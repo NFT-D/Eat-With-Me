@@ -5,17 +5,23 @@ import MyField from '../components/MyField';
 import React, { useState } from 'react';
 import food from '../assets/pizza.png';
 import location from '../assets/location.png';
+import { getEvent } from '../services/firebase';
 
 type ScreenProps = {
   navigation: any
 }
 
 export default function ViewMealScreen({ navigation }: ScreenProps) {
+  const [eventName, enterEvent] = useState("");
     return (
       <ScrollView style={{backgroundColor: 'white'}}>
             <ImageBackground source={food} style={[styles.columnContainer, {width: '100%', height: '80%', top: -20}]}> 
 
-            <View style={{top: 150, alignItems:'center'}}>
+          <View style={{ top: 150, alignItems: 'center' }}>
+            
+            <MyField title="Event Key" type="text" secure={false} onChangeFn={enterEvent} ></MyField>
+            <MyButton text="enter" type="primary" size="large" onPressFn={async () => { getEvent(eventName) }} />
+
               <Text style={styles.whiteTextBold}>Homemade Pizza</Text>
               <Text style={styles.gray_whiteTextBold}>Hosted by User </Text>
               <View style={[styles.rowContainer, {top:-25}]}>
