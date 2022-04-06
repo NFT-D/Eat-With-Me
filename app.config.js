@@ -6,10 +6,10 @@ export default {
     "slug": "Eat-With-Me",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "image": "./assets/food.png",
+      "resizemode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -28,7 +28,7 @@ export default {
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logo.png"
     },
     "extra": {
       firebaseApiKey: process.env.FIREBASE_API_KEY,

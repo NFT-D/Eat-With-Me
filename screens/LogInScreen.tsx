@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Dimensions} from 'react-native';
+import { StyleSheet, View, Dimensions, ImageBackground} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import MyButton from '../components/MyButton';
 import MyField from '../components/MyField';
+import food from '../assets/food.png';
 import { logInWithEmail, getFirstName } from '../services/firebase';
 // import { getFirstName, logInWithEmail } from '../services/firebase';
 
@@ -17,7 +18,9 @@ export default function LogInScreen({ navigation }: ScreenProps) {
   return (
     <>
     <StatusBar style="light" />
+    <ImageBackground source={food} style={{ width: '100%', height: '110%', justifyContent:'center', alignItems: 'center'}}> 
     <View style={styles.container}>
+    
       <MyField title='Email' type='text' onChangeFn={setEmail} />
       <MyField title='Password' type='text' secure={true} onChangeFn={setPassword} />
         <MyButton text="Log In" type="primary" size="large" onPressFn={async () => {
@@ -29,15 +32,21 @@ export default function LogInScreen({ navigation }: ScreenProps) {
         } } />
         <View style={{height: Dimensions.get('screen').width * 0.05}}></View>
     </View>
+    </ImageBackground>
     </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 2,
-    backgroundColor: '#fff',
+    //flex: 2,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'white',
+    width: 338,
+    height: 300,
+    alignSelf: 'center',
+    position: 'absolute',
+    borderRadius: 20,
   },
 });

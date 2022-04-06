@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Dimensions} from 'react-native';
+import { StyleSheet, View, Dimensions,SafeAreaView, ImageBackground} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import MyButton from '../components/MyButton';
 import MyField from '../components/MyField';
 import { getFirstName, signUpWithEmail } from '../services/firebase';
+import colors from '../config/colors';
+import food from '../assets/food.png';
 
 type ScreenProps = {
   navigation: any
@@ -17,8 +19,11 @@ export default function SignUpScreen({ navigation }: ScreenProps) {
 
   return (
     <>
+   
     <StatusBar style="light" />
+    <ImageBackground source={food} style={{ width: '100%', height: '110%', justifyContent:'center', alignItems: 'center'}}> 
     <View style={styles.container}>
+
       <MyField title='First Name' type='text' onChangeFn={setFName} />
       <MyField title='Last Name' type='text' onChangeFn={setLName} />
       <MyField title='Email' type='text' onChangeFn={setEmail} />
@@ -32,15 +37,21 @@ export default function SignUpScreen({ navigation }: ScreenProps) {
         }} />
         <View style={{height: Dimensions.get('screen').width * 0.05}}></View>
     </View>
+    </ImageBackground>
     </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    //flex: 2,
     alignItems: 'center',
     justifyContent: 'center',
-  },
+    backgroundColor: 'white',
+    width: 338,
+    height: 500,
+    alignSelf: 'center',
+    position: 'absolute',
+    borderRadius: 20,
+},
 });
