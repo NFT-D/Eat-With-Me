@@ -10,8 +10,8 @@ import HostMealScreen from './screens/HostMealScreen';
 import ViewMealScreen from './screens/ViewMealScreen';
 import React from 'react';
 import { logOut } from './services/firebase';
+
 import colors from './config/colors';
-import MyButton from './components/MyButton';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,8 +19,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-
-
+        
         <Stack.Screen name="StartUp" component={StartUpScreen} options={{
             headerShown: false,
         }} />

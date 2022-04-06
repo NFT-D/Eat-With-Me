@@ -96,11 +96,13 @@ export const getFirstName = async () => {
 
 // CREATE A MEAL // --------------------------------------------------------------
 
-export const hostEvent = async (dish: string, date: string, start_time: string, end_time: string, address: string, guest: number, allergen: string, notes: string) => {
+
+export const hostEvent = async (dish:string,date: string, start_time: string,end_time:string,address: string, guest: number, allergen: string,notes: string) => {
     try {
         const mealRef = await addMeal(dish, allergen);
+    
+        const data = {capacity: guest, attendees: null, fee: null, location: address, meal: mealRef, startTime: start_time, endTime: end_time, note: notes}
 
-        const data = { capacity: guest, attendees: null, fee: null, location: address, meal: mealRef, startTime: start_time, endTime: end_time, note: notes }
         const docRef = await addDoc(collection(firestore, "events"), data);
         console.log(docRef.path);
     } catch (e) {
@@ -109,9 +111,11 @@ export const hostEvent = async (dish: string, date: string, start_time: string, 
     }
 }
 
-export const addIngredients = async (allergen: string) => {
+
+export const addIngredients = async(allergen: string) => {
     try {
-        const data = { name: allergen }
+        const data = {name: allergen}
+
         const docRef = await addDoc(collection(firestore, "ingredients"), data);
         console.log(docRef.path);
         const ingredientRef = doc(firestore, 'ingredients', docRef.id);
@@ -122,12 +126,16 @@ export const addIngredients = async (allergen: string) => {
     }
 }
 
-export const addDish = async (dish: string, allergen: string) => {
+
+export const addDish = async(dish: string, allergen: string) => {
+
     try {
         // const ingredientArray = allergen.split(',');
         const ingredientRefID = await addIngredients(allergen);
         const ingredientRef = doc(firestore, 'ingredients', ingredientRefID)
-        const data = { name: dish, ingredients: ingredientRef }
+
+        const data = {name: dish, ingredients: ingredientRef}
+
         const docRef = await addDoc(collection(firestore, "dishes"), data);
         console.log(docRef.path);
         const dishRef = doc(firestore, 'dishes', docRef.id);
@@ -138,19 +146,22 @@ export const addDish = async (dish: string, allergen: string) => {
     }
 }
 
-export const addMeal = async (dish: string, allergen: string) => {
+
+export const addMeal = async(dish:string, allergen: string) => {
+
     try {
 
         const ingredientRefID = await addIngredients(allergen);
         const ingredientRef = doc(firestore, 'ingredients', ingredientRefID)
-        const ingData = { name: dish, ingredients: ingredientRef }
+
+        const ingData = {name: dish, ingredients: ingredientRef}
+
         const ingDocRef = await addDoc(collection(firestore, "dishes"), ingData);
         console.log(ingDocRef.path);
         const dishRef = doc(firestore, 'dishes', ingDocRef.id);
 
+        const data = {entree: dishRef, allergens: ingredientRef}
 
-
-        const data = { entree: dishRef, allergens: ingredientRef }
         const docRef = await addDoc(collection(firestore, "meals"), data);
         console.log(docRef.path);
         const mealRef = await doc(firestore, 'meals', docRef.id);
@@ -158,7 +169,9 @@ export const addMeal = async (dish: string, allergen: string) => {
     } catch (e) {
         console.log(e);
         return e
-    }
+
+    }   
+
 
 }
 
@@ -222,3 +235,4 @@ export const getEvent = async (id: string) => {
         console.log(e);
     }
 }
+
