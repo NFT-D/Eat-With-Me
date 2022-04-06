@@ -8,7 +8,8 @@ type ScreenProps = {
     navigation: any
 }
 
-export default function HostMealScreen({ navigation }: ScreenProps) {
+
+export default function LogInScreen({ navigation }: ScreenProps) {
     const [dish,enterDish] = useState("");
     const [date,enterDate] = useState("");
     const [startTime,enterSTime] = useState("");
@@ -17,7 +18,6 @@ export default function HostMealScreen({ navigation }: ScreenProps) {
     const [guest,enterGuest] = useState(0);
     const [allergens,enterAllergens] = useState("");
     const [notes,enterNotes] = useState("");
-
 
     return (
         <SafeAreaView>
@@ -32,42 +32,46 @@ export default function HostMealScreen({ navigation }: ScreenProps) {
                     
                     <View style={{flexDirection:'row'}}>
                         {/* area for setting date */}
-                        <MyField title="Date:" type="text" secure={false} onChangeFn={enterDate} ></MyField>
-                        
+                      
+                        <MyField title="What time is the food being served?" type="text" secure={false} onChangeFn={enterDate} ></MyField>
+                        <MyButton text="Enter" type="primary" ></MyButton>
                     </View>
                     <View style={{flexDirection:'row'}}>
                         {/* area for setting time */}
-                        <MyField title="Starting Time:" type="text" secure={false} onChangeFn={enterSTime} ></MyField>
-                        
-                    </View>
-
-                    <View style={{flexDirection:'row'}}>
-                        {/* area for setting time */}
-                        <MyField title="End Time:" type="text" secure={false} onChangeFn={enterETime} ></MyField>
-                        
+                        <MyField title="What Time will it end?" type="text" secure={false} onChangeFn={enterSTime} ></MyField>
+                        <MyButton text="Enter" type="primary" ></MyButton>
                     </View>
                     <View style={{flexDirection:'row'}}>
                         {/* area for setting location */}
-                        <MyField title="Adress:" type="text" secure={false} onChangeFn={enterLoc} ></MyField>
-                        
+                        <MyField title="Where's the Event?" type="text" secure={false} onChangeFn={enterLoc} ></MyField>
+                        <MyButton text="Enter" type="primary" ></MyButton>
+
                     </View>
                     <View style={{flexDirection:'row'}}>
                         {/* area for setting number of people */}
                         <MyField title="How many people are you serving" type="text" secure={false} onChangeFn={enterGuest} ></MyField>
+
                         
+
+                        <MyButton text="Enter" type="primary" ></MyButton>
+
                     </View>
                     <View style={{flexDirection:'row'}}>
                         {/* area for declaring allergens */}
                         <MyField title="Are you cooking with any allergens?" type="text" secure={false} onChangeFn={enterAllergens} ></MyField>
-                        
+
+                        <MyButton text="Enter" type="primary" ></MyButton>
+
                     </View>
                     <View>
                         {/* area for notes */}
                         <MyField title="Other Notes" type="text" secure={false} onChangeFn={enterNotes} ></MyField>
                     </View>
 
-                    <View style={styles.screenContainer}><Button title="submit" onPress={async () => { hostEvent(dish,date,startTime,endTime,location,guest,allergens,notes) }}/></View>
-                    <View style={styles.screenContainer}><Button title="view Meal" onPress={async () => {navigation.navigate("ViewMeal")  }}/></View>
+
+                    <View style={{flexDirection:'row'}}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { hostEvent(dish, date, startTime, endTime, location, guest, allergens, notes) }} /></View>
+                    <View style={{ flexDirection: 'row' }}><MyButton text="view Meal" type="primary" size="large" onPressFn={async () => { navigation.navigate("ViewMeal") }} /></View>
+
 
                 </ScrollView>
             </View>

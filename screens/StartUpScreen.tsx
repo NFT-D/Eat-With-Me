@@ -4,7 +4,8 @@ import React from "react";
 import { View, Dimensions, StyleSheet, Text, SafeAreaView, ImageBackground} from "react-native";
 import MyButton from '../components/MyButton';
 import food from '../assets/food.png';
-import {useFonts, CinzelDecorative_400Regular, CinzelDecorative_700Bold }from '@expo-google-fonts/cinzel-decorative';
+import {useFonts, CinzelDecorative_400Regular, CinzelDecorative_700Bold, }from '@expo-google-fonts/cinzel-decorative';
+import{Montserrat_700Bold} from '@expo-google-fonts/montserrat'
 import AppLoading from "expo-app-loading";
 import { color } from 'react-native-elements/dist/helpers';
 
@@ -17,7 +18,8 @@ export default function StartUpScreen({ navigation }: ScreenProps) {
     
     let [isLoaded] = useFonts({
         CinzelDecorative_400Regular,
-        CinzelDecorative_700Bold
+        CinzelDecorative_700Bold,
+        Montserrat_700Bold
     });
 
     if(!isLoaded){
@@ -29,6 +31,8 @@ export default function StartUpScreen({ navigation }: ScreenProps) {
 
                 <Text style={styles.fixToText2}>EWM</Text>
                 <Text style={styles.fixToText}>EWM</Text>
+                <Text style={styles.text1}>EAT WITH ME</Text>
+                <Text style={styles.text2}>EAT WITH ME</Text>
                 <MyButton type="primary" text="Login" size="large" onPressFn={() => navigation.navigate("LogIn")} />
                 <View style={{height:20}}/>
                 <MyButton type="secondary" text="Sign Up" size="large" onPressFn={() => navigation.navigate("SignUp")} />
@@ -87,4 +91,43 @@ const styles = StyleSheet.create({
         alignSelf:'center'
         
     },
+
+    text1: {
+        fontFamily: 'Montserrat_700Bold',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        fontWeight: '700',
+        fontSize: 40,
+        fontStyle: 'normal',
+        lineHeight: 175,
+        display: 'flex',
+        textAlign: 'center',
+        top: 325,
+        left: 27,
+        height: 172,
+        width: 331,
+        position: 'absolute',
+        color: 'white',
+        alignSelf:'center'
+    },
+    text2: {
+        fontFamily: 'Montserrat_700Bold',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        fontWeight: '700',
+        fontSize: 39,
+        fontStyle: 'normal',
+        lineHeight: 175,
+        display: 'flex',
+        textAlign: 'center',
+        top: 325,
+        left: 27,
+        height: 172,
+        width: 331,
+        position: 'absolute',
+        color: '#F96332',
+        alignSelf:'center'
+    }
 });

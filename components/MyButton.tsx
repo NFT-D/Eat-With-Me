@@ -1,5 +1,6 @@
 import React from "react";
-import { Pressable, Text, StyleSheet } from "react-native";
+import { Pressable, Text, StyleSheet, TouchableOpacity } from "react-native";
+import colors from "../config/colors";
 
 // make this simpler using https://reactnative.dev/docs/stylesheet 
 
@@ -24,6 +25,18 @@ const MyButton = (props: any) => {
         buttonContainer = styles.secondaryContainer;
         buttonText = styles.secondaryText;
     }
+    else if (props.type == 'orangeIcon'){
+        buttonContainer = styles.orangeiconContainer;
+        buttonText=styles.smallText;
+    }
+    else if (props.type == 'grayIcon'){
+        buttonContainer = styles.grayiconContainer;
+        buttonText=styles.smallText;
+    }
+    else if (props.type == 'icon'){
+        buttonContainer = styles.iconContainer;
+        
+    }
 
     if (props.size == 'small') {
         sizeContainer = styles.smallContainer;
@@ -39,9 +52,9 @@ const MyButton = (props: any) => {
     }
 
     return (
-        <Pressable style={[buttonContainer, sizeContainer]} onPress={props.onPressFn}>
+        <TouchableOpacity style={[buttonContainer, sizeContainer]} onPress={props.onPressFn}>
         <Text style={[buttonText, sizeText]}>{props.text}</Text>
-        </Pressable>
+        </TouchableOpacity>
     )
 }
 
@@ -103,5 +116,17 @@ const styles = StyleSheet.create({
     largeText: {
         fontSize: 24
     },
+    grayiconContainer: {
+        backgroundColor: 'gray',
+        padding:10,
+        borderRadius: 100,
+    },
+    orangeiconContainer: {
+        backgroundColor: colors.primary,
+        borderRadius: 100,
+    },
+    iconContainer:{
+        fontSize:50,
+    }
     
 });

@@ -14,14 +14,15 @@ const MyField: React.FC<Props> = ({ title, type, secure, onChangeFn }) => {
     const [focus, setFocus] = useState(false);
     return ( 
         <View style={styles.container}>
-            <Text style={styles.text}>{title}</Text>
+    
             <TextInput 
                 style={focus ? styles.focus : styles.input} 
                 autoCapitalize={"none"}
                 secureTextEntry={secure}
                 onFocus={() => setFocus(true)} 
                 onBlur={() => setFocus(false)} 
-                onChangeText={(value) => onChangeFn(value)}/>
+                onChangeText={(value) => onChangeFn(value)}
+                placeholder={title}/>
         </View>
     ); 
 }
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         marginTop: 5,
-        padding: 10,
+        padding: 10
     },
     input: {
         height: 50,
