@@ -98,7 +98,7 @@ export const getFirstName = async () => {
 
 
 
-export const hostEvent = async (appetizer: string,entree: string, dessert: string,address:string, guest: number, allergen: string, notes: string, duration: number, sDate: Date) => {
+export const hostEvent = async ( appetizer: string,entree: string, dessert: string,address:string, guest: string, allergen: string, notes: string, duration: number, sDate: Date) => {
 
     try {
         const mealRef = await addMeal(appetizer,entree, dessert, allergen);

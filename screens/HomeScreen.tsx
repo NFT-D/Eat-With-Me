@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ImageBackground, Image, Alert, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView } from "react-native";
 import colors from "../config/colors";
 import MyButton from '../components/MyButton';
-
+import Event from '../components/Event';
+import food from '../assets/pizza.png';
 
 type ScreenProps = {
     navigation: any,
@@ -26,6 +27,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
 
             <ScrollView style={styles.mealfeed}>
                 {/* event components can go here - intended to auto update */}
+                <Event time="10:30" meal="chesseburger" maxGuests="5" eventImage={food} onPress={() => navigation.navigate("ViewMealScreen")} ></Event>
                
             </ScrollView>
         </SafeAreaView>

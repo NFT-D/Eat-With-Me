@@ -17,11 +17,7 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
       <ScrollView style={{backgroundColor: 'white'}}>
             <ImageBackground source={food} style={[styles.columnContainer, {width: '100%', height: '80%', top: -20}]}> 
 
-          <View style={{ top: 150, alignItems: 'center' }}>
-            
-            <MyField title="Event Key" type="text" secure={false} onChangeFn={enterEvent} ></MyField>
-            <MyButton text="enter" type="primary" size="large" onPressFn={async () => { getEvent(eventName) }} />
-
+          <View style={{ top: 150, alignItems: 'center', padding: 15 }}>
               <Text style={styles.whiteTextBold}>Homemade Pizza</Text>
               <Text style={styles.gray_whiteTextBold}>Hosted by User </Text>
               <View style={[styles.rowContainer, {top:-25}]}>
@@ -31,15 +27,16 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
                 <Text>                     </Text>
                 <Text style={styles.whiteTextReg}> $0 </Text>
               </View>
-            </View>
-          <View style={styles.rowContainer}>
+              <View style={styles.rowContainer}>
                 <Text style={styles.white_smallTextReg}> Wed 2/16 </Text>
                 <Text>             </Text>
                 <Text style={styles.white_smallTextReg}> Seats Available </Text>
                 <Text>             </Text>
                 <Text style={styles.white_smallTextReg}> Fee </Text>
           </View>
+            </View>
             </ImageBackground>
+          <View style={{padding:20}}>
           <View style={{alignItems: 'center', justifyContent: 'space-evenly', padding: 20, flex:1, flexDirection: 'row', backgroundColor:'white'}} >
               <MyButton type="primary" size="large" text="Reserve" />
               <MyButton type="icon" text="♥"/>
@@ -59,7 +56,9 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
                         <Text>Suite 4</Text>
                         <Text style={{color:colors.primary}}>Get Directions</Text>
                     </View>
+            
                 </TouchableOpacity>
+                </View>
       </ScrollView>
     );
 }

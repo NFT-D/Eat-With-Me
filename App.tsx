@@ -19,11 +19,26 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-<Stack.Screen name="StartUp" component={StartUpScreen} options={{
+      <Stack.Screen name="HostMeal" component={HostMealScreen} options={{
+            headerStyle: { backgroundColor: 'white' },
+            headerTintColor: '#133C55',
+            headerShadowVisible: false,
+            headerBackVisible:true,
+            title: 'Host Meal'
+        }} />
+        <Stack.Screen name="ViewMeal" component={ViewMealScreen} options={{
+            headerStyle: { backgroundColor: 'transparent' },
+            headerTransparent: true,
+            headerTintColor: 'white',
+            headerShadowVisible: false,
+            headerBackVisible: true,
+            title: '',
+
+        }} />
+      
+        <Stack.Screen name="StartUp" component={StartUpScreen} options={{
             headerShown: false,
         }} />
-
-
         <Stack.Screen name="Home" component={HomeScreen} options={({ navigation }) => ({
           headerStyle: { backgroundColor: 'white' },
           headerTintColor: '#133C55',
@@ -40,28 +55,6 @@ export default function App() {
             <Button title="≡" color={'#133C55'} onPress={() => navigation.navigate("ViewMeal")}></Button>
           )
         })} />
-      
-
-        <Stack.Screen name="ViewMeal" component={ViewMealScreen} options={{
-            headerStyle: { backgroundColor: 'transparent' },
-            headerTransparent: true,
-            headerTintColor: 'white',
-            headerShadowVisible: false,
-            headerBackVisible: true,
-            title: '',
-
-        }} />
-
-        <Stack.Screen name="HostMeal" component={HostMealScreen} options={{
-            headerStyle: { backgroundColor: 'white' },
-            headerTintColor: '#133C55',
-            headerShadowVisible: false,
-            headerBackVisible:true,
-            title: 'Host Meal'
-        }} />
-
-      
-
         <Stack.Screen name="LogIn" component={LogInScreen} options={{
           headerStyle: { backgroundColor: 'transparent'},
           headerTintColor: colors.secondary,

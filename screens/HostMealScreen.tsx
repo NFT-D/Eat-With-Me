@@ -20,8 +20,9 @@ type ScreenProps = {
 
 
 export default function LogInScreen({ navigation }: ScreenProps) {
+    const [event,setEvent] = useState("");
     const [location,enterLoc] = useState("");
-    const [guest,enterGuest] = useState(0);
+    const [guest,enterGuest] = useState("");
     const [allergens,enterAllergens] = useState("");
     const [notes,enterNotes] = useState("");
 
@@ -35,6 +36,8 @@ export default function LogInScreen({ navigation }: ScreenProps) {
 
     const [duration,setDuration] = useState(null);
 
+    const [eventName,setEventName] = useState("");
+
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate||date;
         setShow(false);
@@ -47,27 +50,26 @@ export default function LogInScreen({ navigation }: ScreenProps) {
     };
 
 
- 
+    
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{alignContent:'center',alignItems:'center', backgroundColor:colors.secondary}}>
            
             <View>
                 <ScrollView>
-                  <Text>Select Date and start date for the event</Text>
-                    <View style={{flexDirection:'row'}}>
-                        {/* area for setting date */}
-                        
-                        <View style={styles.container}>
-                            {/* area for setting time */}
-                            <View>
-                                <Button onPress={() => showMode('date')} title="Show date picker!" />
-                            </View>
-                            <View>
-                                <Button onPress={() =>showMode("time")} title="Show time picker!" />
-                            </View>
-                            <Text>selected: {date.toLocaleString()}</Text>
-                            {show && (
+                    <MyField title="Event Name" type="text" secure={false} onChangeFn={setEvent}></MyField>
+                    <Text>Select Date and Time for your event</Text>
+                    <View style={{flexDirection:'row', alignContent:'center', alignItems:'center'}}>
+                                <TouchableOpacity style={{backgroundColor:colors.primary, borderRadius:20, height:35, padding:10, alignContent:'center', alignItems:'center'}} onPress={() => showMode('date')}>
+                                    <Text style={{color:'white'}}>Select Date</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{backgroundColor:colors.primary, borderRadius:20, height:35, padding:10, alignContent:'center', alignItems:'center'}} onPress={() => showMode('time')}>
+                                    <Text style={{color:'white'}}>Select Time</Text>
+                                </TouchableOpacity>   
+                            
+                       </View>
+                       <Text>selected: {date.toLocaleString()}</Text>
+                       {show && (
                             <DateTimePicker
                             testID="dateTimePicker"
                             value={date}
@@ -76,60 +78,31 @@ export default function LogInScreen({ navigation }: ScreenProps) {
                             onChange={onChange}
                             />
                         )}
-                            
-                           
-                            <StatusBar style="auto"/>
-                            </View>
-                        </View>
-                        
-                    
                     <View>
                         
                         
                     </View>
                    
-                        <Text>Duration of event(1-24):</Text>
-                        <MyField title="ex.2" type="text" secure={false} onChangeFn={setDuration} ></MyField>
                         
+                        <MyField title="Duration" type="text" secure={false} onChangeFn={setDuration} ></MyField>
                         
-                        
-                   
+                        <MyField title="Address" type="text" secure={false} onChangeFn={enterLoc} ></MyField>
                     
-                        <Text>Location(Adress):</Text>
-                        <MyField title="123 Main St. Hoboken" type="text" secure={false} onChangeFn={enterLoc} ></MyField>
-                        
+                        <MyField title="How many people are you serving?" type="number" secure={false} onChangeFn={enterGuest} ></MyField>
 
+                        <MyField title="Appetizers (separated by ',')" type="text" secure={false} onChangeFn={enterAppetizersDish} ></MyField>
+
+                        <MyField title="Entrees (separated by ',')" type="text" secure={false} onChangeFn={enterEntreesDish} ></MyField>
+
+                        <MyField title="Desserts (separated by ',')" type="text" secure={false} onChangeFn={enterDessertsDish} ></MyField>
                     
-                    
-                        <Text>Number of people invitable:</Text>
-                        <MyField title="5" type="text" secure={false} onChangeFn={enterGuest} ></MyField>
+                        <MyField title="Allergens?" type="text" secure={false} onChangeFn={enterAllergens} ></MyField>
 
-                        
-
-                        
-                        <Text>Appetizers(Please enter dishes seperated by ","):</Text>
-                        <MyField title="chips, fries" type="text" secure={false} onChangeFn={enterAppetizersDish} ></MyField>
-
-                        <Text>Entree(Please enter dishes seperated by ","):</Text>
-                        <MyField title="pizza, pasta, burger" type="text" secure={false} onChangeFn={enterEntreesDish} ></MyField>
-
-                        <Text>Dessert(Please enter dishes seperated by ","):</Text>
-                        <MyField title="ice cream, gelato" type="text" secure={false} onChangeFn={enterDessertsDish} ></MyField>
-                    
-                  
-                        <Text>Aany allergens:</Text>
-                        <MyField title="dairy" type="text" secure={false} onChangeFn={enterAllergens} ></MyField>
-
-                        
-
-                  
-                  
-                        <Text>Other Notes:</Text>
-                        <MyField title="I have a dog" type="text" secure={false} onChangeFn={enterNotes} ></MyField>
+                        <MyField title="Other Notes....." type="text" secure={false} onChangeFn={enterNotes} ></MyField>
                    
 
 
-                    <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { hostEvent(appetizers,entree,dessert,location,guest,allergens,notes,duration,date) }} /></View>
+                    <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { hostEvent(event, appetizers,entree,dessert,location,guest,allergens,notes,duration,date) }} /></View>
                     <View style={{ flexDirection: 'row' }}><MyButton text="view Meal" type="primary" size="large" onPressFn={async () => { navigation.navigate("ViewMeal") }} /></View>
 
 

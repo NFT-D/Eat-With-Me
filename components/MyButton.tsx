@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         paddingVertical: 8,
         width: 150,
-        borderRadius: 11,
+        //borderRadius: 11,
        
     },
     mediumText: {
