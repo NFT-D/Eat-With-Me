@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc } from 'firebase/firestore';
+import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp } from 'firebase/firestore';
 import Constants from "expo-constants";
 
 // Your web app's Firebase configuration
@@ -97,7 +97,7 @@ export const getFirstName = async () => {
 // CREATE A MEAL // --------------------------------------------------------------
 
 
-export const hostEvent = async (dish:string,date: string, start_time: string,end_time:string,address: string, guest: number, allergen: string,notes: string) => {
+export const hostEvent = async (dish:string,date: Date, start_time: Date,end_time:Date,address: string, guest: number, allergen: string,notes: string) => {
     try {
         const mealRef = await addMeal(dish, allergen);
     

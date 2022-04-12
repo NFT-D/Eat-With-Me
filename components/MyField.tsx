@@ -22,7 +22,9 @@ const MyField: React.FC<Props> = ({ title, type, secure, onChangeFn }) => {
                 onFocus={() => setFocus(true)} 
                 onBlur={() => setFocus(false)} 
                 onChangeText={(value) => onChangeFn(value)}
-                placeholder={title}/>
+                placeholder={title}
+                value= {title}/>
+                
         </View>
     ); 
 }

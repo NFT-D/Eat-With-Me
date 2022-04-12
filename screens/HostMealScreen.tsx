@@ -3,7 +3,8 @@ import colors from '../config/colors';
 import MyField from '../components/MyField';
 import React, { useState } from 'react';
 import { hostEvent } from '../services/firebase';
-
+import DatePicker from 'react-native-date-picker';
+import MyButton from '../components/MyButton';
 type ScreenProps = {
     navigation: any
 }
@@ -11,9 +12,9 @@ type ScreenProps = {
 
 export default function LogInScreen({ navigation }: ScreenProps) {
     const [dish,enterDish] = useState("");
-    const [date,enterDate] = useState("");
-    const [startTime,enterSTime] = useState("");
-    const [endTime,enterETime] = useState("");
+    const [date,setDate] = useState(new Date());
+    const [startTime,enterSTime] = useState(new Date());
+    const [endTime,enterETime] = useState(new Date());
     const [location,enterLoc] = useState("");
     const [guest,enterGuest] = useState(0);
     const [allergens,enterAllergens] = useState("");
@@ -25,52 +26,37 @@ export default function LogInScreen({ navigation }: ScreenProps) {
             <View>
                 <ScrollView>
                    
-                    <View style={{ flexDirection: 'row' }}>
-                        <MyField title="Enter Dish" type="text" secure={false} onChangeFn={enterDish} ></MyField>
+                    {/* area for entering dishes */}
+                    <MyField title="Enter Dish" type="text" secure={false} onChangeFn={enterDish} ></MyField>
 
+                    {/* area for setting date and time*/} 
+                    <DatePicker date={date} onDateChange={(date) => { this.props.onDateChange && this.props.onDateChange(date);this.setState({ date }); }} />
+                    <Text>Pick the start and end time of your event</Text>
+                    <View style={{flexDirection:"row"}}>   
+                        {/* area for setting start time */}
+                        <DatePicker mode= "time" date={date} onDateChange={(date) => { this.props.onDateChange && this.props.onDateChange(date);this.setState({ date }); }} />
+                        {/* area for setting start time */}
+                        <DatePicker mode= "time" date={date} onDateChange={(date) => { this.props.onDateChange && this.props.onDateChange(date);this.setState({ date }); }} />   
                     </View>
-                    
-                    <View style={{flexDirection:'row'}}>
-                        {/* area for setting date */}
-                      
-                        <MyField title="What time is the food being served?" type="text" secure={false} onChangeFn={enterDate} ></MyField>
-                        <MyButton text="Enter" type="primary" ></MyButton>
-                    </View>
-                    <View style={{flexDirection:'row'}}>
-                        {/* area for setting time */}
-                        <MyField title="What Time will it end?" type="text" secure={false} onChangeFn={enterSTime} ></MyField>
-                        <MyButton text="Enter" type="primary" ></MyButton>
-                    </View>
-                    <View style={{flexDirection:'row'}}>
-                        {/* area for setting location */}
-                        <MyField title="Where's the Event?" type="text" secure={false} onChangeFn={enterLoc} ></MyField>
-                        <MyButton text="Enter" type="primary" ></MyButton>
+                    {/* area for setting location */}
+                    <Text>Where are you hosting your event?</Text>
+                        <MyField title="Where's the Event?"  type="text" secure={false} onChangeFn={enterLoc} ></MyField>
+    
+                    {/* area for setting number of people */}
+                    <Text>How many people are you serving?</Text>
+                        <MyField title="How many people are you serving" type="number" secure={false} onChangeFn={enterGuest} ></MyField>
 
-                    </View>
-                    <View style={{flexDirection:'row'}}>
-                        {/* area for setting number of people */}
-                        <MyField title="How many people are you serving" type="text" secure={false} onChangeFn={enterGuest} ></MyField>
-
-                        
-
-                        <MyButton text="Enter" type="primary" ></MyButton>
-
-                    </View>
-                    <View style={{flexDirection:'row'}}>
-                        {/* area for declaring allergens */}
+                    {/* area for declaring allergens */}
+                    <Text>Are there any allergens?</Text>
                         <MyField title="Are you cooking with any allergens?" type="text" secure={false} onChangeFn={enterAllergens} ></MyField>
-
-                        <MyButton text="Enter" type="primary" ></MyButton>
-
-                    </View>
-                    <View>
-                        {/* area for notes */}
+                    <Text>Anything else to add?</Text>
+                    {/* area for notes */}
                         <MyField title="Other Notes" type="text" secure={false} onChangeFn={enterNotes} ></MyField>
-                    </View>
+                   
 
 
-                    <View style={{flexDirection:'row'}}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { hostEvent(dish, date, startTime, endTime, location, guest, allergens, notes) }} /></View>
-                    <View style={{ flexDirection: 'row' }}><MyButton text="view Meal" type="primary" size="large" onPressFn={async () => { navigation.navigate("ViewMeal") }} /></View>
+                    <MyButton text="submit" type="primary" size="large" onPressFn={async () => { hostEvent(dish, date, startTime, endTime, location, guest, allergens, notes) }} />
+                    <MyButton text="view Meal" type="primary" size="large" onPressFn={async () => { navigation.navigate("ViewMeal") }} />
 
 
                 </ScrollView>
