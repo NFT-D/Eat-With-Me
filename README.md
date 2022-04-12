@@ -45,3 +45,13 @@ npm run web -> run the app in a web browser
 npm run ios -> run the app in an iOS simulator
 npm run android -> run the app in an Android simulator
 ```
+
+## (Optional) Deploy app to Firebase Hosting
+
+To set up hosting, you must have the Firebase CLI installed. Once installed, follow [these instructions from Expo](https://docs.expo.dev/distribution/publishing-websites/#firebase-hosting).
+
+- Change the public directory to `web-build`
+- Answer `Configure as a single-page app (rewrite all urls to /index.html)` with `y` (Yes).
+- Answer `Set up automatic builds and deploys with GitHub?` with `N` (No).
+  
+To deploy your app, run the command `npm run deploy-hosting`. If you encounter an error, you may need to run `npx expo-optimize` first.
