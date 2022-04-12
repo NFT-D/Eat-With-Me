@@ -19,14 +19,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen name="HostMeal" component={HostMealScreen} options={{
-            headerStyle: { backgroundColor: 'white' },
-            headerTintColor: '#133C55',
-            headerShadowVisible: false,
-            headerBackVisible:true,
-            title: 'Host Meal'
-        }} />
-        <Stack.Screen name="ViewMeal" component={ViewMealScreen} options={{
+      <Stack.Screen name="ViewMeal" component={ViewMealScreen} options={{
             headerStyle: { backgroundColor: 'transparent' },
             headerTransparent: true,
             headerTintColor: 'white',

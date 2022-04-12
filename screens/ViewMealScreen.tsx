@@ -17,7 +17,7 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
       <ScrollView style={{backgroundColor: 'white'}}>
             <ImageBackground source={food} style={[styles.columnContainer, {width: '100%', height: '80%', top: -20}]}> 
 
-          <View style={{ top: 150, alignItems: 'center', padding: 15 }}>
+            <View style={{ top: 150, alignItems: 'center', padding: 15 }}>
               <Text style={styles.whiteTextBold}>Homemade Pizza</Text>
               <Text style={styles.gray_whiteTextBold}>Hosted by User </Text>
               <View style={[styles.rowContainer, {top:-25}]}>
@@ -33,7 +33,7 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
                 <Text style={styles.white_smallTextReg}> Seats Available </Text>
                 <Text>             </Text>
                 <Text style={styles.white_smallTextReg}> Fee </Text>
-          </View>
+              </View>
             </View>
             </ImageBackground>
           <View style={{padding:20}}>
