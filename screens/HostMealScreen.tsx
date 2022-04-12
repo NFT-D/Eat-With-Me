@@ -13,16 +13,13 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
 
 
+
 type ScreenProps = {
     navigation: any
 }
 
 
 export default function LogInScreen({ navigation }: ScreenProps) {
-    const [Appetizers,enterAppetizersDish] = useState("");
-    const [entree,enterEntreeDish] = useState("");
-    const [dessert,enterDessertDish] = useState("");
-
     const [location,enterLoc] = useState("");
     const [guest,enterGuest] = useState(0);
     const [allergens,enterAllergens] = useState("");
@@ -53,9 +50,7 @@ export default function LogInScreen({ navigation }: ScreenProps) {
            
             <View>
                 <ScrollView>
-                   
-                
-                    <Text>Select Date and start date for the event</Text>
+                  <Text>Select Date and start date for the event</Text>
                     <View style={{flexDirection:'row'}}>
                         {/* area for setting date */}
                         
@@ -132,6 +127,7 @@ export default function LogInScreen({ navigation }: ScreenProps) {
 
                     <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { hostEvent(Appetizers,entree,dessert,location,guest,allergens,notes,duration,date) }} /></View>
                     <View style={{ flexDirection: 'row' }}><MyButton text="view Meal" type="primary" size="large" onPressFn={async () => { navigation.navigate("ViewMeal") }} /></View>
+
 
 
                 </ScrollView>
