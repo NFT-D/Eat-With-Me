@@ -25,6 +25,10 @@ export default function LogInScreen({ navigation }: ScreenProps) {
     const [allergens,enterAllergens] = useState("");
     const [notes,enterNotes] = useState("");
 
+    const [appetizers,enterAppetizersDish]= useState("");
+    const [entree,enterEntreesDish]= useState("");
+    const [dessert, enterDessertsDish]= useState("");
+
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState(null);
     const [show, setShow] = useState(false);
@@ -107,10 +111,10 @@ export default function LogInScreen({ navigation }: ScreenProps) {
                         <MyField title="chips, fries" type="text" secure={false} onChangeFn={enterAppetizersDish} ></MyField>
 
                         <Text>Entree(Please enter dishes seperated by ","):</Text>
-                        <MyField title="pizza, pasta, burger" type="text" secure={false} onChangeFn={enterEntreeDish} ></MyField>
+                        <MyField title="pizza, pasta, burger" type="text" secure={false} onChangeFn={enterEntreesDish} ></MyField>
 
                         <Text>Dessert(Please enter dishes seperated by ","):</Text>
-                        <MyField title="ice cream, gelato" type="text" secure={false} onChangeFn={enterDessertDish} ></MyField>
+                        <MyField title="ice cream, gelato" type="text" secure={false} onChangeFn={enterDessertsDish} ></MyField>
                     
                   
                         <Text>Aany allergens:</Text>
@@ -125,7 +129,7 @@ export default function LogInScreen({ navigation }: ScreenProps) {
                    
 
 
-                    <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { hostEvent(Appetizers,entree,dessert,location,guest,allergens,notes,duration,date) }} /></View>
+                    <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { hostEvent(appetizers,entree,dessert,location,guest,allergens,notes,duration,date) }} /></View>
                     <View style={{ flexDirection: 'row' }}><MyButton text="view Meal" type="primary" size="large" onPressFn={async () => { navigation.navigate("ViewMeal") }} /></View>
 
 
