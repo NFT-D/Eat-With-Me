@@ -3,7 +3,7 @@ import colors from '../config/colors';
 import MyField from '../components/MyField';
 import React, { useState } from 'react';
 import { hostEvent } from '../services/firebase';
-
+import MyButton from '../components/myButton';
 type ScreenProps = {
     navigation: any
 }
