@@ -48,5 +48,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     position: 'absolute',
     borderRadius: 20,
+    padding:20
   },
 });

@@ -14,7 +14,7 @@ const MyField: React.FC<Props> = ({ title, type, secure, onChangeFn }) => {
     const [focus, setFocus] = useState(false);
     return ( 
         <View style={styles.container}>
-    
+            <Text>{title}</Text>
             <TextInput 
                 style={focus ? styles.focus : styles.input} 
                 autoCapitalize={"none"}
@@ -22,8 +22,7 @@ const MyField: React.FC<Props> = ({ title, type, secure, onChangeFn }) => {
                 onFocus={() => setFocus(true)} 
                 onBlur={() => setFocus(false)} 
                 onChangeText={(value) => onChangeFn(value)}
-                placeholder={title}
-                value= {title}/>
+                placeholder={title}/>
                 
         </View>
     ); 
