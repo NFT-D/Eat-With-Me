@@ -97,11 +97,11 @@ export const getFirstName = async () => {
 // CREATE A MEAL // --------------------------------------------------------------
 
 
-export const hostEvent = async (dish:string,date: string, start_time: string,end_time:string,address: string, guest: number, allergen: string,notes: string) => {
+export const hostEvent = async (appetizer: string,entree: string, dessert: string,address:string, guest: number, allergen: string, notes: string, duration: number, sDate: Date) => {
     try {
-        const mealRef = await addMeal(dish, allergen);
+        const mealRef = await addMeal(appetizer,entree, dessert, allergen);
     
-        const data = {capacity: guest, attendees: null, fee: null, location: address, meal: mealRef, startTime: start_time, endTime: end_time, note: notes}
+        const data = {capacity: guest, attendees: null, fee: null, location: address, meal: mealRef, date: sDate, note: notes}
 
         const docRef = await addDoc(collection(firestore, "events"), data);
         console.log(docRef.path);
@@ -110,8 +110,30 @@ export const hostEvent = async (dish:string,date: string, start_time: string,end
         return e
     }
 }
+export const addMeal = async(appetizer:string,entree: string, dessert: string, allergen: string) => {
+
+    try {
+
+        var aDish = appetizer.split(",");
+        var eDish = entree.split(",");
+        var dDish = dessert.split(",");
+        var ing = allergen.split(",");
+
+        const data = {Appetizers: aDish, entree: eDish, dessert: dDish, allergens: ing}
+
+        const docRef = await addDoc(collection(firestore, "meals"), data);
+        console.log(docRef.path);
+        const mealRef = await doc(firestore, 'meals', docRef.id);
+        return mealRef;
+    } catch (e) {
+        console.log(e);
+        return e
+
+    }   
 
 
+}
+/*
 export const addIngredients = async(allergen: string) => {
     try {
         const data = {name: allergen}
@@ -146,34 +168,8 @@ export const addDish = async(dish: string, allergen: string) => {
     }
 }
 
+*/
 
-export const addMeal = async(dish:string, allergen: string) => {
-
-    try {
-
-        const ingredientRefID = await addIngredients(allergen);
-        const ingredientRef = doc(firestore, 'ingredients', ingredientRefID)
-
-        const ingData = {name: dish, ingredients: ingredientRef}
-
-        const ingDocRef = await addDoc(collection(firestore, "dishes"), ingData);
-        console.log(ingDocRef.path);
-        const dishRef = doc(firestore, 'dishes', ingDocRef.id);
-
-        const data = {entree: dishRef, allergens: ingredientRef}
-
-        const docRef = await addDoc(collection(firestore, "meals"), data);
-        console.log(docRef.path);
-        const mealRef = await doc(firestore, 'meals', docRef.id);
-        return mealRef;
-    } catch (e) {
-        console.log(e);
-        return e
-
-    }   
-
-
-}
 
 export const getEvent = async (id: string) => {
     try {
