@@ -1,11 +1,9 @@
 import { SafeAreaView, View, TouchableOpacity, Text, TextInput, Image, StyleSheet, ScrollView, ImageBackground } from 'react-native';
 import MyButton from '../components/MyButton';
 import colors from '../config/colors';
-import MyField from '../components/MyField';
 import React, { useEffect, useState } from 'react';
 import food from '../assets/pizza.png';
 import location from '../assets/location.png';
-import { getEvent } from '../services/firebase';
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp, DocumentReference } from 'firebase/firestore';
@@ -13,23 +11,23 @@ import Constants from "expo-constants";
 import Moment from 'moment';
 
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: Constants.manifest?.extra?.firebaseApiKey,
-  authDomain: Constants.manifest?.extra?.firebaseAuthDomain,
-  projectId: Constants.manifest?.extra?.firebaseProjectId,
-  storageBucket: Constants.manifest?.extra?.firebaseStorageBucket,
-  messagingSenderId: Constants.manifest?.extra?.firebaseMessagingSenderId,
-  appId: Constants.manifest?.extra?.firebaseAppId,
-};
+// // Your web app's Firebase configuration
+// const firebaseConfig = {
+//   apiKey: Constants.manifest?.extra?.firebaseApiKey,
+//   authDomain: Constants.manifest?.extra?.firebaseAuthDomain,
+//   projectId: Constants.manifest?.extra?.firebaseProjectId,
+//   storageBucket: Constants.manifest?.extra?.firebaseStorageBucket,
+//   messagingSenderId: Constants.manifest?.extra?.firebaseMessagingSenderId,
+//   appId: Constants.manifest?.extra?.firebaseAppId,
+// };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const firestore = getFirestore(app);
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+// const auth = getAuth(app);
+// const firestore = getFirestore(app);
 
-// AUTHENTICATION // ---------------------------------------------------------
-let user = auth.currentUser;
+// // AUTHENTICATION // ---------------------------------------------------------
+// let user = auth.currentUser;
 type ScreenProps = {
   navigation: any,
   route: any
@@ -38,7 +36,9 @@ type ScreenProps = {
 
 
 
-export default function ViewMealScreen({ navigation }: ScreenProps) {
+export default function ViewMealScreen({ route,navigation }: ScreenProps) {
+  const{firstName,eventID,user,firestore}=route.params;
+
   const [address, setAddress] = useState("");
   const [capacity, setCapacity] = useState(0);
   const [allergens, setAllergens] = useState([]);
@@ -99,33 +99,14 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
     }
   }
 
-  // const getFirstName = async () => {
-  //   try {
-  //     let firstName = "Temp";
-  //     const q = query(
-  //       collection(firestore, "users"),
-  //       where("email", "==", user.email)
-  //     );
-  //     const querySnapshot = await getDocs(q);
-  //     querySnapshot.forEach((doc) => {
-  //       console.log('first name from getFirstName', doc.data()['first_name'])
-  //       firstName = doc.data()["first_name"];
-  //     });
-  //     setHostFirstName(firstName);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-
-
 
 
   useEffect(() => {
     async function fetchMyAPI() {
-    await getEventInfo("feq8LkV6DZ2NyPDJDoEw")
-    await getMealInfo(ml)}
-    fetchMyAPI()
+      //await getFirstName()
+      await getEventInfo(eventID)
+      await getMealInfo(ml)}
+      fetchMyAPI()
     
   }, []);
 
@@ -135,7 +116,7 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
           <ImageBackground source={food} style={[styles.columnContainer, { width: "100%", height: "50%", top: -200 }]}>
               <View style={{ top: 150, alignItems: "center", padding: 15 }}>
                     <Text style={styles.whiteTextBold}>{eventName}</Text>
-                       <Text style={styles.whiteTextBold}> Hosted by {hostFirstName}</Text> 
+                       <Text style={styles.whiteTextBold}> Hosted by {firstName}</Text> 
                     <View style={[styles.rowContainer, { top: -25 }]}>
                                           
 
