@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc } from 'firebase/firestore';
+import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp } from 'firebase/firestore';
 import Constants from "expo-constants";
 
 // Your web app's Firebase configuration
@@ -22,14 +22,13 @@ const firestore = getFirestore(app);
 // AUTHENTICATION // ---------------------------------------------------------
 let user = auth.currentUser;
 
-export const signUpWithEmail = async (fName: string, lName: string, email:string, password:string) => {
+export const signUpWithEmail = async (fName: string, lName: string, email: string, password: string) => {
     try {
         let result = await createUserWithEmailAndPassword(auth, email, password);
         user = result.user;
         await updateProfile(user, {
             displayName: fName + " " + lName,
         });
-        console.log(user);
         await addNewUser(fName, lName, email);
         return 'success';
     } catch (e) {
@@ -68,7 +67,7 @@ const addNewUser = async (fName: string, lName: string, email: string) => {
             last_name: lName,
             email: email
         }
-        const docRef = await addDoc(collection(firestore, "users", ), userData);
+        const docRef = await addDoc(collection(firestore, "users",), userData);
         console.log(docRef.id);
     } catch (e) {
         console.log(e);
@@ -79,13 +78,13 @@ export const getFirstName = async () => {
     try {
         let firstName = 'Temp';
         const q = query(
-            collection(firestore, "users"), 
+            collection(firestore, "users"),
             where("email", "==", user?.email)
         );
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
-            console.log(doc.data()['first_name'])
-            firstName =  doc.data()['first_name'];
+            // console.log(doc.data()['first_name'])
+            firstName = doc.data()['first_name'];
         });
         return firstName;
 
@@ -97,21 +96,46 @@ export const getFirstName = async () => {
 // CREATE A MEAL // --------------------------------------------------------------
 
 
-export const hostEvent = async (dish:string,date: string, start_time: string,end_time:string,address: string, guest: number, allergen: string,notes: string) => {
+
+export const hostEvent = async (eventName: string, appetizer: string, entree: string, dessert: string, address: string, guest: number, allergen: string, notes: string, duration: number, sDate: Date) => {
+
     try {
-        const mealRef = await addMeal(dish, allergen);
-    
-        const data = {capacity: guest, attendees: null, fee: null, location: address, meal: mealRef, startTime: start_time, endTime: end_time, note: notes}
+        const mealRef = await addMeal(appetizer, entree, dessert, allergen);
+
+        const data = { event: eventName, capacity: guest, attendees: null, fee: null, location: address, meal: mealRef, date: sDate, note: notes }
 
         const docRef = await addDoc(collection(firestore, "events"), data);
         console.log(docRef.path);
+        return docRef.id;
     } catch (e) {
         console.log(e);
         return e
     }
 }
+export const addMeal = async (appetizer: string, entree: string, dessert: string, allergen: string) => {
+
+    try {
+
+        var aDish = appetizer.split(",");
+        var eDish = entree.split(",");
+        var dDish = dessert.split(",");
+        var ing = allergen.split(",");
+
+        const data = { appetizer: aDish, entree: eDish, dessert: dDish, allergens: ing }
+
+        const docRef = await addDoc(collection(firestore, "meals"), data);
+        console.log(docRef.path);
+        const mealRef = await doc(firestore, 'meals', docRef.id);
+        return mealRef;
+    } catch (e) {
+        console.log(e);
+        return e
+
+    }
 
 
+}
+/*
 export const addIngredients = async(allergen: string) => {
     try {
         const data = {name: allergen}
@@ -146,93 +170,20 @@ export const addDish = async(dish: string, allergen: string) => {
     }
 }
 
-
-export const addMeal = async(dish:string, allergen: string) => {
-
+*/
+export const getEvent = async () => {
     try {
 
-        const ingredientRefID = await addIngredients(allergen);
-        const ingredientRef = doc(firestore, 'ingredients', ingredientRefID)
+        const querySnapshot = await getDocs(collection(firestore, "events"));
+        querySnapshot.forEach((doc) => {
+            console.log(`${doc.id} => ${doc.data()["event"]}`);
+        });
 
-        const ingData = {name: dish, ingredients: ingredientRef}
-
-        const ingDocRef = await addDoc(collection(firestore, "dishes"), ingData);
-        console.log(ingDocRef.path);
-        const dishRef = doc(firestore, 'dishes', ingDocRef.id);
-
-        const data = {entree: dishRef, allergens: ingredientRef}
-
-        const docRef = await addDoc(collection(firestore, "meals"), data);
-        console.log(docRef.path);
-        const mealRef = await doc(firestore, 'meals', docRef.id);
-        return mealRef;
-    } catch (e) {
-        console.log(e);
-        return e
-
-    }   
-
-
-}
-
-export const getEvent = async (id: string) => {
-    try {
-        var meal;
-        const eventRef = doc(firestore, 'events', id);
-        const eventSnap = await getDoc(eventRef);
-
-        if (eventSnap.exists()) {
-            console.log('event data', eventSnap.data());
-            // console.log('meal', eventSnap.data()['meal']);
-            const mealRef = eventSnap.data()['meal'];
-            const mealSnap = await getDoc(mealRef);
-
-            if (mealSnap.exists()) {
-                console.log('meal data', mealSnap.data());
-                meal = mealSnap.data();
-
-                const dishRef = mealSnap.data()['entree'];
-                const dishSnap = await getDoc(dishRef);
-
-                const ingredientRef = mealSnap.data()['allergens'];
-                const ingredientSnap = await getDoc(ingredientRef);
-
-                if (dishSnap.exists()) {
-                    console.log('dish data', dishSnap.data());
-                    meal['dish'] = dishSnap.data()['name'];
-                } else {
-                    console.log('dish not found');
-                }
-
-                if (ingredientSnap.exists()) {
-                    console.log('ingredient data', ingredientSnap.data());
-                    meal['allergen'] = ingredientSnap.data();
-                } else {
-                    console.log('ingredient not found');
-                }
-            } else {
-                console.log('meal does not exist');
-            }
-        } else {
-            console.log('no such document!');
-        }
-        // console.log(eventRef.get('meal'));
-        return eventRef;
-        // const q = query(
-        //     collection(firestore, "events"),
-        //     where("id", "==", id)
-        // );
-
-        // const querySnapshot = await getDocs(q);
-        // querySnapshot.forEach((doc) => {
-        //     console.log(doc.data()['meals'])
-        //     meal = doc.data()['meals'];
-        // });
-        // console.log(meal);
-        // return meal;
 
     } catch (e) {
         console.log(e);
     }
 }
+
+
 
