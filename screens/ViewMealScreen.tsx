@@ -53,7 +53,7 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
   const [duration, setDuration] = useState(null);
 
   const [eventName, setEventName] = useState("");
-
+// comment
   const [hostFirstName, setHostFirstName] = useState("");
   const [hostLastName, setHostLastName] = useState("");
 
