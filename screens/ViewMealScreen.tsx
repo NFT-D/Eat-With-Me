@@ -140,78 +140,71 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
   }, []);
 
   return (
-    <SafeAreaView style={{ alignContent: 'center', alignItems: 'center', backgroundColor: colors.secondary }}>
-          <View>
-                <ScrollView>
-                      <ImageBackground source={food} style={[styles.columnContainer, { width: "100%", height: "80%", top: -20 }]}>
-                            <View style={{ top: 150, alignItems: "center", padding: 15 }}>
-                                  <Text style={styles.eventTitle}>{eventName}</Text>
-                                  {/* <Text style={styles.gray_whiteTextBold}>
-                                    Hosted by {hostFirstName}fdsfsd{" "}
-                                  </Text> 
-                                  
-                                  */}
-                                  <View style={[styles.rowContainer, { top: -25 }]}>
-                                        {/* <Text style={styles.whiteTextReg}>{(moment(absoluteDateTime)).format("HH:MM:SS XM")}</Text> */}
+    <View>
+      <ScrollView contentContainerStyle = {styles.contentContainer}>
+          <ImageBackground source={food} style={[styles.columnContainer, { width: "100%", height: "50%", top: -200 }]}>
+              <View style={{ top: 150, alignItems: "center", padding: 15 }}>
+                    <Text style={styles.whiteTextBold}>{eventName}</Text>
+                      {/* <Text style={styles.gray_whiteTextBold}> Hosted by {hostFirstName}fdsfsd{" "}</Text> */}
+                    <View style={[styles.rowContainer, { top: -25 }]}>
+                                          {/* <Text style={styles.whiteTextReg}>{(moment(absoluteDateTime)).format("HH:MM:SS XM")}</Text> */}
 
-                                        <Text style={styles.whiteTextReg}>{Moment(absoluteDateTime).format("yyyy-MM-dd – kk:mm")} </Text>
-                                        {/* <Text>{dateFormat(absoluteDateTime, "h:MM:ss TT")} </Text> */}
-                                        <Text style={styles.whiteTextReg}> 0/{capacity} </Text>
-                                        <Text> </Text>
-                                        <Text style={styles.whiteTextReg}> $0 </Text>
-                                  </View>
-                            </View>
-                            <View style={styles.rowContainer}>
-                                <Text style={styles.white_smallTextReg}> Wed 2/16 </Text>
-                                <Text> </Text>
-                                <Text style={styles.white_smallTextReg}> Seats Taken </Text>
-                                <Text> </Text>
-                                <Text style={styles.white_smallTextReg}> Fee </Text>
-                            </View>
-                      </ImageBackground>
+                      <Text style={styles.whiteTextReg}>{Moment(absoluteDateTime).format("yyyy-MM-dd – kk:mm")}</Text>
+                                          {/* <Text>{dateFormat(absoluteDateTime, "h:MM:ss TT")} </Text> */}
+                      <Text> </Text>
+                      <Text style={styles.whiteTextReg}> 0/{capacity} </Text>
+                      <Text>            </Text>
+                      <Text style={styles.whiteTextReg}> $0 </Text>
+                    </View>
+              </View>
 
-                      <View style={{ padding: 20 }}>
-                          <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 20, flex: 1, flexDirection: "row", backgroundColor: "white"}}>
-                            <MyButton type="primary" size="large" text="Reserve" />
-                            <MyButton type="icon" text="♥" />
-                            <MyButton type="icon" text="✉" />
-                          </View>
-                        <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 20, flex: 1, flexDirection: "column", backgroundColor: "white"}}>
-                            <Text style={styles.blackTextBold}>About Meal:</Text>
-                            <Text> {notes} </Text>
+              <View style={[styles.rowContainer,{top:-40}]}>
+                  <Text style={styles.white_smallTextReg}> Wed 2/16 </Text>
+                  <Text>          </Text>
+                  <Text style={styles.white_smallTextReg}> Seats Taken </Text>
+                  <Text>          </Text>
+                  <Text style={styles.white_smallTextReg}> Fee </Text>
+              </View>
+              
+          </ImageBackground>
 
-                            <Text style={styles.blackTextBold}>Appetizers:</Text>
-                            <Text>{appetizers.toString()}</Text>
-                            <Text style={styles.blackTextBold}>Entrees:</Text>
-                            <Text>{entree.toString()}</Text>
-                            <Text style={styles.blackTextBold}>Desserts:</Text>
-                            <Text>{dessert.toString()}</Text>
-                            <Text style={styles.blackTextBold}>Allergens:</Text>
-                            <Text>{allergens.toString()}</Text>
-                        </View>
-                        <TouchableOpacity
-                          style={{
-                            flexDirection: "row",
-                            flexWrap: "wrap",
-                            width: "100%",
-                            padding: 15,
-                            backgroundColor: "white",
-                          }}
-                          onPress={() => navigation.navigate("ViewMeal")}
-                        >
-                          <View style={{ flex: 0.5 }}>
-                            <Image source={location} style={{ height: "20%", width: "20%" }} />
-                          </View>
-                          <View style={{ flexDirection: "column", padding: 10 }}>
-                            {/*location info*/}
-                            <Text>{address}</Text>
-                            <Text style={{ color: colors.primary }}>Get Directions</Text>
-                          </View>
-                        </TouchableOpacity>
-                      </View>
-                </ScrollView>
+          <View style={{ padding: 20, top: -200 }}>
+              <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 20, flex: 1, flexDirection: "row", backgroundColor: "white"}}>
+                  <MyButton type="primary" size="medium" text="Reserve" />
+                  <MyButton type="icon" text="♥" />
+                  <MyButton type="icon" text="✉" />
+              </View>
+
+              <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 20, flex: 1, flexDirection: "column", backgroundColor: "white"}}>
+                  
+                <Text style={styles.blackTextBold}>About Meal:</Text>
+                <Text style={styles.gray_whiteTextBold}> {notes} </Text>   
+                <Text style={styles.gray_whiteTextBold}>_________________________________</Text>
+                <Text style={styles.black_smallTextBold}>Appetizers:</Text>
+                <Text style={styles.gray_whiteTextBold}>{appetizers.toString()}</Text>
+                <Text style={styles.black_smallTextBold}>Entrees:</Text>
+                <Text style={styles.gray_whiteTextBold}>{entree.toString()}</Text>
+                <Text style={styles.black_smallTextBold}>Desserts:</Text>
+                <Text style={styles.gray_whiteTextBold}>{dessert.toString()}</Text>
+                <Text style={styles.black_smallTextBold}>Allergens:</Text>
+                <Text style={styles.gray_whiteTextBold}>{allergens.toString()}</Text>
+              </View>
+                          
+              <TouchableOpacity style={{ flexDirection: "row", flexWrap: "wrap", width: "100%", padding: 15, backgroundColor: "white",}} onPress={() => navigation.navigate("ViewMeal")}>
+                    <View style={{ flex: 0.5 }}>
+                        <Image source={location} style={{ height: "20%", width: "20%" }} />
+                    </View>
+                            
+                    <View style={{ flexDirection: "column", padding: 10 }}>
+                        {/*location info*/}
+                        <Text>{address}</Text>
+                        <Text style={{ color: colors.primary }}>Get Directions</Text>
+                    </View>
+
+                </TouchableOpacity>
           </View>
-    </SafeAreaView>
+      </ScrollView>
+  </View>
   );
 }
 const styles = StyleSheet.create({
@@ -242,16 +235,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   gray_whiteTextBold: {
-    color: 'white',
+    color: 'grey',
     fontSize: 18,
     fontWeight: 'bold',
-    fontStyle: "italic"
+    fontStyle: "italic",
+    padding: 20,
 
   },
   grayTextReg: {
     color: 'gray',
     fontSize: 18,
-    fontStyle: "italic"
+    fontStyle: "italic",
   },
   blackTextBold: {
     color: 'black',
@@ -268,6 +262,15 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 40,
     fontWeight: 'bold'
-  }
+  },
 
+  black_smallTextBold: {
+    color: 'black',
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+
+  contentContainer: {
+    paddingVertical: 200,
+  },
 });
