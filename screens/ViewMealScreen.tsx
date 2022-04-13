@@ -17,7 +17,7 @@ type ScreenProps = {
 
 
 export default function ViewMealScreen({ route,navigation }: ScreenProps) {
-  const{firstName,eventID,user,firestore}=route.params;
+  const{firstName,eventID,firestore}=route.params;
 
   const [address, setAddress] = useState("");
   const [capacity, setCapacity] = useState(0);
@@ -34,10 +34,7 @@ export default function ViewMealScreen({ route,navigation }: ScreenProps) {
 
   const [eventName, setEventName] = useState("");
 
-  const [hostFirstName, setHostFirstName] = useState("");
-  const [hostLastName, setHostLastName] = useState("");
-
-  let time, apz;
+  let time;
   var ml;
   const getEventInfo = async (id: string) => {
     try {
@@ -79,7 +76,6 @@ export default function ViewMealScreen({ route,navigation }: ScreenProps) {
 
   useEffect(() => {
     async function fetchMyAPI() {
-      //await getFirstName()
       await getEventInfo(eventID)
       await getMealInfo(ml)}
       fetchMyAPI()
@@ -124,8 +120,7 @@ export default function ViewMealScreen({ route,navigation }: ScreenProps) {
 
               <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 20, flex: 1, flexDirection: "column", backgroundColor: "white"}}>
                   
-                <Text style={styles.blackTextBold}>About Meal:</Text>
-                <Text style={styles.gray_whiteTextBold}> {notes} </Text>   
+                <Text style={styles.blackTextBold}>Menu</Text>
                 <Text style={styles.gray_whiteTextBold}>_________________________________</Text>
                 <Text style={styles.black_smallTextBold}>Appetizers:</Text>
                 <Text style={styles.gray_whiteTextBold}>{appetizers.toString()}</Text>
@@ -144,8 +139,12 @@ export default function ViewMealScreen({ route,navigation }: ScreenProps) {
                             
                     <View style={{ flexDirection: "column", padding: 10 }}>
                         {/*location info*/}
+                        <Text style={styles.black_smallTextBold}>location: </Text>
                         <Text>{address}</Text>
-                        <Text style={{ color: colors.primary }}>Get Directions</Text>
+
+                        <Text style = {styles.black_smallTextBold}>Additional Notes:</Text>
+                        <Text> {notes} </Text> 
+                        
                     </View>
 
                 </TouchableOpacity>
