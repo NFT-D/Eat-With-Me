@@ -4,30 +4,10 @@ import colors from '../config/colors';
 import React, { useEffect, useState } from 'react';
 import food from '../assets/pizza.png';
 import location from '../assets/location.png';
-import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp, DocumentReference } from 'firebase/firestore';
 import Constants from "expo-constants";
 import Moment from 'moment';
 
-
-// // Your web app's Firebase configuration
-// const firebaseConfig = {
-//   apiKey: Constants.manifest?.extra?.firebaseApiKey,
-//   authDomain: Constants.manifest?.extra?.firebaseAuthDomain,
-//   projectId: Constants.manifest?.extra?.firebaseProjectId,
-//   storageBucket: Constants.manifest?.extra?.firebaseStorageBucket,
-//   messagingSenderId: Constants.manifest?.extra?.firebaseMessagingSenderId,
-//   appId: Constants.manifest?.extra?.firebaseAppId,
-// };
-
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const auth = getAuth(app);
-// const firestore = getFirestore(app);
-
-// // AUTHENTICATION // ---------------------------------------------------------
-// let user = auth.currentUser;
 type ScreenProps = {
   navigation: any,
   route: any
@@ -89,10 +69,6 @@ export default function ViewMealScreen({ route,navigation }: ScreenProps) {
       setDessertsDish(meal["dessert"]);
       setAllergens(meal["allergens"]);
 
-      //console.log('appetizers:', appetizers.toString());
-      // console.log('entrees:', entree.toString());
-      // console.log('desserts:', dessert.toString());
-      // console.log('allergens:', allergens.toString());
     }
     catch (e) {
       console.log(e);
