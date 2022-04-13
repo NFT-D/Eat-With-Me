@@ -6,8 +6,28 @@ import { hostEvent } from '../services/firebase';
 import MyButton from '../components/MyButton';
 import { StatusBar } from 'expo-status-bar';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Constants from 'expo-constants';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: Constants.manifest?.extra?.firebaseApiKey,
+    authDomain: Constants.manifest?.extra?.firebaseAuthDomain,
+    projectId: Constants.manifest?.extra?.firebaseProjectId,
+    storageBucket: Constants.manifest?.extra?.firebaseStorageBucket,
+    messagingSenderId: Constants.manifest?.extra?.firebaseMessagingSenderId,
+    appId: Constants.manifest?.extra?.firebaseAppId,
+};
 
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const firestore = getFirestore(app);
+
+// AUTHENTICATION // ---------------------------------------------------------
+let user = auth.currentUser;
 
 
 type ScreenProps = {
@@ -17,6 +37,7 @@ type ScreenProps = {
 
 export default function LogInScreen({ navigation }: ScreenProps) {
     const [event, setEvent] = useState("");
+    const [eventID, setEventID] = useState("");
     const [location, enterLoc] = useState("");
     const [guest, enterGuest] = useState(0);
     const [allergens, enterAllergens] = useState("");
@@ -98,8 +119,8 @@ export default function LogInScreen({ navigation }: ScreenProps) {
 
 
 
-                    <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date) }} /></View>
-                    <View style={{ flexDirection: 'row' }}><MyButton text="view Meal" type="primary" size="large" onPressFn={async () => { navigation.navigate("ViewMeal") }} /></View>
+                    <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { setEventID(await hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date)) }} /></View>
+                    <View style={{ flexDirection: 'row' }}><MyButton text="view Meal" type="primary" size="large" onPressFn={async () => { navigation.navigate("ViewMeal", { firstName: 'Tyler', eventID: eventID, firestore }) }} /></View>
 
 
 

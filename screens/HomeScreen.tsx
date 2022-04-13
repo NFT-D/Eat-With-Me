@@ -38,17 +38,17 @@ type ScreenProps = {
 
 const getEvents = async (ary: Array<string>) => {
     try {
-        
+
         const querySnapshot = await getDocs(collection(firestore, "events"));
         querySnapshot.forEach((doc) => {
             //console.log(`${doc.id} => ${doc.data()["event"]}`);
             ary.push(doc.id);
-          });
+        });
         return ary;
 
     } catch (e) {
         console.log(e);
-}
+    }
 }
 var docIds = getEvents([]);
 /*
@@ -57,11 +57,11 @@ const docItems = docIds.map((value)=>{
 })*/
 
 export default function HomeScreen({ navigation, route }: ScreenProps) {
-    const {firstName} = route.params;
+    const { firstName } = route.params;
     const [searchText, enterSearch] = useState("");
     return (
         <SafeAreaView style={styles.container}>
-            
+
             <MyButton type="primary" text="Host" size="medium" onPressFn={() => navigation.navigate("HostMeal")}></MyButton>
             {/* 
             <View style={styles.topPanelView}>
@@ -87,18 +87,18 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
                 </TouchableOpacity> 
             </View>
 */}
-            <ScrollView style={{width:'85%', padding:20}}>
+            <ScrollView style={{ width: '85%', padding: 20 }}>
                 <MyButton text="enter" type="primary" size="large" onPressFn={getEvent} />
-                <TouchableOpacity style={{flexDirection:'row', flexWrap:'wrap', width:"100%", borderColor:'black', borderWidth:1, borderRadius: 20}} onPress={() => navigation.navigate("ViewMeal", { firstName,eventID: 'feq8LkV6DZ2NyPDJDoEw',firestore})}>
-                    <View style={{flex:.5}}>
-                    <Image source={pizza} style={{height:'100%', width:'100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20}}/>
+                <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }} onPress={() => navigation.navigate("ViewMeal", { firstName, eventID: '59L6GKjQewXjpUaY9ik9', firestore })}>
+                    <View style={{ flex: .5 }}>
+                        <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
                     </View>
-                    <View style={{flexDirection:'column', padding:10}}>
+                    <View style={{ flexDirection: 'column', padding: 10 }}>
                         {/*meal info */}
-                        <Text>Homemade Pizza</Text>
-                        <Text>Max Guests: 6</Text>
-                        <Text>7:30 PM</Text>
-                        <Text style={{color:colors.primary}}>View Event</Text>
+                        <Text>Pizza Party</Text>
+                        <Text>Max Guests: 15</Text>
+                        <Text>Tomorrow, 6:06 PM</Text>
+                        <Text style={{ color: colors.primary }}>View Event</Text>
                     </View>
                 </TouchableOpacity>
             </ScrollView>
@@ -129,12 +129,12 @@ const styles = StyleSheet.create({
         backgroundColor: colors.secondary,
         flexDirection: 'row',
         alignItems: 'center',
-        padding:15
-        
-        
-    
+        padding: 15
+
+
+
     },
-    mealComponent:{
+    mealComponent: {
         backgroundColor: colors.secondary
     }
 
