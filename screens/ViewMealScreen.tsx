@@ -51,7 +51,7 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
   const [entree, setEntreesDish] = useState([]);
   const [dessert, setDessertsDish] = useState([]);
 
-  const [absoluteDateTime, setAbsoluteDateTime] = useState(new Date());
+  const [absoluteDateTime, setAbsoluteDateTime] = useState(null);
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState(new Date());
 
@@ -74,8 +74,8 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
       setEventName(querySnapshot.data()["event"]);
       setCapacity(event["capacity"]);
       setNotes(event["note"]);
-      
-      setAbsoluteDateTime(event["absoluteDateTime"]);
+
+      setAbsoluteDateTime(new Date(event["date"]));
       setDate(querySnapshot.data()["date"]);
       //setTime(dateFormat(absoluteDateTime, "h:MM TT"));
       setDuration(event["duration"]);
@@ -137,7 +137,7 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
           <View style={[styles.rowContainer, { top: -25 }]}>
             {/* <Text style={styles.whiteTextReg}>{(moment(absoluteDateTime)).format("HH:MM:SS XM")}</Text> */}
 
-            <Text style={styles.whiteTextReg}>{Moment(absoluteDateTime).format("h:mm")} </Text>
+            <Text style={styles.whiteTextReg}>{Moment(absoluteDateTime).format("yyyy-MM-dd – kk:mm")} </Text>
             {/* <Text>{dateFormat(absoluteDateTime, "h:MM:ss TT")} </Text> */}
             <Text style={styles.whiteTextReg}> 0/{capacity} </Text>
             <Text> </Text>
