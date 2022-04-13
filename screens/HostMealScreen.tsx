@@ -6,10 +6,6 @@ import { hostEvent } from '../services/firebase';
 import MyButton from '../components/MyButton';
 import { StatusBar } from 'expo-status-bar';
 import DateTimePicker  from '@react-native-community/datetimepicker';
-import {Slider} from '@miblanchard/react-native-slider';
-
-
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
 
 
@@ -22,7 +18,7 @@ type ScreenProps = {
 export default function LogInScreen({ navigation }: ScreenProps) {
     const [event,setEvent] = useState("");
     const [location,enterLoc] = useState("");
-    const [guest,enterGuest] = useState("");
+    const [guest,enterGuest] = useState(0);
     const [allergens,enterAllergens] = useState("");
     const [notes,enterNotes] = useState("");
 

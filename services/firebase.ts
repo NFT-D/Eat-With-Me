@@ -98,7 +98,7 @@ export const getFirstName = async () => {
 
 
 
-export const hostEvent = async (eventName: string, appetizer: string,entree: string, dessert: string,address:string, guest: string, allergen: string, notes: string, duration: number, sDate: Date) => {
+export const hostEvent = async (eventName: string, appetizer: string,entree: string, dessert: string,address:string, guest: number, allergen: string, notes: string, duration: number, sDate: Date) => {
 
     try {
         const mealRef = await addMeal(appetizer,entree, dessert, allergen);
@@ -172,62 +172,32 @@ export const addDish = async(dish: string, allergen: string) => {
 
 */
 
-
-export const getEvent = async (id: string) => {
+export const getFire = async () => {return firestore;}
+export const getEvent = async () => {
     try {
-        var meal;
-        const eventRef = doc(firestore, 'events', id);
-        const eventSnap = await getDoc(eventRef);
+        
+        const querySnapshot = await getDocs(collection(firestore, "events"));
+        querySnapshot.forEach((doc) => {
+            console.log(`${doc.id} => ${doc.data()["event"]}`);
+          });
+        
 
-        if (eventSnap.exists()) {
-            console.log('event data', eventSnap.data());
-            // console.log('meal', eventSnap.data()['meal']);
-            const mealRef = eventSnap.data()['meal'];
-            const mealSnap = await getDoc(mealRef);
+    } catch (e) {
+        console.log(e);
+    }
+}
 
-            if (mealSnap.exists()) {
-                console.log('meal data', mealSnap.data());
-                meal = mealSnap.data();
+export const getEvent2 = async () => {
+    try {
+        var evt=[];
+        const eventref = doc(firestore, 'events',"default");
+        const docSnap = await getDoc(eventref);
 
-                const dishRef = mealSnap.data()['entree'];
-                const dishSnap = await getDoc(dishRef);
+        if (docSnap.exists()) {
+            console.log('event data', docSnap.data());
+            evt.push(docSnap.data()["event"]);
 
-                const ingredientRef = mealSnap.data()['allergens'];
-                const ingredientSnap = await getDoc(ingredientRef);
-
-                if (dishSnap.exists()) {
-                    console.log('dish data', dishSnap.data());
-                    meal['dish'] = dishSnap.data()['name'];
-                } else {
-                    console.log('dish not found');
-                }
-
-                if (ingredientSnap.exists()) {
-                    console.log('ingredient data', ingredientSnap.data());
-                    meal['allergen'] = ingredientSnap.data();
-                } else {
-                    console.log('ingredient not found');
-                }
-            } else {
-                console.log('meal does not exist');
-            }
-        } else {
-            console.log('no such document!');
-        }
-        // console.log(eventRef.get('meal'));
-        return eventRef;
-        // const q = query(
-        //     collection(firestore, "events"),
-        //     where("id", "==", id)
-        // );
-
-        // const querySnapshot = await getDocs(q);
-        // querySnapshot.forEach((doc) => {
-        //     console.log(doc.data()['meals'])
-        //     meal = doc.data()['meals'];
-        // });
-        // console.log(meal);
-        // return meal;
+        return evt}
 
     } catch (e) {
         console.log(e);
