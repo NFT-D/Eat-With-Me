@@ -16,7 +16,7 @@ type ScreenProps = {
 
 
 
-export default function ViewMealScreen({ route, navigation }: ScreenProps) {
+export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   const { firstName, eventID, firestore } = route.params;
 
   const [address, setAddress] = useState("");

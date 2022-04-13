@@ -62,7 +62,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
     return (
         <SafeAreaView style={styles.container}>
 
-            <MyButton type="primary" text="Host" size="medium" onPressFn={() => navigation.navigate("HostMeal")}></MyButton>
+            <MyButton type="primary" text="Host" size="medium" onPressFn={() => navigation.navigate("HostMeal", {firstName})}></MyButton>
             {/* 
             <View style={styles.topPanelView}>
                 <TextInput 

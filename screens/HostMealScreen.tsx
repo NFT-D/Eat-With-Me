@@ -31,11 +31,14 @@ let user = auth.currentUser;
 
 
 type ScreenProps = {
-    navigation: any
+    navigation: any,
+    route: any
 }
 
 
-export default function LogInScreen({ navigation }: ScreenProps) {
+
+export default function LogInScreen({ navigation, route }: ScreenProps) {
+    const { firstName } = route.params;
     const [event, setEvent] = useState("");
     const [eventID, setEventID] = useState("");
     const [location, enterLoc] = useState("");
@@ -120,7 +123,7 @@ export default function LogInScreen({ navigation }: ScreenProps) {
 
 
                     <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { setEventID(await hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date)) }} /></View>
-                    <View style={{ flexDirection: 'row' }}><MyButton text="view Meal" type="primary" size="large" onPressFn={async () => { navigation.navigate("ViewMeal", { firstName: 'Tyler', eventID: eventID, firestore }) }} /></View>
+                    <View style={{ flexDirection: 'row' }}><MyButton text="view Meal" type="primary" size="large" onPressFn={async () => { navigation.navigate("ViewMeal", { firstName, eventID: eventID, firestore }) }} /></View>
 
 
 
