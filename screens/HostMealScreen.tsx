@@ -3,6 +3,7 @@ import colors from '../config/colors';
 import MyField from '../components/MyField';
 import React, { useState } from 'react';
 import { hostEvent } from '../services/firebase';
+
 import MyButton from '../components/MyButton';
 import { StatusBar } from 'expo-status-bar';
 import DateTimePicker from '@react-native-community/datetimepicker';
