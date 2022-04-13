@@ -20,7 +20,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
 
-        <Stack.Screen name="StartUp" component={StartUpScreen} options={{
+        <Stack.Screen name="StartUp" component={ViewMealScreen} options={{
           headerShown: false,
         }} />
 

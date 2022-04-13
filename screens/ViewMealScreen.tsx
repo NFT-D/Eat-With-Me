@@ -10,6 +10,8 @@ import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp } from 'firebase/firestore';
 import Constants from "expo-constants";
+import Moment from 'moment';
+
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -37,6 +39,7 @@ type ScreenProps = {
 
 
 export default function ViewMealScreen({ navigation }: ScreenProps) {
+  var dateFormat = require('dateformat');
   // const [eventName, enterEvent] = useState("");
   // const [event, setEvent] = useState("");
   const [address, setAddress] = useState("");
@@ -48,12 +51,14 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
   const [entree, setEntreesDish] = useState([]);
   const [dessert, setDessertsDish] = useState([]);
 
+  const [absoluteDateTime, setAbsoluteDateTime] = useState(new Date());
   const [date, setDate] = useState(new Date());
+  const [time, setTime] = useState(new Date());
 
   const [duration, setDuration] = useState(null);
 
   const [eventName, setEventName] = useState("");
-// comment
+
   const [hostFirstName, setHostFirstName] = useState("");
   const [hostLastName, setHostLastName] = useState("");
 
@@ -68,8 +73,11 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
       setAddress(querySnapshot.data()["location"]);
       setEventName(querySnapshot.data()["event"]);
       setCapacity(event["capacity"]);
-      setNotes(event["notes"]);
-      setDate(event["date"]);
+      setNotes(event["note"]);
+      
+      setAbsoluteDateTime(event["absoluteDateTime"]);
+      setDate(querySnapshot.data()["date"]);
+      //setTime(dateFormat(absoluteDateTime, "h:MM TT"));
       setDuration(event["duration"]);
 
 
@@ -121,12 +129,16 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
       >
         <View style={{ top: 150, alignItems: "center", padding: 15 }}>
           <Text style={styles.eventTitle}>{eventName}</Text>
-          <Text style={styles.gray_whiteTextBold}>
+          {/* <Text style={styles.gray_whiteTextBold}>
             Hosted by {hostFirstName}fdsfsd{" "}
-          </Text>
+          </Text> 
+          
+          */}
           <View style={[styles.rowContainer, { top: -25 }]}>
-            <Text style={styles.whiteTextReg}> 7:30 </Text>
-            <Text> </Text>
+            {/* <Text style={styles.whiteTextReg}>{(moment(absoluteDateTime)).format("HH:MM:SS XM")}</Text> */}
+
+            <Text style={styles.whiteTextReg}>{Moment(absoluteDateTime).format("h:mm")} </Text>
+            {/* <Text>{dateFormat(absoluteDateTime, "h:MM:ss TT")} </Text> */}
             <Text style={styles.whiteTextReg}> 0/{capacity} </Text>
             <Text> </Text>
             <Text style={styles.whiteTextReg}> $0 </Text>
@@ -166,9 +178,7 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
           }}
         >
           <Text style={styles.blackTextBold}>About Meal:</Text>
-          <Text style={styles.grayTextReg}>
-            Just a casual get together to meet some new people
-          </Text>
+          <Text> {notes} </Text>
         </View>
         <TouchableOpacity
           style={{
@@ -185,8 +195,7 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
           </View>
           <View style={{ flexDirection: "column", padding: 10 }}>
             {/*location info*/}
-            <Text>604 River Terrace</Text>
-            <Text>Suite 4</Text>
+            <Text>{address}</Text>
             <Text style={{ color: colors.primary }}>Get Directions</Text>
           </View>
         </TouchableOpacity>
