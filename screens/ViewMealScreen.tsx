@@ -13,12 +13,12 @@ import Constants from "expo-constants";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: Constants.manifest?.extra?.firebaseApiKey,
-    authDomain: Constants.manifest?.extra?.firebaseAuthDomain,
-    projectId: Constants.manifest?.extra?.firebaseProjectId,
-    storageBucket: Constants.manifest?.extra?.firebaseStorageBucket,
-    messagingSenderId: Constants.manifest?.extra?.firebaseMessagingSenderId,
-    appId: Constants.manifest?.extra?.firebaseAppId,
+  apiKey: Constants.manifest?.extra?.firebaseApiKey,
+  authDomain: Constants.manifest?.extra?.firebaseAuthDomain,
+  projectId: Constants.manifest?.extra?.firebaseProjectId,
+  storageBucket: Constants.manifest?.extra?.firebaseStorageBucket,
+  messagingSenderId: Constants.manifest?.extra?.firebaseMessagingSenderId,
+  appId: Constants.manifest?.extra?.firebaseAppId,
 };
 
 // Initialize Firebase
@@ -38,49 +38,49 @@ type ScreenProps = {
 
 export default function ViewMealScreen({ navigation }: ScreenProps) {
   // const [eventName, enterEvent] = useState("");
-// const [event, setEvent] = useState("");
-const [address,setAddress] = useState("");
-const [capacity, setCapacity] = useState(0);
-const [allergens,setAllergens] = useState([]);
-const [notes, setNotes] = useState("");
+  // const [event, setEvent] = useState("");
+  const [address, setAddress] = useState("");
+  const [capacity, setCapacity] = useState(0);
+  const [allergens, setAllergens] = useState([]);
+  const [notes, setNotes] = useState("");
 
-const [appetizers, setAppetizersDish]= useState([]);
-const [entree, setEntreesDish]= useState([]);
-const [dessert, setDessertsDish]= useState([]);
+  const [appetizers, setAppetizersDish] = useState([]);
+  const [entree, setEntreesDish] = useState([]);
+  const [dessert, setDessertsDish] = useState([]);
 
-const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date());
 
-const [duration,setDuration] = useState(null);
+  const [duration, setDuration] = useState(null);
 
   const [eventName, setEventName] = useState("");
-  
+
   const [hostFirstName, setHostFirstName] = useState("");
   const [hostLastName, setHostLastName] = useState("");
 
 
-const getEventInfo = async (id: string) => {
-  try {
+  const getEventInfo = async (id: string) => {
+    try {
       const eventRef = doc(firestore, 'events', id);
       const querySnapshot = await getDoc(eventRef);
-       
-    //console.log(`${querySnapshot.id} => ${querySnapshot.data()["location"]}`);
-    const event = querySnapshot.data();
-    setAddress(querySnapshot.data()["location"]);
-    setEventName(querySnapshot.data()["event"]);
-    setCapacity(event["capacity"]);
-    setNotes(event["notes"]);
-    setDate(event["date"]);
-    setDuration(event["duration"]);
-  
-    
 
-      
+      //console.log(`${querySnapshot.id} => ${querySnapshot.data()["location"]}`);
+      const event = querySnapshot.data();
+      setAddress(querySnapshot.data()["location"]);
+      setEventName(querySnapshot.data()["event"]);
+      setCapacity(event["capacity"]);
+      setNotes(event["notes"]);
+      setDate(event["date"]);
+      setDuration(event["duration"]);
 
-  } catch (e) {
+
+
+
+
+    } catch (e) {
       console.log(e);
-}
+    }
   }
-  
+
   const getFirstName = async () => {
     try {
       let firstName = "Temp";
@@ -99,14 +99,14 @@ const getEventInfo = async (id: string) => {
     }
   };
 
-  
-  
-    
-  
+
+
+
+
   useEffect(() => {
     getEventInfo("feq8LkV6DZ2NyPDJDoEw");
-      console.log(user?.email);
-      getFirstName();
+    console.log(user?.email);
+    getFirstName();
     console.log("host first name", hostFirstName);
   }, []);
 
@@ -196,58 +196,58 @@ const getEventInfo = async (id: string) => {
 }
 const styles = StyleSheet.create({
   rowContainer: {
-      alignItems: 'center',
-      justifyContent: 'space-evenly',
-      padding: 10,
-      flex:1,
-      flexDirection: 'row'
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    padding: 10,
+    flex: 1,
+    flexDirection: 'row'
 
   },
   columnContainer: {
-    backgroundColor:'white',
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'space-evenly',
     padding: 20,
     flexDirection: 'column',
-    
+
   },
-  whiteTextBold:{
-    color:'white',
+  whiteTextBold: {
+    color: 'white',
     fontSize: 40,
-    fontWeight:'bold'
+    fontWeight: 'bold'
   },
-  whiteTextReg:{
-    color:'white',
+  whiteTextReg: {
+    color: 'white',
     fontSize: 25,
     fontWeight: 'bold'
   },
-  gray_whiteTextBold:{
-    color:'white',
+  gray_whiteTextBold: {
+    color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
-    fontStyle:"italic"
-  
+    fontStyle: "italic"
+
   },
-  grayTextReg:{
-    color:'gray',
+  grayTextReg: {
+    color: 'gray',
     fontSize: 18,
-    fontStyle:"italic"
+    fontStyle: "italic"
   },
-  blackTextBold:{
-    color:'black',
+  blackTextBold: {
+    color: 'black',
     fontSize: 27,
     fontWeight: 'bold'
   },
-  white_smallTextReg:{
-    color:'white',
+  white_smallTextReg: {
+    color: 'white',
     fontSize: 15,
     fontWeight: 'bold'
   },
 
-  eventTitle:{
-    color:'white',
+  eventTitle: {
+    color: 'white',
     fontSize: 60,
     fontWeight: 'bold'
   }
-  
+
 });

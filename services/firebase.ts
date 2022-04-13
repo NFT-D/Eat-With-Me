@@ -22,7 +22,7 @@ const firestore = getFirestore(app);
 // AUTHENTICATION // ---------------------------------------------------------
 let user = auth.currentUser;
 
-export const signUpWithEmail = async (fName: string, lName: string, email:string, password:string) => {
+export const signUpWithEmail = async (fName: string, lName: string, email: string, password: string) => {
     try {
         let result = await createUserWithEmailAndPassword(auth, email, password);
         user = result.user;
@@ -68,7 +68,7 @@ const addNewUser = async (fName: string, lName: string, email: string) => {
             last_name: lName,
             email: email
         }
-        const docRef = await addDoc(collection(firestore, "users", ), userData);
+        const docRef = await addDoc(collection(firestore, "users",), userData);
         console.log(docRef.id);
     } catch (e) {
         console.log(e);
@@ -79,13 +79,13 @@ export const getFirstName = async () => {
     try {
         let firstName = 'Temp';
         const q = query(
-            collection(firestore, "users"), 
+            collection(firestore, "users"),
             where("email", "==", user?.email)
         );
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
             console.log(doc.data()['first_name'])
-            firstName =  doc.data()['first_name'];
+            firstName = doc.data()['first_name'];
         });
         return firstName;
 
@@ -98,12 +98,12 @@ export const getFirstName = async () => {
 
 
 
-export const hostEvent = async (eventName: string, appetizer: string,entree: string, dessert: string,address:string, guest: number, allergen: string, notes: string, duration: number, sDate: Date) => {
+export const hostEvent = async (eventName: string, appetizer: string, entree: string, dessert: string, address: string, guest: number, allergen: string, notes: string, duration: number, sDate: Date) => {
 
     try {
-        const mealRef = await addMeal(appetizer,entree, dessert, allergen);
-    
-        const data = {event: eventName,capacity: guest, attendees: null, fee: null, location: address, meal: mealRef, date: sDate, note: notes}
+        const mealRef = await addMeal(appetizer, entree, dessert, allergen);
+
+        const data = { event: eventName, capacity: guest, attendees: null, fee: null, location: address, meal: mealRef, date: sDate, note: notes }
 
         const docRef = await addDoc(collection(firestore, "events"), data);
         console.log(docRef.path);
@@ -112,7 +112,7 @@ export const hostEvent = async (eventName: string, appetizer: string,entree: str
         return e
     }
 }
-export const addMeal = async(appetizer:string,entree: string, dessert: string, allergen: string) => {
+export const addMeal = async (appetizer: string, entree: string, dessert: string, allergen: string) => {
 
     try {
 
@@ -121,7 +121,7 @@ export const addMeal = async(appetizer:string,entree: string, dessert: string, a
         var dDish = dessert.split(",");
         var ing = allergen.split(",");
 
-        const data = {Appetizers: aDish, entree: eDish, dessert: dDish, allergens: ing}
+        const data = { Appetizers: aDish, entree: eDish, dessert: dDish, allergens: ing }
 
         const docRef = await addDoc(collection(firestore, "meals"), data);
         console.log(docRef.path);
@@ -131,7 +131,7 @@ export const addMeal = async(appetizer:string,entree: string, dessert: string, a
         console.log(e);
         return e
 
-    }   
+    }
 
 
 }
@@ -172,15 +172,15 @@ export const addDish = async(dish: string, allergen: string) => {
 
 */
 
-export const getFire = async () => {return firestore;}
+export const getFire = async () => { return firestore; }
 export const getEvent = async () => {
     try {
-        
+
         const querySnapshot = await getDocs(collection(firestore, "events"));
         querySnapshot.forEach((doc) => {
             console.log(`${doc.id} => ${doc.data()["event"]}`);
-          });
-        
+        });
+
 
     } catch (e) {
         console.log(e);
@@ -189,15 +189,16 @@ export const getEvent = async () => {
 
 export const getEvent2 = async () => {
     try {
-        var evt=[];
-        const eventref = doc(firestore, 'events',"default");
+        var evt = [];
+        const eventref = doc(firestore, 'events', "default");
         const docSnap = await getDoc(eventref);
 
         if (docSnap.exists()) {
             console.log('event data', docSnap.data());
             evt.push(docSnap.data()["event"]);
 
-        return evt}
+            return evt
+        }
 
     } catch (e) {
         console.log(e);
