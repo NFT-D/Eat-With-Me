@@ -8,7 +8,7 @@ import location from '../assets/location.png';
 import { getEvent } from '../services/firebase';
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp } from 'firebase/firestore';
+import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp, DocumentReference } from 'firebase/firestore';
 import Constants from "expo-constants";
 import Moment from 'moment';
 
@@ -47,6 +47,8 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
   const [allergens, setAllergens] = useState([]);
   const [notes, setNotes] = useState("");
 
+  const [mealID, setMealID] = useState(null);
+
   const [appetizers, setAppetizersDish] = useState([]);
   const [entree, setEntreesDish] = useState([]);
   const [dessert, setDessertsDish] = useState([]);
@@ -74,17 +76,34 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
       setEventName(querySnapshot.data()["event"]);
       setCapacity(event["capacity"]);
       setNotes(event["note"]);
+      setMealID(event["meal"]);
 
       setAbsoluteDateTime(new Date(event["date"]));
       setDate(querySnapshot.data()["date"]);
       //setTime(dateFormat(absoluteDateTime, "h:MM TT"));
       setDuration(event["duration"]);
 
-
-
-
-
     } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const getMealInfo = async (mealRef: DocumentReference) => {
+    try {
+      const querySnapshot = await getDoc(mealRef);
+      const meal = querySnapshot.data();
+
+      setAppetizersDish(meal["appetizer"]);
+      setEntreesDish(meal["entree"]);
+      setDessertsDish(meal["dessert"]);
+      setAllergens(meal["allergens"]);
+
+      // console.log('appetizers:', appetizers.toString());
+      // console.log('entrees:', entree.toString());
+      // console.log('desserts:', dessert.toString());
+      // console.log('allergens:', allergens.toString());
+    }
+    catch (e) {
       console.log(e);
     }
   }
@@ -113,94 +132,86 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
 
   useEffect(() => {
     getEventInfo("feq8LkV6DZ2NyPDJDoEw");
-    console.log(user?.email);
-    getFirstName();
-    console.log("host first name", hostFirstName);
+    // console.log(user?.email);
+    // getFirstName();
+    // console.log("host first name", hostFirstName);
+    // console.log("mealID", mealID);
+    getMealInfo(mealID);
   }, []);
 
   return (
-    <ScrollView style={{ backgroundColor: "white" }}>
-      <ImageBackground
-        source={food}
-        style={[
-          styles.columnContainer,
-          { width: "100%", height: "80%", top: -20 },
-        ]}
-      >
-        <View style={{ top: 150, alignItems: "center", padding: 15 }}>
-          <Text style={styles.eventTitle}>{eventName}</Text>
-          {/* <Text style={styles.gray_whiteTextBold}>
-            Hosted by {hostFirstName}fdsfsd{" "}
-          </Text> 
-          
-          */}
-          <View style={[styles.rowContainer, { top: -25 }]}>
-            {/* <Text style={styles.whiteTextReg}>{(moment(absoluteDateTime)).format("HH:MM:SS XM")}</Text> */}
+    <SafeAreaView style={{ alignContent: 'center', alignItems: 'center', backgroundColor: colors.secondary }}>
+          <View>
+                <ScrollView>
+                      <ImageBackground source={food} style={[styles.columnContainer, { width: "100%", height: "80%", top: -20 }]}>
+                            <View style={{ top: 150, alignItems: "center", padding: 15 }}>
+                                  <Text style={styles.eventTitle}>{eventName}</Text>
+                                  {/* <Text style={styles.gray_whiteTextBold}>
+                                    Hosted by {hostFirstName}fdsfsd{" "}
+                                  </Text> 
+                                  
+                                  */}
+                                  <View style={[styles.rowContainer, { top: -25 }]}>
+                                        {/* <Text style={styles.whiteTextReg}>{(moment(absoluteDateTime)).format("HH:MM:SS XM")}</Text> */}
 
-            <Text style={styles.whiteTextReg}>{Moment(absoluteDateTime).format("yyyy-MM-dd – kk:mm")} </Text>
-            {/* <Text>{dateFormat(absoluteDateTime, "h:MM:ss TT")} </Text> */}
-            <Text style={styles.whiteTextReg}> 0/{capacity} </Text>
-            <Text> </Text>
-            <Text style={styles.whiteTextReg}> $0 </Text>
+                                        <Text style={styles.whiteTextReg}>{Moment(absoluteDateTime).format("yyyy-MM-dd – kk:mm")} </Text>
+                                        {/* <Text>{dateFormat(absoluteDateTime, "h:MM:ss TT")} </Text> */}
+                                        <Text style={styles.whiteTextReg}> 0/{capacity} </Text>
+                                        <Text> </Text>
+                                        <Text style={styles.whiteTextReg}> $0 </Text>
+                                  </View>
+                            </View>
+                            <View style={styles.rowContainer}>
+                                <Text style={styles.white_smallTextReg}> Wed 2/16 </Text>
+                                <Text> </Text>
+                                <Text style={styles.white_smallTextReg}> Seats Taken </Text>
+                                <Text> </Text>
+                                <Text style={styles.white_smallTextReg}> Fee </Text>
+                            </View>
+                      </ImageBackground>
+
+                      <View style={{ padding: 20 }}>
+                          <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 20, flex: 1, flexDirection: "row", backgroundColor: "white"}}>
+                            <MyButton type="primary" size="large" text="Reserve" />
+                            <MyButton type="icon" text="♥" />
+                            <MyButton type="icon" text="✉" />
+                          </View>
+                        <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 20, flex: 1, flexDirection: "column", backgroundColor: "white"}}>
+                            <Text style={styles.blackTextBold}>About Meal:</Text>
+                            <Text> {notes} </Text>
+
+                            <Text style={styles.blackTextBold}>Appetizers:</Text>
+                            <Text>{appetizers.toString()}</Text>
+                            <Text style={styles.blackTextBold}>Entrees:</Text>
+                            <Text>{entree.toString()}</Text>
+                            <Text style={styles.blackTextBold}>Desserts:</Text>
+                            <Text>{dessert.toString()}</Text>
+                            <Text style={styles.blackTextBold}>Allergens:</Text>
+                            <Text>{allergens.toString()}</Text>
+                        </View>
+                        <TouchableOpacity
+                          style={{
+                            flexDirection: "row",
+                            flexWrap: "wrap",
+                            width: "100%",
+                            padding: 15,
+                            backgroundColor: "white",
+                          }}
+                          onPress={() => navigation.navigate("ViewMeal")}
+                        >
+                          <View style={{ flex: 0.5 }}>
+                            <Image source={location} style={{ height: "20%", width: "20%" }} />
+                          </View>
+                          <View style={{ flexDirection: "column", padding: 10 }}>
+                            {/*location info*/}
+                            <Text>{address}</Text>
+                            <Text style={{ color: colors.primary }}>Get Directions</Text>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                </ScrollView>
           </View>
-          <View style={styles.rowContainer}>
-            <Text style={styles.white_smallTextReg}> Wed 2/16 </Text>
-            <Text> </Text>
-            <Text style={styles.white_smallTextReg}> Seats Available </Text>
-            <Text> </Text>
-            <Text style={styles.white_smallTextReg}> Fee </Text>
-          </View>
-        </View>
-      </ImageBackground>
-      <View style={{ padding: 20 }}>
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "space-evenly",
-            padding: 20,
-            flex: 1,
-            flexDirection: "row",
-            backgroundColor: "white",
-          }}
-        >
-          <MyButton type="primary" size="large" text="Reserve" />
-          <MyButton type="icon" text="♥" />
-          <MyButton type="icon" text="✉" />
-        </View>
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "space-evenly",
-            padding: 20,
-            flex: 1,
-            flexDirection: "column",
-            backgroundColor: "white",
-          }}
-        >
-          <Text style={styles.blackTextBold}>About Meal:</Text>
-          <Text> {notes} </Text>
-        </View>
-        <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            flexWrap: "wrap",
-            width: "100%",
-            padding: 15,
-            backgroundColor: "white",
-          }}
-          onPress={() => navigation.navigate("ViewMeal")}
-        >
-          <View style={{ flex: 0.5 }}>
-            <Image source={location} style={{ height: "20%", width: "20%" }} />
-          </View>
-          <View style={{ flexDirection: "column", padding: 10 }}>
-            {/*location info*/}
-            <Text>{address}</Text>
-            <Text style={{ color: colors.primary }}>Get Directions</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
@@ -255,7 +266,7 @@ const styles = StyleSheet.create({
 
   eventTitle: {
     color: 'white',
-    fontSize: 60,
+    fontSize: 40,
     fontWeight: 'bold'
   }
 

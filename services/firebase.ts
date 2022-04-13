@@ -121,7 +121,7 @@ export const addMeal = async (appetizer: string, entree: string, dessert: string
         var dDish = dessert.split(",");
         var ing = allergen.split(",");
 
-        const data = { Appetizers: aDish, entree: eDish, dessert: dDish, allergens: ing }
+        const data = { appetizer: aDish, entree: eDish, dessert: dDish, allergens: ing }
 
         const docRef = await addDoc(collection(firestore, "meals"), data);
         console.log(docRef.path);
