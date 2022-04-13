@@ -39,66 +39,57 @@ type ScreenProps = {
 
 
 export default function ViewMealScreen({ navigation }: ScreenProps) {
-  var dateFormat = require('dateformat');
-  // const [eventName, enterEvent] = useState("");
-  // const [event, setEvent] = useState("");
   const [address, setAddress] = useState("");
   const [capacity, setCapacity] = useState(0);
   const [allergens, setAllergens] = useState([]);
   const [notes, setNotes] = useState("");
 
-  const [mealID, setMealID] = useState(null);
-
   const [appetizers, setAppetizersDish] = useState([]);
   const [entree, setEntreesDish] = useState([]);
   const [dessert, setDessertsDish] = useState([]);
 
-  const [absoluteDateTime, setAbsoluteDateTime] = useState(null);
   const [date, setDate] = useState(new Date());
-  const [time, setTime] = useState(new Date());
 
-  const [duration, setDuration] = useState(null);
+  const [duration, setDuration] = useState(0);
 
   const [eventName, setEventName] = useState("");
 
   const [hostFirstName, setHostFirstName] = useState("");
   const [hostLastName, setHostLastName] = useState("");
 
-
+  let time, apz;
+  var ml;
   const getEventInfo = async (id: string) => {
     try {
       const eventRef = doc(firestore, 'events', id);
       const querySnapshot = await getDoc(eventRef);
-
-      //console.log(`${querySnapshot.id} => ${querySnapshot.data()["location"]}`);
+      
       const event = querySnapshot.data();
-      setAddress(querySnapshot.data()["location"]);
-      setEventName(querySnapshot.data()["event"]);
+      setAddress(event["location"]);
+      setEventName(event["event"]);
       setCapacity(event["capacity"]);
       setNotes(event["note"]);
-      setMealID(event["meal"]);
-
-      setAbsoluteDateTime(new Date(event["date"]));
-      setDate(querySnapshot.data()["date"]);
-      //setTime(dateFormat(absoluteDateTime, "h:MM TT"));
+      ml=event["meal"]["id"].toString();
       setDuration(event["duration"]);
+      time = new Date(querySnapshot.data()["date"]["seconds"]*1000);
+      setDate(time);
 
     } catch (e) {
       console.log(e);
     }
   }
 
-  const getMealInfo = async (mealRef: DocumentReference) => {
+  const getMealInfo = async (mealRef: string) => {
     try {
-      const querySnapshot = await getDoc(mealRef);
+      const q = doc(firestore, "meals",mealRef);
+      const querySnapshot = await getDoc(q);
       const meal = querySnapshot.data();
-
       setAppetizersDish(meal["appetizer"]);
       setEntreesDish(meal["entree"]);
       setDessertsDish(meal["dessert"]);
       setAllergens(meal["allergens"]);
 
-      // console.log('appetizers:', appetizers.toString());
+      //console.log('appetizers:', appetizers.toString());
       // console.log('entrees:', entree.toString());
       // console.log('desserts:', dessert.toString());
       // console.log('allergens:', allergens.toString());
@@ -108,35 +99,34 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
     }
   }
 
-  const getFirstName = async () => {
-    try {
-      let firstName = "Temp";
-      const q = query(
-        collection(firestore, "users"),
-        where("email", "==", user?.email)
-      );
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        console.log('first name from getFirstName', doc.data()['first_name'])
-        firstName = doc.data()["first_name"];
-      });
-      setHostFirstName(firstName);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const getFirstName = async () => {
+  //   try {
+  //     let firstName = "Temp";
+  //     const q = query(
+  //       collection(firestore, "users"),
+  //       where("email", "==", user.email)
+  //     );
+  //     const querySnapshot = await getDocs(q);
+  //     querySnapshot.forEach((doc) => {
+  //       console.log('first name from getFirstName', doc.data()['first_name'])
+  //       firstName = doc.data()["first_name"];
+  //     });
+  //     setHostFirstName(firstName);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
 
 
 
 
   useEffect(() => {
-    getEventInfo("feq8LkV6DZ2NyPDJDoEw");
-    // console.log(user?.email);
-    // getFirstName();
-    // console.log("host first name", hostFirstName);
-    // console.log("mealID", mealID);
-    getMealInfo(mealID);
+    async function fetchMyAPI() {
+    await getEventInfo("feq8LkV6DZ2NyPDJDoEw")
+    await getMealInfo(ml)}
+    fetchMyAPI()
+    
   }, []);
 
   return (
@@ -145,12 +135,12 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
           <ImageBackground source={food} style={[styles.columnContainer, { width: "100%", height: "50%", top: -200 }]}>
               <View style={{ top: 150, alignItems: "center", padding: 15 }}>
                     <Text style={styles.whiteTextBold}>{eventName}</Text>
-                      {/* <Text style={styles.gray_whiteTextBold}> Hosted by {hostFirstName}fdsfsd{" "}</Text> */}
+                       <Text style={styles.whiteTextBold}> Hosted by {hostFirstName}</Text> 
                     <View style={[styles.rowContainer, { top: -25 }]}>
-                                          {/* <Text style={styles.whiteTextReg}>{(moment(absoluteDateTime)).format("HH:MM:SS XM")}</Text> */}
+                                          
 
-                      <Text style={styles.whiteTextReg}>{Moment(absoluteDateTime).format("yyyy-MM-dd – kk:mm")}</Text>
-                                          {/* <Text>{dateFormat(absoluteDateTime, "h:MM:ss TT")} </Text> */}
+                                          <Text style={styles.whiteTextReg}>{(Moment(date)).format('hh:hh a')} </Text>
+                                          
                       <Text> </Text>
                       <Text style={styles.whiteTextReg}> 0/{capacity} </Text>
                       <Text>            </Text>
@@ -159,7 +149,7 @@ export default function ViewMealScreen({ navigation }: ScreenProps) {
               </View>
 
               <View style={[styles.rowContainer,{top:-40}]}>
-                  <Text style={styles.white_smallTextReg}> Wed 2/16 </Text>
+                  <Text style={styles.white_smallTextReg}> {(Moment(date)).format('M/DD/YYYY')} </Text>
                   <Text>          </Text>
                   <Text style={styles.white_smallTextReg}> Seats Taken </Text>
                   <Text>          </Text>
