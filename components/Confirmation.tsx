@@ -27,6 +27,7 @@ const Confirmation = (props: any) => {
         }}
         style={styles.primaryContainer}
       >
+            <Text>Event Created!</Text>
             <Image style={styles.imageStyle} source = {props.eventImage}/>
             <Text style={styles.infoText}> Value:{props.meal}</Text>
             <Text style={styles.infoText}> Value:{props.maxGuests}</Text>

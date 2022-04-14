@@ -7,8 +7,8 @@ import MyButton from '../components/MyButton';
 import { StatusBar } from 'expo-status-bar';
 import DateTimePicker  from '@react-native-community/datetimepicker';
 import {Slider} from '@miblanchard/react-native-slider';
-
-
+import Confirmation from '../components/Confirmation';
+import food from '../assets/pizza.png';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
 
@@ -101,8 +101,9 @@ export default function LogInScreen({ navigation }: ScreenProps) {
                         <MyField title="Other Notes....." type="text" secure={false} onChangeFn={enterNotes} ></MyField>
                    
 
-
+                    
                     <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { hostEvent(event, appetizers,entree,dessert,location,guest,allergens,notes,duration,date) }} /></View>
+                    {/* <Confirmation time={date} meal={event} maxGuests={guest} eventImage={food} onPressFn={async () => { navigation.navigate("ViewMeal") }}></Confirmation> */}
                     <View style={{ flexDirection: 'row' }}><MyButton text="view Meal" type="primary" size="large" onPressFn={async () => { navigation.navigate("ViewMeal") }} /></View>
 
 

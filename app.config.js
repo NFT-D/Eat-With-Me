@@ -39,4 +39,4 @@ export default {
       firebaseAppId: process.env.FIREBASE_APP_ID,
     }
   }
-}
+}//es lint errors say cannot find process
