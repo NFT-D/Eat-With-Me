@@ -1,4 +1,4 @@
-import { SafeAreaView, View, TouchableOpacity, Text, TextInput, StyleSheet, ScrollView, Button } from 'react-native';
+import {Image, SafeAreaView, View, TouchableOpacity, Text, TextInput, StyleSheet, ScrollView, Button, Alert, Modal } from 'react-native';
 import colors from '../config/colors';
 import MyField from '../components/MyField';
 import React, { useState } from 'react';
@@ -11,6 +11,8 @@ import Constants from 'expo-constants';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import food from '../assets/pizza.png';
+
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -57,7 +59,7 @@ export default function LogInScreen({ navigation, route }: ScreenProps) {
 
     const [duration, setDuration] = useState(null);
 
-    const [eventName, setEventName] = useState("");
+  
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
@@ -70,8 +72,22 @@ export default function LogInScreen({ navigation, route }: ScreenProps) {
         setMode(currentMode);
     };
 
-
-
+    function createMealFunction(){
+        const [modalVisible, setModalVisible] = useState(true);
+        hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date);
+        return (
+        <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => { Alert.alert("Modal has been closed."); setModalVisible(!modalVisible);}} style={styles.primaryContainer}>
+            <Image style={styles.imageStyle} source = {food}/>
+            <Text style={styles.infoText}> Event Created</Text>
+            <Text style={styles.infoText}> Value:{event}</Text>
+            <Text style={styles.infoText}> Value:{guest}</Text>
+            <Text style={styles.infoText}> Value:{date}</Text>
+            <MyButton text="okay" type="primary" onPressFn={() => navigation.navigate("Home", { firstName: firstName })}/>
+            <MyButton text="edit" type="primary" onPressFn={() => setModalVisible(!modalVisible)}/>
+        </Modal>
+        
+        )};
+   
 
     return (
         <SafeAreaView style={{ alignContent: 'center', alignItems: 'center', backgroundColor: colors.secondary }}>
@@ -121,9 +137,9 @@ export default function LogInScreen({ navigation, route }: ScreenProps) {
 
                     <MyField title="Other Notes....." type="text" secure={false} onChangeFn={enterNotes} ></MyField>
 
+                   
 
-
-                    <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { setEventID(await hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date)) }} /></View>
+                    <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={createMealFunction()} /></View>
                     <View style={{ flexDirection: 'row' }}><MyButton text="view Meal" type="primary" size="large" onPressFn={async () => { navigation.navigate("ViewMeal", { firstName, eventID: eventID, firestore }) }} /></View>
 
 
@@ -160,6 +176,30 @@ const styles = StyleSheet.create({
         marginRight: 10,
         alignItems: 'stretch',
         justifyContent: 'center',
+    },
+    primaryContainer: {
+        flexDirection: 'column',
+        flexWrap: 'wrap',
+        width:'70%',
+        borderColor: colors.primary,
+        borderWidth:.5,
+        borderRadius: 20,
+        alignContent:'center',
+        alignItems:'center',
+    },
+    imageStyle:{
+        height:'100%',
+        width:'100%',
+        borderTopLeftRadius:20,
+        borderBottomLeftRadius:20,
+
+    },
+    
+    infoText: {
+        color: 'black',
+        fontWeight: 'bold',
+        textAlign: 'left',
+        fontSize: 12,
     },
 }
 );

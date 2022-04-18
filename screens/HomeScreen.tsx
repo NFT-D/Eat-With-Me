@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
         padding: 20,
         flex: 1,
         flexDirection: 'column',
+        alignContent:'center'
 
 
     },
