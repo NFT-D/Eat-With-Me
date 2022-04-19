@@ -7,6 +7,7 @@ import location from '../assets/location.png';
 import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp, DocumentReference } from 'firebase/firestore';
 import Constants from "expo-constants";
 import Moment from 'moment';
+import moment from 'moment';
 
 type ScreenProps = {
   navigation: any,
@@ -18,7 +19,6 @@ type ScreenProps = {
 
 export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   const { firstName, eventID, firestore } = route.params;
-
   const [address, setAddress] = useState("");
   const [capacity, setCapacity] = useState(0);
   const [allergens, setAllergens] = useState([]);
@@ -28,8 +28,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   const [entree, setEntreesDish] = useState([]);
   const [dessert, setDessertsDish] = useState([]);
 
-  const [date, setDate] = useState(new Date());
-
+  const [date, setDate] = useState(moment());
   const [duration, setDuration] = useState(0);
 
   const [eventName, setEventName] = useState("");
@@ -48,9 +47,9 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
       setNotes(event["note"]);
       ml = event["meal"]["id"].toString();
       setDuration(event["duration"]);
-      time = new Date(querySnapshot.data()["date"]["seconds"] * 1000);
+      time = querySnapshot.data()["date"];
+      time = moment.unix(time.seconds).utc().local();
       setDate(time);
-
     } catch (e) {
       console.log(e);
     }
@@ -93,7 +92,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
             <View style={[styles.rowContainer, { top: -25 }]}>
 
 
-              <Text style={styles.whiteTextReg}>{(Moment(date)).format('hh:hh a')} </Text>
+              <Text style={styles.whiteTextReg}>{date.format('hh:mm A')} </Text>
 
               <Text> </Text>
               <Text style={styles.whiteTextReg}> 0/{capacity} </Text>
@@ -103,7 +102,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
           </View>
 
           <View style={[styles.rowContainer, { top: -40 }]}>
-            <Text style={styles.white_smallTextReg}> {(Moment(date)).format('M/DD/YYYY')} </Text>
+            <Text style={styles.white_smallTextReg}> {date.format('M/DD/YYYY')} </Text>
             <Text>          </Text>
             <Text style={styles.white_smallTextReg}> Seats Taken </Text>
             <Text>          </Text>

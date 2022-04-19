@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, Image, Alert, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { FlatList,View, Text, StyleSheet, ImageBackground, Image, Alert, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView } from "react-native";
 import colors from "../config/colors";
 import MyButton from '../components/MyButton';
 import MyField from '../components/MyField';
@@ -10,7 +10,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp } from 'firebase/firestore';
 import Constants from "expo-constants";
-
+import moment from 'moment';
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: Constants.manifest?.extra?.firebaseApiKey,
@@ -36,31 +36,37 @@ type ScreenProps = {
 
 
 
-const getEvents = async (ary: Array<string>) => {
-    try {
 
-        const querySnapshot = await getDocs(collection(firestore, "events"));
-        querySnapshot.forEach((doc) => {
-            //console.log(`${doc.id} => ${doc.data()["event"]}`);
-            ary.push(doc.id);
-        });
-        return ary;
-
-    } catch (e) {
-        console.log(e);
-    }
-}
-var docIds = getEvents([]);
-/*
-const docItems = docIds.map((value)=>{
-    <li>{value}</li>
-})*/
 
 export default function HomeScreen({ navigation, route }: ScreenProps) {
     const { firstName } = route.params;
     const [searchText, enterSearch] = useState("");
+    const [DATA,setDATA] = useState([]);
+
+    useEffect(() => {
+        async function fetchMyAPI() {
+            try {
+                const querySnapshot = await getDocs(collection(firestore, "events"));
+                let ary = [];
+                querySnapshot.forEach((doc) => {
+                    let docData = doc.data();
+                    var time = docData["date"];
+                    time = moment.unix(time.seconds).utc().local();
+                    ary.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A')});
+                });
+                setDATA(ary);
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        fetchMyAPI()
+    
+      }, []);
+    
+
+
     return (
-        <SafeAreaView style={styles.container}>
+        <ScrollView>
 
             <MyButton type="primary" text="Host" size="medium" onPressFn={() => navigation.navigate("HostMeal", {firstName})}></MyButton>
             {/* 
@@ -87,22 +93,29 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
                 </TouchableOpacity> 
             </View>
 */}
-            <ScrollView style={{ width: '85%', padding: 20 }}>
-                <MyButton text="enter" type="primary" size="large" onPressFn={getEvent} />
-                <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }} onPress={() => navigation.navigate("ViewMeal", { firstName, eventID: '59L6GKjQewXjpUaY9ik9', firestore })}>
-                    <View style={{ flex: .5 }}>
-                        <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
-                    </View>
-                    <View style={{ flexDirection: 'column', padding: 10 }}>
-                        {/*meal info */}
-                        <Text>Pizza Party</Text>
-                        <Text>Max Guests: 15</Text>
-                        <Text>Tomorrow, 6:06 PM</Text>
-                        <Text style={{ color: colors.primary }}>View Event</Text>
-                    </View>
-                </TouchableOpacity>
-            </ScrollView>
-        </SafeAreaView>
+            <FlatList
+                keyExtractor={(item)=> item.id}
+                data={DATA}
+                renderItem={({item}) =>(
+                    <ScrollView style={{ width: '85%', padding: 20 }}>
+                        <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }} onPress={() => navigation.navigate("ViewMeal", { firstName, eventID: item.id, firestore })}>
+                            <View style={{ flex: .5 }}>
+                                <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                            </View>
+                            <View style={{ flexDirection: 'column', padding: 10 }}>
+                                {/*meal info */}
+                                <Text>{item.name}</Text>
+                                <Text>Max Guests: {item.capacity}</Text>
+                                <Text>{item.date}</Text>
+                                <Text style={{ color: colors.primary }}>View Event</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </ScrollView>
+                )}
+            />
+
+
+        </ScrollView>
     );
 }
 

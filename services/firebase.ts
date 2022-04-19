@@ -105,7 +105,6 @@ export const hostEvent = async (eventName: string, appetizer: string, entree: st
         const data = { event: eventName, capacity: guest, attendees: null, fee: null, location: address, meal: mealRef, date: sDate, note: notes }
 
         const docRef = await addDoc(collection(firestore, "events"), data);
-        console.log(docRef.path);
         return docRef.id;
     } catch (e) {
         console.log(e);
@@ -124,9 +123,7 @@ export const addMeal = async (appetizer: string, entree: string, dessert: string
         const data = { appetizer: aDish, entree: eDish, dessert: dDish, allergens: ing }
 
         const docRef = await addDoc(collection(firestore, "meals"), data);
-        console.log(docRef.path);
-        const mealRef = await doc(firestore, 'meals', docRef.id);
-        return mealRef;
+        return docRef.id;
     } catch (e) {
         console.log(e);
         return e
