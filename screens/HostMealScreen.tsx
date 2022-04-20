@@ -80,7 +80,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
     };
 
     const viewMealNav = async () => {
-        toggleOverlay();
+        setVisible(false);
         navigation.navigate("ViewMeal", {eventID, firestore }) ;
     };
 
