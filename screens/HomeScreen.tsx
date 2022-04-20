@@ -13,6 +13,7 @@ import Constants from "expo-constants";
 import moment from 'moment';
 import Moment from 'moment';
 import { async } from '@firebase/util';
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: Constants.manifest?.extra?.firebaseApiKey,
@@ -35,9 +36,6 @@ type ScreenProps = {
     navigation: any,
     route: any
 }
-
-
-
 
 
 export default function HomeScreen({ navigation, route }: ScreenProps) {
@@ -104,7 +102,6 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
         await start();
         setRefresh(false);
     }
-
     return (
         <ScrollView>
 
@@ -181,6 +178,7 @@ const styles = StyleSheet.create({
         padding: 20,
         flex: 1,
         flexDirection: 'column',
+        alignContent:'center'
 
 
     },
@@ -203,6 +201,41 @@ const styles = StyleSheet.create({
     },
     mealComponent: {
         backgroundColor: colors.secondary
-    }
+    },
+    primaryContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        width:'100%',
+        borderColor: colors.primary,
+        borderWidth:.5,
+        borderRadius: 20,
+    },
+    pictureContainer: {
+        flex:.5
+    },
+    imageStyle:{
+        height:'100%',
+        width:'100%',
+        borderTopLeftRadius:20,
+        borderBottomLeftRadius:20,
 
+    },
+    infoTextContainer:{
+        flexDirection:'column',
+        padding:10,
+    },
+    infoText: {
+        color: 'black',
+        fontWeight: 'bold',
+        textAlign: 'left',
+        fontSize: 12,
+    },
+    linkText:{
+        color:colors.primary,
+        fontWeight:'bold',
+        textAlign:'center',
+        fontSize:12
+
+    }
 });
+

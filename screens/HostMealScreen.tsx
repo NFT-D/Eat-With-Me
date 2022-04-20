@@ -1,4 +1,4 @@
-import { SafeAreaView, View, TouchableOpacity, Text, TextInput, StyleSheet, ScrollView, Button } from 'react-native';
+import {Image, SafeAreaView, View, TouchableOpacity, Text, TextInput, StyleSheet, ScrollView, Button, Alert, Modal } from 'react-native';
 import colors from '../config/colors';
 import MyField from '../components/MyField';
 import React, { useState } from 'react';
@@ -57,7 +57,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
 
     const [duration, setDuration] = useState(null);
 
-    const [eventName, setEventName] = useState("");
+  
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
@@ -69,7 +69,6 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
         setShow(true);
         setMode(currentMode);
     };
-
 
     const toggleOverlay = () => {
         setVisible(true);
@@ -133,8 +132,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
 
                     <MyField title="Other Notes....." type="text" secure={false} onChangeFn={enterNotes} ></MyField>
 
-
-
+                  
                     <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { hostEv() }} /></View>
                     <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
 
@@ -177,6 +175,30 @@ const styles = StyleSheet.create({
         marginRight: 10,
         alignItems: 'stretch',
         justifyContent: 'center',
+    },
+    primaryContainer: {
+        flexDirection: 'column',
+        flexWrap: 'wrap',
+        width:'70%',
+        borderColor: colors.primary,
+        borderWidth:.5,
+        borderRadius: 20,
+        alignContent:'center',
+        alignItems:'center',
+    },
+    imageStyle:{
+        height:'100%',
+        width:'100%',
+        borderTopLeftRadius:20,
+        borderBottomLeftRadius:20,
+
+    },
+    
+    infoText: {
+        color: 'black',
+        fontWeight: 'bold',
+        textAlign: 'left',
+        fontSize: 12,
     },
 }
 );

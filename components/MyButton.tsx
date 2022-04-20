@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import colors from "../config/colors";
 
 // make this simpler using https://reactnative.dev/docs/stylesheet 
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F96332',
         paddingHorizontal: 12,
         paddingVertical: 12,
-        width: 30,
+        //width: 30,
         borderRadius: 11,
     },
     primaryText: {
