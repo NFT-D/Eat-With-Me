@@ -80,6 +80,11 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
         toggleOverlay();
     };
 
+    const viewMealE = () => {
+        setVisible(false);
+        navigation.navigate("ViewMeal", {eventID, firestore })
+    };
+
     return (
         <SafeAreaView style={{ alignContent: 'center', alignItems: 'center', backgroundColor: colors.secondary }}>
 
@@ -134,7 +139,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
                     <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
 
                         <Text>Meal Created!</Text>
-                        <MyButton text="view Meal" type="primary" size="large" onPressFn={async () => { navigation.navigate("ViewMeal", {eventID, firestore }) }} />
+                        <MyButton text="view Meal" type="primary" size="large" onPressFn={ () => {viewMealE()  }} />
                         <MyButton text="Ok" type="primary" size="large" onPressFn={async () => {  navigation.navigate("Home", { firstName })}} />
                     </Overlay>
                     

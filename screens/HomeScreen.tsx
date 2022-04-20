@@ -50,25 +50,27 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
 
     async function start() {
         try {
-            const querySnapshot = await getDocs(collection(firestore, "events"));
-            let ary = [];
+            
+            const q = query(collection(firestore, "events"), where("event",">=",""));
+            const querySnapshot = await getDocs(q);
+            let arys = [];
             querySnapshot.forEach((doc) => {
                 let docData = doc.data();
                 var time = docData["date"];
                 time = moment.unix(time.seconds).utc().local();
-                ary.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A')});
+                arys.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A')});
             });
-            ary=ary.sort((a, b) => {return moment(a.date).diff(b.date)});
-            setDATA(ary);
+            arys=arys.sort((a, b) => {return moment(a.date).diff(b.date)});
+            setDATA(arys);
+            setRefresh(true);
         } catch (e) {
             console.log(e);
         }
-
         
     }
     useEffect(() => {
         
-        start()
+        start();
     
       }, []);
     
@@ -98,6 +100,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
     }
 
     const handleRefresh = async () =>{
+        enterSearch("")
         await start();
         setRefresh(false);
     }
@@ -108,7 +111,15 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
             <MyButton type="primary" text="Host" size="medium" onPressFn={() => navigation.navigate("HostMeal", {firstName})}></MyButton>
             {
             <View style={styles.topPanelView}>
-                <MyField title="Event Name" type="text" secure={false} onChangeFn={enterSearch}></MyField>
+                <View style={styles.container}>
+                <Text>Event Name</Text>
+                <TextInput 
+                    autoCapitalize={"none"}
+                    onChangeText={(value) => enterSearch(value)}
+                    value = {searchText}
+                    placeholder="Event Name"/>
+                    
+            </View>
                 {/* <TextInput 
                 autoCapitalize={"none"} 
                 onChangeText={enterSearch} 
