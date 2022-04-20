@@ -19,7 +19,9 @@ export default {
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.stevens.eat-with-me",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
