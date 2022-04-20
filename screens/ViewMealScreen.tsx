@@ -7,6 +7,7 @@ import location from '../assets/location.png';
 import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp, DocumentReference } from 'firebase/firestore';
 import Constants from "expo-constants";
 import Moment from 'moment';
+import moment from 'moment';
 
 type ScreenProps = {
   navigation: any,
@@ -17,9 +18,9 @@ type ScreenProps = {
 
 
 export default function ViewMealScreen({ navigation,route }: ScreenProps) {
-  const { firstName, eventID, firestore } = route.params;
-
+  const { eventID, firestore } = route.params;
   const [address, setAddress] = useState("");
+  const [host, setHost] = useState("");
   const [capacity, setCapacity] = useState(0);
   const [allergens, setAllergens] = useState([]);
   const [notes, setNotes] = useState("");
@@ -28,8 +29,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   const [entree, setEntreesDish] = useState([]);
   const [dessert, setDessertsDish] = useState([]);
 
-  const [date, setDate] = useState(new Date());
-
+  const [date, setDate] = useState(moment());
   const [duration, setDuration] = useState(0);
 
   const [eventName, setEventName] = useState("");
@@ -42,15 +42,17 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
       const querySnapshot = await getDoc(eventRef);
 
       const event = querySnapshot.data();
+      setHost(event["host"]);
       setAddress(event["location"]);
       setEventName(event["event"]);
       setCapacity(event["capacity"]);
       setNotes(event["note"]);
-      ml = event["meal"]["id"].toString();
+      ml = event["meal"];
       setDuration(event["duration"]);
-      time = new Date(querySnapshot.data()["date"]["seconds"] * 1000);
+      time = querySnapshot.data()["date"];
+      time = moment.unix(time.seconds).utc().local();
+      console.log(time)
       setDate(time);
-
     } catch (e) {
       console.log(e);
     }
@@ -89,11 +91,11 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
         <ImageBackground source={food} style={[styles.columnContainer, { width: "100%", height: "50%", top: -200 }]}>
           <View style={{ top: 150, alignItems: "center", padding: 15 }}>
             <Text style={styles.whiteTextBold}>{eventName}</Text>
-            <Text style={styles.whiteTextBold}> Hosted by {firstName}</Text>
+            <Text style={styles.whiteTextBold}> Hosted by {host}</Text>
             <View style={[styles.rowContainer, { top: -25 }]}>
 
 
-              <Text style={styles.whiteTextReg}>{(Moment(date)).format('hh:hh a')} </Text>
+              <Text style={styles.whiteTextReg}>{date.format('hh:mm A')} </Text>
 
               <Text> </Text>
               <Text style={styles.whiteTextReg}> 0/{capacity} </Text>
@@ -103,7 +105,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
           </View>
 
           <View style={[styles.rowContainer, { top: -40 }]}>
-            <Text style={styles.white_smallTextReg}> {(Moment(date)).format('M/DD/YYYY')} </Text>
+            <Text style={styles.white_smallTextReg}> {date.format('M/DD/YYYY')} </Text>
             <Text>          </Text>
             <Text style={styles.white_smallTextReg}> Seats Taken </Text>
             <Text>          </Text>
@@ -133,7 +135,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
             <Text style={styles.gray_whiteTextBold}>{allergens.toString()}</Text>
           </View>
 
-          <TouchableOpacity style={{ flexDirection: "row", flexWrap: "wrap", width: "100%", padding: 15, backgroundColor: "white", }} onPress={() => navigation.navigate("ViewMeal")}>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", width: "100%", padding: 15, backgroundColor: "white", }}>
             <View style={{ flex: 0.5 }}>
               <Image source={location} style={{ height: "20%", width: "20%" }} />
             </View>
@@ -148,7 +150,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
 
             </View>
 
-          </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </View>

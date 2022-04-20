@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, Image, Alert, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView, FlatList } from "react-native";
+import { FlatList,View, Text, StyleSheet, ImageBackground, Image, Alert, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView } from "react-native";
 import colors from "../config/colors";
 import MyButton from '../components/MyButton';
 import MyField from '../components/MyField';
@@ -8,9 +8,11 @@ import { getEvent } from '../services/firebase';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp } from 'firebase/firestore';
+import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp, arrayRemove } from 'firebase/firestore';
 import Constants from "expo-constants";
-
+import moment from 'moment';
+import Moment from 'moment';
+import { async } from '@firebase/util';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -36,56 +38,124 @@ type ScreenProps = {
 }
 
 
-const [events, setEvents] = useState([]);
-const getEvents = async (ary: Array<string>) => {
-    try {
-
-        const querySnapshot = await getDocs(collection(firestore, "events"));
-        querySnapshot.forEach((doc) => {
-            //console.log(`${doc.id} => ${doc.data()["event"]}`);
-            ary.push(doc.id);
-        });
-        setEvents(ary);
-
-    } catch (e) {
-        console.log(e);
-    }
-}
-var docIds = getEvents([]);
-
-/*
-const docItems = docIds.map((value)=>{
-    <li>{value}</li>
-})*/
-
-
-
 export default function HomeScreen({ navigation, route }: ScreenProps) {
     const { firstName } = route.params;
     const [searchText, enterSearch] = useState("");
+    const [DATA,setDATA] = useState([]);
+    const [refeshing, setRefresh] = useState(false);
+
+
+
+    async function start() {
+        try {
+            const querySnapshot = await getDocs(collection(firestore, "events"));
+            let ary = [];
+            querySnapshot.forEach((doc) => {
+                let docData = doc.data();
+                var time = docData["date"];
+                time = moment.unix(time.seconds).utc().local();
+                ary.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A')});
+            });
+            ary=ary.sort((a, b) => {return moment(a.date).diff(b.date)});
+            setDATA(ary);
+        } catch (e) {
+            console.log(e);
+        }
+
+        
+    }
+    useEffect(() => {
+        
+        start()
     
+      }, []);
     
+    const search = async () => {
+        try {
+            
+            const q = query(collection(firestore, "events"), where("event",">=",searchText),where("event","<=",searchText+"~"));
+            const querySnapshot = await getDocs(q);
+            let ary = [];
+            querySnapshot.forEach((doc) => {
+                let docData = doc.data();
+                var time = docData["date"];
+                time = moment.unix(time.seconds).utc().local();
+                ary.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A')});
+            });
+            ary=ary.sort((a, b) => {return moment(a.date).diff(b.date)});
+            setDATA(ary);
+            setRefresh(true);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const handleSearch = async () =>{
+        await search();
+        setRefresh(false);
+    }
+
+    const handleRefresh = async () =>{
+        await start();
+        setRefresh(false);
+    }
     return (
-        <SafeAreaView style={styles.container}>
+        <ScrollView>
 
             <MyButton type="primary" text="Host" size="medium" onPressFn={() => navigation.navigate("HostMeal", {firstName})}></MyButton>
-            
-            <ScrollView style={{ width: '85%', padding: 20 }}>
-                <MyButton text="enter" type="primary" size="large" onPressFn={getEvent} />
-                <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }} onPress={() => navigation.navigate("ViewMeal", { firstName, eventID: '59L6GKjQewXjpUaY9ik9', firestore })}>
-                    <View style={{ flex: .5 }}>
-                        <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
-                    </View>
-                    <View style={{ flexDirection: 'column', padding: 10 }}>
-                        {/*meal info */}
-                        <Text>Pizza Party</Text>
-                        <Text>Max Guests: 15</Text>
-                        <Text>Tomorrow, 6:06 PM</Text>
-                        <Text style={{ color: colors.primary }}>View Event</Text>
-                    </View>
-                </TouchableOpacity>
-            </ScrollView>
-        </SafeAreaView>
+            {
+            <View style={styles.topPanelView}>
+                <MyField title="Event Name" type="text" secure={false} onChangeFn={enterSearch}></MyField>
+                {/* <TextInput 
+                autoCapitalize={"none"} 
+                onChangeText={enterSearch} 
+                placeholder="search for a meal...."
+                style={{height: 50,
+                    width: 300,
+                    fontSize: 16,
+                    borderColor: colors.primary,
+                    borderWidth: 1,
+                    borderRadius: 15,
+                    marginTop: 5,
+                    padding: 10,
+                    justifyContent:'flex-start',
+                    flex:3
+                    }}>
+
+                    </TextInput> */}
+                {/* <TouchableOpacity style={{}}>
+
+                    <Text>🔎</Text>
+                </TouchableOpacity>  */}
+                <MyButton type="primary" text="🔎" size="medium" onPressFn={async () => {handleSearch()}}></MyButton>
+                <MyButton type="primary" text="⟳" size="medium" onPressFn={async () => {handleRefresh()}}></MyButton>
+            </View>
+}
+            <FlatList
+                keyExtractor={(item)=> item.id}
+                data={DATA}
+                refreshing = {refeshing}
+                onRefresh = {handleRefresh}
+                renderItem={({item}) =>(
+                    <ScrollView style={{ width: '85%', padding: 20 }}>
+                        <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }} onPress={() => navigation.navigate("ViewMeal", { eventID: item.id, firestore })}>
+                            <View style={{ flex: .5 }}>
+                                <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                            </View>
+                            <View style={{ flexDirection: 'column', padding: 10 }}>
+                                {/*meal info */}
+                                <Text>{item.name}</Text>
+                                <Text>Max Guests: {item.capacity}</Text>
+                                <Text>{item.date}</Text>
+                                <Text style={{ color: colors.primary }}>View Event</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </ScrollView>
+                )}
+            />
+
+
+        </ScrollView>
     );
 }
 
