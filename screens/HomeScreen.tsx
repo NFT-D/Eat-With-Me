@@ -8,9 +8,11 @@ import { getEvent } from '../services/firebase';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp } from 'firebase/firestore';
+import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp, arrayRemove } from 'firebase/firestore';
 import Constants from "expo-constants";
 import moment from 'moment';
+import Moment from 'moment';
+import { async } from '@firebase/util';
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: Constants.manifest?.extra?.firebaseApiKey,
@@ -42,36 +44,72 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
     const { firstName } = route.params;
     const [searchText, enterSearch] = useState("");
     const [DATA,setDATA] = useState([]);
+    const [refeshing, setRefresh] = useState(false);
 
-    useEffect(() => {
-        async function fetchMyAPI() {
-            try {
-                const querySnapshot = await getDocs(collection(firestore, "events"));
-                let ary = [];
-                querySnapshot.forEach((doc) => {
-                    let docData = doc.data();
-                    var time = docData["date"];
-                    time = moment.unix(time.seconds).utc().local();
-                    ary.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A')});
-                });
-                setDATA(ary);
-            } catch (e) {
-                console.log(e);
-            }
+
+
+    async function start() {
+        try {
+            const querySnapshot = await getDocs(collection(firestore, "events"));
+            let ary = [];
+            querySnapshot.forEach((doc) => {
+                let docData = doc.data();
+                var time = docData["date"];
+                time = moment.unix(time.seconds).utc().local();
+                ary.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A')});
+            });
+            ary=ary.sort((a, b) => {return moment(a.date).diff(b.date)});
+            setDATA(ary);
+        } catch (e) {
+            console.log(e);
         }
-        fetchMyAPI()
+
+        
+    }
+    useEffect(() => {
+        
+        start()
     
       }, []);
     
+    const search = async () => {
+        try {
+            
+            const q = query(collection(firestore, "events"), where("event",">=",searchText),where("event","<=",searchText+"~"));
+            const querySnapshot = await getDocs(q);
+            let ary = [];
+            querySnapshot.forEach((doc) => {
+                let docData = doc.data();
+                var time = docData["date"];
+                time = moment.unix(time.seconds).utc().local();
+                ary.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A')});
+            });
+            ary=ary.sort((a, b) => {return moment(a.date).diff(b.date)});
+            setDATA(ary);
+            setRefresh(true);
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
+    const handleSearch = async () =>{
+        await search();
+        setRefresh(false);
+    }
+
+    const handleRefresh = async () =>{
+        await start();
+        setRefresh(false);
+    }
 
     return (
         <ScrollView>
 
             <MyButton type="primary" text="Host" size="medium" onPressFn={() => navigation.navigate("HostMeal", {firstName})}></MyButton>
-            {/* 
+            {
             <View style={styles.topPanelView}>
-                <TextInput 
+                <MyField title="Event Name" type="text" secure={false} onChangeFn={enterSearch}></MyField>
+                {/* <TextInput 
                 autoCapitalize={"none"} 
                 onChangeText={enterSearch} 
                 placeholder="search for a meal...."
@@ -87,18 +125,23 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
                     flex:3
                     }}>
 
-                    </TextInput>
-                <TouchableOpacity style={{}}>
+                    </TextInput> */}
+                {/* <TouchableOpacity style={{}}>
+
                     <Text>🔎</Text>
-                </TouchableOpacity> 
+                </TouchableOpacity>  */}
+                <MyButton type="primary" text="🔎" size="medium" onPressFn={async () => {handleSearch()}}></MyButton>
+                <MyButton type="primary" text="⟳" size="medium" onPressFn={async () => {handleRefresh()}}></MyButton>
             </View>
-*/}
+}
             <FlatList
                 keyExtractor={(item)=> item.id}
                 data={DATA}
+                refreshing = {refeshing}
+                onRefresh = {handleRefresh}
                 renderItem={({item}) =>(
                     <ScrollView style={{ width: '85%', padding: 20 }}>
-                        <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }} onPress={() => navigation.navigate("ViewMeal", { firstName, eventID: item.id, firestore })}>
+                        <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }} onPress={() => navigation.navigate("ViewMeal", { eventID: item.id, firestore })}>
                             <View style={{ flex: .5 }}>
                                 <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
                             </View>

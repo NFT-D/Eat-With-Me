@@ -18,8 +18,9 @@ type ScreenProps = {
 
 
 export default function ViewMealScreen({ navigation,route }: ScreenProps) {
-  const { firstName, eventID, firestore } = route.params;
+  const { eventID, firestore } = route.params;
   const [address, setAddress] = useState("");
+  const [host, setHost] = useState("");
   const [capacity, setCapacity] = useState(0);
   const [allergens, setAllergens] = useState([]);
   const [notes, setNotes] = useState("");
@@ -41,14 +42,16 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
       const querySnapshot = await getDoc(eventRef);
 
       const event = querySnapshot.data();
+      setHost(event["host"]);
       setAddress(event["location"]);
       setEventName(event["event"]);
       setCapacity(event["capacity"]);
       setNotes(event["note"]);
-      ml = event["meal"]["id"].toString();
+      ml = event["meal"];
       setDuration(event["duration"]);
       time = querySnapshot.data()["date"];
       time = moment.unix(time.seconds).utc().local();
+      console.log(time)
       setDate(time);
     } catch (e) {
       console.log(e);
@@ -88,7 +91,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
         <ImageBackground source={food} style={[styles.columnContainer, { width: "100%", height: "50%", top: -200 }]}>
           <View style={{ top: 150, alignItems: "center", padding: 15 }}>
             <Text style={styles.whiteTextBold}>{eventName}</Text>
-            <Text style={styles.whiteTextBold}> Hosted by {firstName}</Text>
+            <Text style={styles.whiteTextBold}> Hosted by {host}</Text>
             <View style={[styles.rowContainer, { top: -25 }]}>
 
 
@@ -132,7 +135,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
             <Text style={styles.gray_whiteTextBold}>{allergens.toString()}</Text>
           </View>
 
-          <TouchableOpacity style={{ flexDirection: "row", flexWrap: "wrap", width: "100%", padding: 15, backgroundColor: "white", }} onPress={() => navigation.navigate("ViewMeal")}>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", width: "100%", padding: 15, backgroundColor: "white", }}>
             <View style={{ flex: 0.5 }}>
               <Image source={location} style={{ height: "20%", width: "20%" }} />
             </View>
@@ -147,7 +150,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
 
             </View>
 
-          </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </View>
