@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Dimensions, SafeAreaView, ImageBackground, Alert, Modal,Text } from 'react-native';
+import { StyleSheet, View, Dimensions, ImageBackground, Alert, Modal,Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import MyButton from '../components/MyButton';
 import MyField from '../components/MyField';
 import { getFirstName, signUpWithEmail } from '../services/firebase';
-import colors from '../config/colors';
 import food from '../assets/food.png';
 
 type ScreenProps = {
@@ -32,10 +31,10 @@ export default function SignUpScreen({ navigation }: ScreenProps) {
       <ImageBackground source={food} style={{ width: '100%', height: '110%', justifyContent: 'center', alignItems: 'center' }}>
         <View style={styles.container}>
 
-          <MyField title='First Name' type='text' onChangeFn={setFName} />
-          <MyField title='Last Name' type='text' onChangeFn={setLName} />
-          <MyField title='Email' type='text' onChangeFn={setEmail} />
-          <MyField title='Password' type='text' secure={true} onChangeFn={setPassword} />
+          <MyField title='First Name' showText= "George" type='text' onChangeFn={setFName} />
+          <MyField title='Last Name' type='text' showText= "Washington" onChangeFn={setLName} />
+          <MyField title='Email' type='text' showText= "abc123@gmail.com" onChangeFn={setEmail} />
+          <MyField title='Password' type='text' showText= "password" secure={true} onChangeFn={setPassword} />
           <MyButton text="Sign Up" type="primary" size="large" onPressFn={async () => {
             let result = await signUpWithEmail(fName, lName, email, password);
             if (result === 'success') {

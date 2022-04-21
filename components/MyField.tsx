@@ -7,10 +7,11 @@ export type Props = {
     title: string,
     type: string,
     secure?: boolean,
-    onChangeFn: Function
+    onChangeFn: Function,
+    showText: string
 }
 
-const MyField: React.FC<Props> = ({ title, type, secure, onChangeFn }) => {
+const MyField: React.FC<Props> = ({ title, type, secure, onChangeFn, showText}) => {
     const [focus, setFocus] = useState(false);
     return ( 
         <View style={styles.container}>
@@ -22,7 +23,7 @@ const MyField: React.FC<Props> = ({ title, type, secure, onChangeFn }) => {
                 onFocus={() => setFocus(true)} 
                 onBlur={() => setFocus(false)} 
                 onChangeText={(value) => onChangeFn(value)}
-                placeholder={title}/>
+                placeholder={showText}/>
                 
         </View>
     ); 

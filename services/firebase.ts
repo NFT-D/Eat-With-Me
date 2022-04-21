@@ -97,12 +97,12 @@ export const getFirstName = async () => {
 
 
 
-export const hostEvent = async (eventName: string, appetizer: string, entree: string, dessert: string, address: string, guest: number, allergen: string, notes: string, duration: number, sDate: Date, fName: string) => {
+export const hostEvent = async (eventName: string, appetizer: string, entree: string, dessert: string, address: string, guest: number, allergen: string, notes: string, duration: number, sDate: Date, fName: string,fee: number) => {
 
     try {
         const mealRef = await addMeal(appetizer, entree, dessert, allergen);
 
-        const data = { event: eventName, capacity: guest, attendees: null, fee: null, location: address, meal: mealRef, date: sDate, note: notes, host: fName }
+        const data = { event: eventName, capacity: guest, attendees: [], fee: fee, location: address, meal: mealRef, date: sDate, note: notes, host: fName }
 
         const docRef = await addDoc(collection(firestore, "events"), data);
         return docRef.id;
@@ -168,19 +168,6 @@ export const addDish = async(dish: string, allergen: string) => {
 }
 
 */
-export const getEvent = async () => {
-    try {
-
-        const querySnapshot = await getDocs(collection(firestore, "events"));
-        querySnapshot.forEach((doc) => {
-            console.log(`${doc.id} => ${doc.data()["event"]}`);
-        });
-
-
-    } catch (e) {
-        console.log(e);
-    }
-}
 
 
 

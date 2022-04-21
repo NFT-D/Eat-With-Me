@@ -30,13 +30,13 @@ export default function LogInScreen({ navigation }: ScreenProps) {
       
         <View style={styles.container}>
           <Text>      </Text>
-          <MyField title='Email' type='text' onChangeFn={setEmail} />
-          <MyField title='Password' type='text' secure={true} onChangeFn={setPassword} />
+          <MyField title='Email' showText= "test@gmail.com" type='text' onChangeFn={setEmail} />
+          <MyField title='Password' type='text' showText= "Password" secure={true} onChangeFn={setPassword} />
           <MyButton text="Log In" type="primary" size="large" onPressFn={async () => {
             let result = await logInWithEmail(email, password);
             if (result === 'success') {
               let firstName = await getFirstName();
-              navigation.navigate("Home", { firstName: firstName });
+              navigation.navigate("Home", { firstName: firstName, email: email });
             }
             else{
               setModalVisible(true);
