@@ -19,7 +19,7 @@ export default function LogInScreen({ navigation }: ScreenProps) {
     <>
       {/* login error modal */}
       <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => {Alert.alert("Modal has been closed."); setModalVisible(!modalVisible);}}>
-        <View style={[styles.container, {padding:40, justifyContent:"space-evenly"}]}  >
+        <View style={[styles.container, {padding:40, justifyContent:"space-evenly",alignSelf:"center"}]}  >
             <Text>Incorrect Username or Password!</Text>
             <MyButton text="Try Again" type="primary" onPressFn={() => setModalVisible(!modalVisible)}/>
         </View>
@@ -29,7 +29,7 @@ export default function LogInScreen({ navigation }: ScreenProps) {
       <ImageBackground source={food} style={{ width: '100%', height: '110%', justifyContent: 'center', alignItems: 'center' }}>
       
         <View style={styles.container}>
-          
+          <Text>      </Text>
           <MyField title='Email' type='text' onChangeFn={setEmail} />
           <MyField title='Password' type='text' secure={true} onChangeFn={setPassword} />
           <MyButton text="Log In" type="primary" size="large" onPressFn={async () => {
@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
     width: 338,
     height: 300,
     borderRadius: 20,
+    padding:40,
     
   },
   

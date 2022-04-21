@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, Image, Alert, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ImageBackground, Image, Alert, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView, FlatList } from "react-native";
 import colors from "../config/colors";
 import MyButton from '../components/MyButton';
 import MyField from '../components/MyField';
@@ -10,6 +10,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp } from 'firebase/firestore';
 import Constants from "expo-constants";
+
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -35,7 +36,7 @@ type ScreenProps = {
 }
 
 
-
+const [events, setEvents] = useState([]);
 const getEvents = async (ary: Array<string>) => {
     try {
 
@@ -44,49 +45,31 @@ const getEvents = async (ary: Array<string>) => {
             //console.log(`${doc.id} => ${doc.data()["event"]}`);
             ary.push(doc.id);
         });
-        return ary;
+        setEvents(ary);
 
     } catch (e) {
         console.log(e);
     }
 }
 var docIds = getEvents([]);
+
 /*
 const docItems = docIds.map((value)=>{
     <li>{value}</li>
 })*/
 
+
+
 export default function HomeScreen({ navigation, route }: ScreenProps) {
     const { firstName } = route.params;
     const [searchText, enterSearch] = useState("");
+    
+    
     return (
         <SafeAreaView style={styles.container}>
 
             <MyButton type="primary" text="Host" size="medium" onPressFn={() => navigation.navigate("HostMeal", {firstName})}></MyButton>
-            {/* 
-            <View style={styles.topPanelView}>
-                <TextInput 
-                autoCapitalize={"none"} 
-                onChangeText={enterSearch} 
-                placeholder="search for a meal...."
-                style={{height: 50,
-                    width: 300,
-                    fontSize: 16,
-                    borderColor: colors.primary,
-                    borderWidth: 1,
-                    borderRadius: 15,
-                    marginTop: 5,
-                    padding: 10,
-                    justifyContent:'flex-start',
-                    flex:3
-                    }}>
-
-                    </TextInput>
-                <TouchableOpacity style={{}}>
-                    <Text>🔎</Text>
-                </TouchableOpacity> 
-            </View>
-*/}
+            
             <ScrollView style={{ width: '85%', padding: 20 }}>
                 <MyButton text="enter" type="primary" size="large" onPressFn={getEvent} />
                 <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }} onPress={() => navigation.navigate("ViewMeal", { firstName, eventID: '59L6GKjQewXjpUaY9ik9', firestore })}>
@@ -137,6 +120,41 @@ const styles = StyleSheet.create({
     },
     mealComponent: {
         backgroundColor: colors.secondary
-    }
+    },
+    primaryContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        width:'100%',
+        borderColor: colors.primary,
+        borderWidth:.5,
+        borderRadius: 20,
+    },
+    pictureContainer: {
+        flex:.5
+    },
+    imageStyle:{
+        height:'100%',
+        width:'100%',
+        borderTopLeftRadius:20,
+        borderBottomLeftRadius:20,
 
+    },
+    infoTextContainer:{
+        flexDirection:'column',
+        padding:10,
+    },
+    infoText: {
+        color: 'black',
+        fontWeight: 'bold',
+        textAlign: 'left',
+        fontSize: 12,
+    },
+    linkText:{
+        color:colors.primary,
+        fontWeight:'bold',
+        textAlign:'center',
+        fontSize:12
+
+    }
 });
+
