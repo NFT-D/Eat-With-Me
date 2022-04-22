@@ -30,9 +30,11 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   const [date, setDate] = useState(moment());
   const [duration, setDuration] = useState(0);
 
+  const [attending, setAttending] = useState([]);
+
   const [eventName, setEventName] = useState("");
   const [visible, setVisible] = useState(false);
-
+  const [status, setStatus] = useState("");
   let time;
   var ml;
   const getEventInfo = async (id: string) => {
@@ -41,6 +43,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
       const querySnapshot = await getDoc(eventRef);
 
       const event = querySnapshot.data();
+      setAttending(event["attendees"]);
       setHost(event["host"]);
       setAddress(event["location"]);
       setEventName(event["event"]);
@@ -73,10 +76,17 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   }
 
   const reserve = async() =>{
-    const eventRef = doc(firestore, 'events', eventID);
-    await updateDoc(eventRef,{pending: arrayUnion(email)});
-    setVisible(false);
-    navigation.navigate("Home", { firstName,email })
+    
+    if (attending.length < capacity){
+      setStatus("Reserved");
+      const eventRef = doc(firestore, 'events', eventID);
+      await updateDoc(eventRef,{pending: arrayUnion(email)});
+    }
+    else{
+      setStatus("Reservation declined capacity is full");
+    }
+    
+    setVisible(true);
   }
 
 
@@ -102,7 +112,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
               <Text style={styles.whiteTextReg}>{date.format('hh:mm A')} </Text>
 
               <Text> </Text>
-              <Text style={styles.whiteTextReg}> 0/{capacity} </Text>
+              <Text style={styles.whiteTextReg}> {attending.length}/{capacity} </Text>
               <Text>            </Text>
               <Text style={styles.whiteTextReg}> $0 </Text>
             </View>
@@ -120,7 +130,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
 
         <View style={{ padding: 20, top: -200 }}>
           <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 20, flex: 1, flexDirection: "row", backgroundColor: "white" }}>
-            <MyButton type="primary" size="medium" text="Reserve" onPressFn={() =>{setVisible(true)}}/>
+            <MyButton type="primary" size="medium" text="Reserve" onPressFn={() =>{reserve()}}/>
 
           </View>
 
@@ -159,8 +169,8 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
           </View>
         </View>
         <Overlay isVisible={visible}>
-          <Text>Reserved</Text>
-          <MyButton text="Ok" type="primary" size="large" onPressFn={ () => { reserve() }} />
+          <Text>{status}</Text>
+          <MyButton text="Ok" type="primary" size="large" onPressFn={ () => { setVisible(false)}} />
       </Overlay>
       </ScrollView>
 

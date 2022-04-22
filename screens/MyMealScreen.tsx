@@ -4,7 +4,7 @@ import colors from "../config/colors";
 import MyButton from '../components/MyButton';
 import pizza from '../assets/pizza.png'
 // Import the functions you need from the SDKs you need
-import { doc, collection, query, where, getDocs, arrayRemove, arrayUnion, updateDoc } from 'firebase/firestore';
+import { doc, collection, query, where, getDocs, arrayRemove, arrayUnion, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import moment from 'moment';
 import { Overlay } from 'react-native-elements';
 
@@ -17,15 +17,16 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
     const { firstName,email, firestore} = route.params;
     const [DATA,setDATA] = useState([]);
     const [AttenDATA,setAttenDATA] = useState([]);
+    const [Attending,setAttending] = useState([]);
     const [pendList,setPendList] = useState([]);
     const [refeshing, setRefresh] = useState(false);
     const [pendRefeshing, setpendRefresh] = useState(false);
     const [visible, setVisible] = useState(false);
     const [pend, setPend] = useState([]);
     const [evId, setId] = useState("");
-    
-
-    let pendData = [];
+    const [AttenVisible, setAttenVisible] = useState(false);
+    const [AttenRefeshing, setAttenRefeshing] = useState(false);
+    let pendData, attendingData = [];
 
     async function start() {
         try {
@@ -40,8 +41,7 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
                 if (!Array.isArray(temp)){
                     temp = [];
                 };
-              
-                arys.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A'), pending: temp});
+                arys.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A'), pending: temp, atten: docData["attendees"]});
             });
             arys=arys.sort((a, b) => {return moment(a.date).diff(b.date)});
             
@@ -124,6 +124,17 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
         setpendRefresh(false);
     }
 
+    const handleAttenRefresh = async () =>{
+        let ary = [];
+        let cnt = 1;
+        attendingData.forEach((item) => {
+            ary.push({id: cnt,name: item});
+            cnt +=1;
+        })
+        setAttending(ary);
+        setAttenRefeshing(false);
+    }
+
 
     const accept = async ( mail) =>{
         setVisible(false)
@@ -138,6 +149,28 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
         const eventRef = doc(firestore, 'events', evId);
         await updateDoc(eventRef,{pending: arrayRemove(mail)});
         
+    }
+
+
+    const cancelPending = async (id) =>{
+        const eventRef = doc(firestore, 'events', id);
+        await updateDoc(eventRef,{pending: arrayRemove(email)});
+        handleRefresh();
+    }
+
+    const cancelAttending = async (id) =>{
+        const eventRef = doc(firestore, 'events', id);
+        await updateDoc(eventRef,{attendees: arrayRemove(email)});
+        handleRefresh();
+    }
+
+    const cancelHost = async (id) =>{
+        const eventRef = doc(firestore, 'events', id);
+        const querySnapshot = await getDoc(eventRef);
+        const mealRef = querySnapshot.data()["meal"];
+        await deleteDoc(doc(firestore,"meals",mealRef));
+        await deleteDoc(doc(firestore,"events",id));
+        handleRefresh();
     }
 
     return(
@@ -159,6 +192,8 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
                                 <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
                             </View>
                             <MyButton text="invitation requests" type="primary" size="large" onPressFn={ () => { setId(item.id); setVisible(true);pendData = item.pending ; handlePendRefresh();}} />
+                            <MyButton text="Attendees" type="primary" size="large" onPressFn={ () => {setAttenVisible(true);attendingData = item.atten;setAttenRefeshing(true); handleAttenRefresh(); }} />
+                            <MyButton text="cancel" type="primary" size="large" onPressFn={ async () => {await cancelHost(item.id)}} />
                             <View style={{ flexDirection: 'column', padding: 10 }}>
                                 {/*meal info */}
                                 <Text>{item.name}</Text>
@@ -184,6 +219,7 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
                             <View style={{ flex: .5 }}>
                                 <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
                             </View>
+                            <MyButton text="cancel" type="primary" size="large" onPressFn={ async () => {await cancelAttending(item.id)}} />
                             <View style={{ flexDirection: 'column', padding: 10 }}>
                                 {/*meal info */}
                                 <Text>{item.name}</Text>
@@ -210,6 +246,7 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
                             <View style={{ flex: .5 }}>
                                 <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
                             </View>
+                            <MyButton text="cancel" type="primary" size="large" onPressFn={ async () => {await cancelPending(item.id)}} />
                             <View style={{ flexDirection: 'column', padding: 10 }}>
                                 {/*meal info */}
                                 <Text>{item.name}</Text>
@@ -243,6 +280,22 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
 
 
           <MyButton text="Ok" type="primary" size="large" onPressFn={ () => { setVisible(false); handleRefresh();}} />
+        </Overlay>
+
+        <Overlay isVisible={AttenVisible}>
+            <FlatList
+                keyExtractor={(item)=> item.id}
+                data={Attending}
+                refreshing = {AttenRefeshing}
+                onRefresh = {handleAttenRefresh}
+                renderItem={({item}) =>(
+                    <View>
+                        <Text>{item.name}</Text>
+                    </View>
+                    
+                )}
+            />
+            <MyButton text="Ok" type="primary" size="large" onPressFn={ () => { setAttenVisible(false); handleRefresh();}} />
         </Overlay>
 
         </View>
