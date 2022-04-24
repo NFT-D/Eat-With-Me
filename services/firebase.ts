@@ -97,14 +97,15 @@ export const getFirstName = async () => {
 
 
 
-export const hostEvent = async (eventName: string, appetizer: string, entree: string, dessert: string, address: string, guest: number, allergen: string, notes: string, duration: number, sDate: Date, fName: string) => {
+export const hostEvent = async (eventName: string, appetizer: string, entree: string, dessert: string, address: string, guest: number, allergen: string, notes: string, duration: number, sDate: Date, fName: string, imageURL: string) => {
 
     try {
         const mealRef = await addMeal(appetizer, entree, dessert, allergen);
 
-        const data = { event: eventName, capacity: guest, attendees: null, fee: null, location: address, meal: mealRef, date: sDate, note: notes, host: fName }
+        const data = { event: eventName, capacity: guest, attendees: null, fee: null, location: address, meal: mealRef, date: sDate, note: notes, host: fName, image: imageURL };
 
         const docRef = await addDoc(collection(firestore, "events"), data);
+        console.log(`Created event with ID: ${docRef.id}`);
         return docRef.id;
     } catch (e) {
         console.log(e);

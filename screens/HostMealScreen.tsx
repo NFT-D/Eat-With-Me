@@ -83,9 +83,8 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
       };
     
     const hostEv = async () => {
-        await setEventID(await hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date, firstName));
-        // 'file' comes from the Blob or File API
-        await pickImage();
+        const image = await pickImage();
+        await setEventID(await hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date, firstName, image));
         toggleOverlay();
     };
 
@@ -100,7 +99,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
             aspect: [4, 3],
         });
         console.log(pickerResult);
-        handleImpagePicked(pickerResult);
+        return handleImpagePicked(pickerResult);
     };
 
     const handleImpagePicked = async (pickerResult) => {
@@ -111,6 +110,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
             if (!pickerResult.cancelled) {
                 const uploadUrl = await uploadImageAsync(pickerResult.uri);
                 state = { image: uploadUrl };
+                return uploadUrl;
             }
         } catch (e) {
             console.log(e);
