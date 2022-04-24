@@ -1,25 +1,6 @@
-import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
-import { initializeApp } from 'firebase-admin';
-import { getAuth } from 'firebase/auth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { useState } from 'react';
 import uuid from "uuid";
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: Constants.manifest?.extra?.firebaseApiKey,
-    authDomain: Constants.manifest?.extra?.firebaseAuthDomain,
-    projectId: Constants.manifest?.extra?.firebaseProjectId,
-    storageBucket: Constants.manifest?.extra?.firebaseStorageBucket,
-    messagingSenderId: Constants.manifest?.extra?.firebaseMessagingSenderId,
-    appId: Constants.manifest?.extra?.firebaseAppId,
-};
-
-// // Initialize Firebase
-// // const app = initializeApp(firebaseConfig);
-// // const auth = getAuth(app);
-// // let user = auth.currentUser;
 
 let folder = '';
 
@@ -67,10 +48,7 @@ const uploadImageAsync = async (uri) => {
     });
 
     const fileRef = ref(getStorage(), folder + '/' + uuid.v4());
-    const result = await uploadBytes(fileRef, blob);
-
-    // We're done with the blob, close and release it
-    // blob.close();
+    await uploadBytes(fileRef, blob);
 
     return await getDownloadURL(fileRef);
 };
