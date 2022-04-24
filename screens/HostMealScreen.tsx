@@ -11,10 +11,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { async } from '@firebase/util';
-import food from '../assets/burger.jpeg';
-import * as ImagePicker from 'expo-image-picker';
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import uuid from "uuid";
+import { pickImage } from '../helpers/upload-image';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -30,9 +27,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
-// Create a root reference
-const storage = getStorage(app);
-const storageRef = ref(storage, food);
 
 // AUTHENTICATION // ---------------------------------------------------------
 let user = auth.currentUser;
@@ -83,7 +77,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
       };
     
     const hostEv = async () => {
-        const image = await pickImage();
+        const image = await pickImage('events');
         await setEventID(await hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date, firstName, image));
         toggleOverlay();
     };
@@ -91,57 +85,6 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
     const viewMealE = () => {
         setVisible(false);
         navigation.navigate("ViewMeal", {eventID, firestore })
-    };
-
-    const pickImage = async () => {
-        let pickerResult = await ImagePicker.launchImageLibraryAsync({
-            allowsEditing: true,
-            aspect: [4, 3],
-        });
-        console.log(pickerResult);
-        return handleImpagePicked(pickerResult);
-    };
-
-    const handleImpagePicked = async (pickerResult) => {
-        var state = null;
-        try {
-            state = { uploading: true };
-
-            if (!pickerResult.cancelled) {
-                const uploadUrl = await uploadImageAsync(pickerResult.uri);
-                state = { image: uploadUrl };
-                return uploadUrl;
-            }
-        } catch (e) {
-            console.log(e);
-            alert("Upload failed, sorry :(");
-        } finally {
-            state = { uploading: false };
-        }
-    };
-
-    const uploadImageAsync = async (uri) => {
-        const blob: Blob = await new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function () {
-                resolve(xhr.response);
-            };
-            xhr.onerror = function (e) {
-                console.log(e);
-                reject(new TypeError("Network request failed"));
-            };
-            xhr.responseType = "blob";
-            xhr.open("GET", uri, true);
-            xhr.send(null);
-        });
-
-        const fileRef = ref(getStorage(), 'events/' + uuid.v4());
-        const result = await uploadBytes(fileRef, blob);
-
-        // We're done with the blob, close and release it
-        // blob.close();
-
-        return await getDownloadURL(fileRef);
     };
 
     return (
