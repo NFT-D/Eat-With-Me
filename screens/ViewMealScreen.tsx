@@ -1,4 +1,4 @@
-import { SafeAreaView, View, TouchableOpacity, Text, TextInput, Image, StyleSheet, ScrollView, ImageBackground } from 'react-native';
+import { SafeAreaView, View, TouchableOpacity, Text, TextInput, Image, StyleSheet, ScrollView, ImageBackground, FlatList } from 'react-native';
 import MyButton from '../components/MyButton';
 import React, { useEffect, useState } from 'react';
 import food from '../assets/pizza.png';
@@ -6,7 +6,8 @@ import location from '../assets/location.png';
 import {  doc,  getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import moment from 'moment';
 import { Overlay } from 'react-native-elements';
-
+import pizza from '../assets/pizza.png'
+import { async } from '@firebase/util';
 type ScreenProps = {
   navigation: any,
   route: any
@@ -23,10 +24,6 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   const [allergens, setAllergens] = useState([]);
   const [notes, setNotes] = useState("");
 
-  const [appetizers, setAppetizersDish] = useState([]);
-  const [entree, setEntreesDish] = useState([]);
-  const [dessert, setDessertsDish] = useState([]);
-
   const [date, setDate] = useState(moment());
   const [duration, setDuration] = useState(0);
 
@@ -35,6 +32,13 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   const [eventName, setEventName] = useState("");
   const [visible, setVisible] = useState(false);
   const [status, setStatus] = useState("");
+
+  const [appData,setAppData] = useState([]);
+  const [entData,setEntData] = useState([]);
+  const [desData,setDesData] = useState([]);
+  const [refeshing, setRefresh] = useState(false);
+
+
   let time;
   var ml;
   const getEventInfo = async (id: string) => {
@@ -59,21 +63,47 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
     }
   }
 
+
+  
   const getMealInfo = async (mealRef: string) => {
     try {
       const q = doc(firestore, "meals", mealRef);
       const querySnapshot = await getDoc(q);
       const meal = querySnapshot.data();
-      setAppetizersDish(meal["appetizer"]);
-      setEntreesDish(meal["entree"]);
-      setDessertsDish(meal["dessert"]);
-      setAllergens(meal["allergens"]);
+      let a = meal["appetizer"];
+      let b = meal["entree"];
+      let c = meal["dessert"];
+      let ary = [];
+      let cnt = 1;
+      a.forEach((item) => {
+          ary.push({id: cnt,name: item.name, image: item.image, ingredient: item.ingredient});
+          cnt +=1;
+      })
+      setAppData(ary);
 
+      let ary2 = [];
+      let cnt2 = 1;
+      b.forEach((item) => {
+          ary2.push({id: cnt2,name: item.name, image: item.image, ingredient: item.ingredient});
+          cnt2 +=1;
+      })
+      setEntData(ary2);
+
+      let ary3 = [];
+      let cnt3 = 1;
+      c.forEach((item) => {
+          ary3.push({id: cnt3,name: item.name, image: item.image, ingredient: item.ingredient});
+          cnt3 +=1;
+      })
+      setDesData(ary3);
+      
+      setAllergens(meal["allergens"]);
     }
     catch (e) {
       console.log(e);
     }
   }
+
 
   const reserve = async() =>{
     
@@ -89,14 +119,18 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
     setVisible(true);
   }
 
-
+  const handleRefresh = async () =>{
+    start();
+    setRefresh(false);
+  }
+  const start = async () =>{
+    await getEventInfo(eventID)
+    await getMealInfo(ml)
+    setRefresh(true);
+  }
   useEffect(() => {
-    async function fetchMyAPI() {
-      await getEventInfo(eventID)
-      await getMealInfo(ml)
-    }
-    fetchMyAPI()
-
+    start();
+    console.log(appData)
   }, []);
 
   return (
@@ -136,21 +170,92 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
 
           <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 20, flex: 1, flexDirection: "column", backgroundColor: "white" }}>
 
-      
+          <Text>Duration: {duration}</Text>
 
 
             <Text style={styles.blackTextBold}>Menu</Text>
             <Text style={styles.gray_whiteTextBold}>_________________________________</Text>
-            <Text style={styles.black_smallTextBold}>Appetizers:</Text>
+            {/* <Text style={styles.black_smallTextBold}>Appetizers:</Text>
             <Text style={styles.gray_whiteTextBold}>{appetizers.toString()}</Text>
             <Text style={styles.black_smallTextBold}>Entrees:</Text>
             <Text style={styles.gray_whiteTextBold}>{entree.toString()}</Text>
             <Text style={styles.black_smallTextBold}>Desserts:</Text>
-            <Text style={styles.gray_whiteTextBold}>{dessert.toString()}</Text>
-            <Text style={styles.black_smallTextBold}>Allergens:</Text>
-            <Text style={styles.gray_whiteTextBold}>{allergens.toString()}</Text>
-          </View>
+            <Text style={styles.gray_whiteTextBold}>{dessert.toString()}</Text>*/}
+            
 
+            
+          </View>
+          <Text style={styles.black_smallTextBold}>Appetizers:</Text>
+            <FlatList
+                keyExtractor={(item)=> item.id}
+                data={appData}
+                refreshing = {refeshing}
+                onRefresh = {handleRefresh}
+                renderItem={({item}) =>(
+                    <ScrollView style={{ width: '85%', padding: 20 }}>
+                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }}>
+                            <View style={{ flex: .5 }}>
+                                <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                            </View>
+                            <View style={{ flexDirection: 'column', padding: 10 }}>
+                                {/*dish info */}
+                                <Text>Dish: {item.name}</Text>
+                                <Text>{item.image}</Text>
+                                <Text>Ingredients: {item.ingredient}</Text>
+                            </View>
+                        </View>
+                    </ScrollView>
+                )}
+            />
+
+            <Text style={styles.black_smallTextBold}>Entree:</Text>
+            <FlatList
+                keyExtractor={(item)=> item.id}
+                data={entData}
+                refreshing = {refeshing}
+                onRefresh = {handleRefresh}
+                renderItem={({item}) =>(
+                    <ScrollView style={{ width: '85%', padding: 20 }}>
+                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }}>
+                            <View style={{ flex: .5 }}>
+                                <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                            </View>
+                            <View style={{ flexDirection: 'column', padding: 10 }}>
+                                {/*dish info */}
+                                <Text>Dish: {item.name}</Text>
+                                <Text>{item.image}</Text>
+                                <Text>Ingredients: {item.ingredient}</Text>
+                            </View>
+                        </View>
+                    </ScrollView>
+                )}
+            />
+
+            <Text style={styles.black_smallTextBold}>Dessert:</Text>
+            <FlatList
+                keyExtractor={(item)=> item.id}
+                data={desData}
+                refreshing = {refeshing}
+                onRefresh = {handleRefresh}
+                renderItem={({item}) =>(
+                    <ScrollView style={{ width: '85%', padding: 20 }}>
+                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }}>
+                            <View style={{ flex: .5 }}>
+                                <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                            </View>
+                            <View style={{ flexDirection: 'column', padding: 10 }}>
+                                {/*dish info */}
+                                <Text>Dish: {item.name}</Text>
+                                <Text>{item.image}</Text>
+                                <Text>Ingredients: {item.ingredient}</Text>
+                            </View>
+                        </View>
+                    </ScrollView>
+                )}
+            />
+
+          <Text style={styles.black_smallTextBold}>Allergens:</Text>
+            <Text style={styles.gray_whiteTextBold}>{allergens.toString()}</Text> 
           <View style={{ flexDirection: "row", flexWrap: "wrap", width: "100%", padding: 15, backgroundColor: "white", }}>
             <View style={{ flex: 0.5 }}>
               <Image source={location} style={{ height: "20%", width: "20%" }} />

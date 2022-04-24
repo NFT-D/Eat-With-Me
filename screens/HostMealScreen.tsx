@@ -26,10 +26,6 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
     const [allergens, enterAllergens] = useState("");
     const [notes, enterNotes] = useState("");
 
-    const [appetizers, enterAppetizersDish] = useState("");
-    const [entree, enterEntreesDish] = useState("");
-    const [dessert, enterDessertsDish] = useState("");
-
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState(null);
     const [show, setShow] = useState(false);
@@ -49,7 +45,6 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
     const refInputs = useRef<Array<any>>([]);
     const refInputs2 = useRef<Array<any>>([]);
     const refInputs3 = useRef<Array<any>>([]);
-    const [testA, setTesta] = useState([]);
 
     const hostEvent = async (eventName: string, address: string, guest: number, allergen: string, notes: string, duration: number, sDate: Date, fName: string,fee: number, app: Array<any>,ent: Array<any>,des: Array<any>) => {
 
@@ -57,7 +52,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
             
             const mealRef = await addMeal(app, ent, des, allergen);
     
-            const data = { event: eventName, capacity: guest, attendees: [], fee: fee, location: address, meal: mealRef, date: sDate, note: notes, host: fName }
+            const data = { event: eventName, capacity: guest, attendees: [], fee: fee, location: address, meal: mealRef, date: sDate, note: notes, host: fName, duration: duration }
     
             const docRef = await addDoc(collection(firestore, "events"), data);
             return docRef.id;
@@ -93,13 +88,18 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
         try {
             dish.forEach(async (value) => {
                 const data = { name: value[0], image: value[1], ingredient: value[2] };
-                const dishRef = await addDoc(collection(firestore, "dishes"), data);
                 const eventRef = doc(firestore, 'meals', id);
-                await updateDoc(eventRef, { meal: arrayUnion(dishRef.id) });
+                if (meal == "appetizer"){
+                    await updateDoc(eventRef, { appetizer: arrayUnion(data) });
+                }
+                if (meal == "entree"){
+                    await updateDoc(eventRef, { entree: arrayUnion(data) });
+                }
+                if (meal == "dessert"){
+                    await updateDoc(eventRef, { dessert: arrayUnion(data) });
+                }
             });
            
-
-            // setTesta(ary);
             return
         } catch (e) {
             console.log(e);
