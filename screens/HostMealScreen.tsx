@@ -1,17 +1,16 @@
-import { SafeAreaView, View, TouchableOpacity, Text, TextInput, StyleSheet, ScrollView, Button } from 'react-native';
+import {Image, SafeAreaView, View, TouchableOpacity, Text, TextInput, StyleSheet, ScrollView, Button, Alert, Modal } from 'react-native';
 import colors from '../config/colors';
 import MyField from '../components/MyField';
 import React, { useState } from 'react';
 import { hostEvent } from '../services/firebase';
-
+import {Overlay } from 'react-native-elements';
 import MyButton from '../components/MyButton';
-import { StatusBar } from 'expo-status-bar';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Constants from 'expo-constants';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
-
+import { async } from '@firebase/util';
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: Constants.manifest?.extra?.firebaseApiKey,
@@ -38,7 +37,8 @@ type ScreenProps = {
 
 
 
-export default function LogInScreen({ navigation, route }: ScreenProps) {
+export default function HostMealScreen({ navigation, route }: ScreenProps) {
+    const [visible, setVisible] = useState(false);
     const { firstName } = route.params;
     const [event, setEvent] = useState("");
     const [eventID, setEventID] = useState("");
@@ -57,7 +57,7 @@ export default function LogInScreen({ navigation, route }: ScreenProps) {
 
     const [duration, setDuration] = useState(null);
 
-    const [eventName, setEventName] = useState("");
+  
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
@@ -70,8 +70,19 @@ export default function LogInScreen({ navigation, route }: ScreenProps) {
         setMode(currentMode);
     };
 
+    const toggleOverlay = () => {
+        setVisible(true);
+      };
+    
+    const hostEv = async () => {
+        await setEventID(await hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date, firstName))
+        toggleOverlay();
+    };
 
-
+    const viewMealE = () => {
+        setVisible(false);
+        navigation.navigate("ViewMeal", {eventID, firestore })
+    };
 
     return (
         <SafeAreaView style={{ alignContent: 'center', alignItems: 'center', backgroundColor: colors.secondary }}>
@@ -121,11 +132,15 @@ export default function LogInScreen({ navigation, route }: ScreenProps) {
 
                     <MyField title="Other Notes....." type="text" secure={false} onChangeFn={enterNotes} ></MyField>
 
+                  
+                    <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { hostEv() }} /></View>
+                    <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
 
-
-                    <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { setEventID(await hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date)) }} /></View>
-                    <View style={{ flexDirection: 'row' }}><MyButton text="view Meal" type="primary" size="large" onPressFn={async () => { navigation.navigate("ViewMeal", { firstName, eventID: eventID, firestore }) }} /></View>
-
+                        <Text>Meal Created!</Text>
+                        <MyButton text="view Meal" type="primary" size="large" onPressFn={ () => {viewMealE()  }} />
+                        <MyButton text="Ok" type="primary" size="large" onPressFn={async () => {  navigation.navigate("Home", { firstName })}} />
+                    </Overlay>
+                    
 
 
                 </ScrollView>
@@ -160,6 +175,30 @@ const styles = StyleSheet.create({
         marginRight: 10,
         alignItems: 'stretch',
         justifyContent: 'center',
+    },
+    primaryContainer: {
+        flexDirection: 'column',
+        flexWrap: 'wrap',
+        width:'70%',
+        borderColor: colors.primary,
+        borderWidth:.5,
+        borderRadius: 20,
+        alignContent:'center',
+        alignItems:'center',
+    },
+    imageStyle:{
+        height:'100%',
+        width:'100%',
+        borderTopLeftRadius:20,
+        borderBottomLeftRadius:20,
+
+    },
+    
+    infoText: {
+        color: 'black',
+        fontWeight: 'bold',
+        textAlign: 'left',
+        fontSize: 12,
     },
 }
 );

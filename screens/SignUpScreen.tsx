@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Dimensions, SafeAreaView, ImageBackground } from 'react-native';
+import { StyleSheet, View, Dimensions, SafeAreaView, ImageBackground, Alert, Modal,Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import MyButton from '../components/MyButton';
 import MyField from '../components/MyField';
@@ -16,10 +16,18 @@ export default function SignUpScreen({ navigation }: ScreenProps) {
   const [lName, setLName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <>
-
+      {/* sign up error modal */}
+      <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => {Alert.alert("Modal has been closed."); setModalVisible(!modalVisible);}}>
+        <View style={styles.container} >
+            <Text>Account Not Created</Text>
+            <Text>Invalid Submission(s)</Text>
+            <MyButton text="try again" type="primary" onPressFn={() => setModalVisible(!modalVisible)}/>
+        </View>
+      </Modal>
       <StatusBar style="light" />
       <ImageBackground source={food} style={{ width: '100%', height: '110%', justifyContent: 'center', alignItems: 'center' }}>
         <View style={styles.container}>
@@ -34,6 +42,9 @@ export default function SignUpScreen({ navigation }: ScreenProps) {
               let firstName = await getFirstName();
               navigation.navigate("Home", { firstName: firstName });
             }
+            else {
+              setModalVisible(true);
+            }
           }} />
           <View style={{ height: Dimensions.get('screen').width * 0.05 }}></View>
         </View>
@@ -44,7 +55,6 @@ export default function SignUpScreen({ navigation }: ScreenProps) {
 
 const styles = StyleSheet.create({
   container: {
-    //flex: 2,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
