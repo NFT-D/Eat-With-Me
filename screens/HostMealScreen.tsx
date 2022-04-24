@@ -11,6 +11,10 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { async } from '@firebase/util';
+import food from '../assets/burger.jpeg';
+
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: Constants.manifest?.extra?.firebaseApiKey,
@@ -25,6 +29,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
+// Create a root reference
+const storage = getStorage(app);
+const storageRef = ref(storage, food);
 
 // AUTHENTICATION // ---------------------------------------------------------
 let user = auth.currentUser;
@@ -75,7 +82,11 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
       };
     
     const hostEv = async () => {
-        await setEventID(await hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date, firstName))
+        await setEventID(await hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date, firstName));
+        // 'file' comes from the Blob or File API
+        await uploadBytes(storageRef, food).then((snapshot) => {
+            console.log('Uploaded a blob or file!');
+        });
         toggleOverlay();
     };
 
@@ -134,6 +145,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
 
                   
                     <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { hostEv() }} /></View>
+
                     <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
 
                         <Text>Meal Created!</Text>
