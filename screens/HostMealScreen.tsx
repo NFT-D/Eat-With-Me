@@ -48,6 +48,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
     const [guest, enterGuest] = useState(0);
     const [allergens, enterAllergens] = useState("");
     const [notes, enterNotes] = useState("");
+    const [image, setImage] = useState("");
 
     const [appetizers, enterAppetizersDish] = useState("");
     const [entree, enterEntreesDish] = useState("");
@@ -77,7 +78,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
       };
     
     const hostEv = async () => {
-        const image = await pickImage('events');
+        setImage(await pickImage('events'));
         await setEventID(await hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date, firstName, image));
         toggleOverlay();
     };
