@@ -78,8 +78,8 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
       };
     
     const hostEv = async () => {
-        setImage(await pickImage('events'));
-        await setEventID(await hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date, firstName, image));
+        let imageURL = await pickImage('events');
+        await setEventID(await hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date, firstName, imageURL));
         toggleOverlay();
     };
 
