@@ -35,6 +35,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   const [duration, setDuration] = useState(0);
 
   const [eventName, setEventName] = useState("");
+  const [imageURL, setImageURL] = useState("");
 
   let time;
   var ml;
@@ -49,6 +50,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
       setEventName(event["event"]);
       setCapacity(event["capacity"]);
       setNotes(event["note"]);
+      setImageURL(event["image"]);
       ml = event["meal"];
       setDuration(event["duration"]);
       time = querySnapshot.data()["date"];
@@ -90,7 +92,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   return (
     <View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <ImageBackground source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/eat-with-me-53105.appspot.com/o/dishes%2Ffrench-toast.jpeg?alt=media&token=eca2042e-bde2-4c11-aafe-0dd338ed61b3'}} style={[styles.columnContainer, { width: "100%", height: "50%", top: -200 }]}>
+        <ImageBackground source={{ uri: imageURL}} style={[styles.columnContainer, { width: "100%", height: "50%", top: -200 }]}>
           <View style={{ top: 150, alignItems: "center", padding: 15 }}>
             <Text style={styles.whiteTextBold}>{eventName}</Text>
             <Text style={styles.whiteTextBold}> Hosted by {host}</Text>
