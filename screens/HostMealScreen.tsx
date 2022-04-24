@@ -12,8 +12,9 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { async } from '@firebase/util';
 import food from '../assets/burger.jpeg';
-
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import * as ImagePicker from 'expo-image-picker';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import uuid from "uuid";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -84,15 +85,63 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
     const hostEv = async () => {
         await setEventID(await hostEvent(event, appetizers, entree, dessert, location, guest, allergens, notes, duration, date, firstName));
         // 'file' comes from the Blob or File API
-        await uploadBytes(storageRef, food).then((snapshot) => {
-            console.log('Uploaded a blob or file!');
-        });
+        await pickImage();
         toggleOverlay();
     };
 
     const viewMealE = () => {
         setVisible(false);
         navigation.navigate("ViewMeal", {eventID, firestore })
+    };
+
+    const pickImage = async () => {
+        let pickerResult = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+        });
+        console.log(pickerResult);
+        handleImpagePicked(pickerResult);
+    };
+
+    const handleImpagePicked = async (pickerResult) => {
+        var state = null;
+        try {
+            state = { uploading: true };
+
+            if (!pickerResult.cancelled) {
+                const uploadUrl = await uploadImageAsync(pickerResult.uri);
+                state = { image: uploadUrl };
+            }
+        } catch (e) {
+            console.log(e);
+            alert("Upload failed, sorry :(");
+        } finally {
+            state = { uploading: false };
+        }
+    };
+
+    const uploadImageAsync = async (uri) => {
+        const blob: Blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+                console.log(e);
+                reject(new TypeError("Network request failed"));
+            };
+            xhr.responseType = "blob";
+            xhr.open("GET", uri, true);
+            xhr.send(null);
+        });
+
+        const fileRef = ref(getStorage(), uuid.v4());
+        const result = await uploadBytes(fileRef, blob);
+
+        // We're done with the blob, close and release it
+        // blob.close();
+
+        return await getDownloadURL(fileRef);
     };
 
     return (
