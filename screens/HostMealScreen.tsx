@@ -18,7 +18,7 @@ type ScreenProps = {
 
 export default function HostMealScreen({ navigation, route }: ScreenProps) {
     const [visible, setVisible] = useState(false);
-    const { firstName,firestore } = route.params;
+    const { email,firstName,firestore } = route.params;
     const [event, setEvent] = useState("");
     const [eventID, setEventID] = useState("");
     const [location, enterLoc] = useState("");
@@ -46,13 +46,13 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
     const refInputs2 = useRef<Array<any>>([]);
     const refInputs3 = useRef<Array<any>>([]);
 
-    const hostEvent = async (eventName: string, address: string, guest: number, allergen: string, notes: string, duration: number, sDate: Date, fName: string,fee: number, app: Array<any>,ent: Array<any>,des: Array<any>) => {
+    const hostEvent = async (email: string,eventName: string, address: string, guest: number, allergen: string, notes: string, duration: number, sDate: Date, fName: string,fee: number, app: Array<any>,ent: Array<any>,des: Array<any>) => {
 
         try {
             
             const mealRef = await addMeal(app, ent, des, allergen);
     
-            const data = { event: eventName, capacity: guest, attendees: [], fee: fee, location: address, meal: mealRef, date: sDate, note: notes, host: fName, duration: duration }
+            const data = { HostEmail: email,event: eventName, capacity: guest, attendees: [], fee: fee, location: address, meal: mealRef, date: sDate, note: notes, host: fName, duration: duration }
     
             const docRef = await addDoc(collection(firestore, "events"), data);
             return docRef.id;
@@ -127,7 +127,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
       };
     
     const hostEv = async () => {
-        setEventID(await hostEvent(event, location, guest, allergens, notes, duration, date, firstName, fee, refInputs.current, refInputs2.current, refInputs3.current))
+        setEventID(await hostEvent(email,event, location, guest, allergens, notes, duration, date, firstName, fee, refInputs.current, refInputs2.current, refInputs3.current))
         toggleOverlay();
     };
 

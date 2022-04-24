@@ -37,6 +37,9 @@ type ScreenProps = {
 export default function HomeScreen({ navigation, route }: ScreenProps) {
     const { firstName, email} = route.params;
     const [searchText, enterSearch] = useState("");
+
+
+    //Data format = {id: element,id2:element2}
     const [DATA,setDATA] = useState([]);
     const [refeshing, setRefresh] = useState(false);
 
@@ -100,7 +103,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
     return (
         <ScrollView>
 
-            <MyButton type="primary" text="Host" size="medium" onPressFn={() => navigation.navigate("HostMeal", {firstName, firestore})}></MyButton>
+            <MyButton type="primary" text="Host" size="medium" onPressFn={() => navigation.navigate("HostMeal", {email, firstName, firestore})}></MyButton>
             <MyButton type="primary" text="myMeal" size="medium" onPressFn={() => navigation.navigate("MyMeal", {firstName, email,firestore})}></MyButton>
             {
             <View style={styles.topPanelView}>
@@ -138,6 +141,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
                 <MyButton type="primary" text="⟳" size="medium" onPressFn={async () => {handleRefresh()}}></MyButton>
             </View>
 }
+            {/* item has id and element, item.id item.element */}
             <FlatList
                 keyExtractor={(item)=> item.id}
                 data={DATA}
