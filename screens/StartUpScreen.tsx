@@ -1,13 +1,11 @@
-import { Foundation } from '@expo/vector-icons';
-import { StatusBar } from 'expo-status-bar';
+
 import React from "react";
-import { View, Dimensions, StyleSheet, Text, SafeAreaView, ImageBackground } from "react-native";
+import { View, StyleSheet, Text, SafeAreaView, ImageBackground } from "react-native";
 import MyButton from '../components/MyButton';
 import food from '../assets/food.png';
 import { useFonts, CinzelDecorative_400Regular, CinzelDecorative_700Bold, } from '@expo-google-fonts/cinzel-decorative';
 import { Montserrat_700Bold } from '@expo-google-fonts/montserrat'
 import AppLoading from "expo-app-loading";
-import { color } from 'react-native-elements/dist/helpers';
 import colors from '../config/colors';
 
 

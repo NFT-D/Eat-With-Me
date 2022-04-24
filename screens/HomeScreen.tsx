@@ -2,17 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { FlatList,View, Text, StyleSheet, ImageBackground, Image, Alert, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView } from "react-native";
 import colors from "../config/colors";
 import MyButton from '../components/MyButton';
-import MyField from '../components/MyField';
 import pizza from '../assets/pizza.png'
-import { getEvent } from '../services/firebase';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp, arrayRemove } from 'firebase/firestore';
 import Constants from "expo-constants";
 import moment from 'moment';
-import Moment from 'moment';
-import { async } from '@firebase/util';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -39,12 +35,12 @@ type ScreenProps = {
 
 
 export default function HomeScreen({ navigation, route }: ScreenProps) {
-    const { firstName } = route.params;
+    const { firstName, email} = route.params;
     const [searchText, enterSearch] = useState("");
     const [DATA,setDATA] = useState([]);
     const [refeshing, setRefresh] = useState(false);
 
-
+    
 
     async function start() {
         try {
@@ -67,7 +63,6 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
         
     }
     useEffect(() => {
-        
         start();
     
       }, []);
@@ -105,7 +100,8 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
     return (
         <ScrollView>
 
-            <MyButton type="primary" text="Host" size="medium" onPressFn={() => navigation.navigate("HostMeal", {firstName})}></MyButton>
+            <MyButton type="primary" text="Host" size="medium" onPressFn={() => navigation.navigate("HostMeal", {firstName, firestore})}></MyButton>
+            <MyButton type="primary" text="myMeal" size="medium" onPressFn={() => navigation.navigate("MyMeal", {firstName, email,firestore})}></MyButton>
             {
             <View style={styles.topPanelView}>
                 <View style={styles.container}>
@@ -149,7 +145,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
                 onRefresh = {handleRefresh}
                 renderItem={({item}) =>(
                     <ScrollView style={{ width: '85%', padding: 20 }}>
-                        <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }} onPress={() => navigation.navigate("ViewMeal", { eventID: item.id, firestore })}>
+                        <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }} onPress={() => navigation.navigate("ViewMeal", { firstName, eventID: item.id, firestore,email })}>
                             <View style={{ flex: .5 }}>
                                 <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
                             </View>

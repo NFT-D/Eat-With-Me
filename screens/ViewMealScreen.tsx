@@ -1,13 +1,11 @@
 import { SafeAreaView, View, TouchableOpacity, Text, TextInput, Image, StyleSheet, ScrollView, ImageBackground } from 'react-native';
 import MyButton from '../components/MyButton';
-import colors from '../config/colors';
 import React, { useEffect, useState } from 'react';
 import food from '../assets/pizza.png';
 import location from '../assets/location.png';
-import { getFirestore, doc, addDoc, collection, query, where, getDocs, getDoc, Timestamp, DocumentReference } from 'firebase/firestore';
-import Constants from "expo-constants";
-import Moment from 'moment';
+import {  doc,  getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import moment from 'moment';
+import { Overlay } from 'react-native-elements';
 
 type ScreenProps = {
   navigation: any,
@@ -18,7 +16,7 @@ type ScreenProps = {
 
 
 export default function ViewMealScreen({ navigation,route }: ScreenProps) {
-  const { eventID, firestore } = route.params;
+  const {firstName, eventID, firestore, email } = route.params;
   const [address, setAddress] = useState("");
   const [host, setHost] = useState("");
   const [capacity, setCapacity] = useState(0);
@@ -32,8 +30,11 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   const [date, setDate] = useState(moment());
   const [duration, setDuration] = useState(0);
 
-  const [eventName, setEventName] = useState("");
+  const [attending, setAttending] = useState([]);
 
+  const [eventName, setEventName] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [status, setStatus] = useState("");
   let time;
   var ml;
   const getEventInfo = async (id: string) => {
@@ -42,6 +43,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
       const querySnapshot = await getDoc(eventRef);
 
       const event = querySnapshot.data();
+      setAttending(event["attendees"]);
       setHost(event["host"]);
       setAddress(event["location"]);
       setEventName(event["event"]);
@@ -51,7 +53,6 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
       setDuration(event["duration"]);
       time = querySnapshot.data()["date"];
       time = moment.unix(time.seconds).utc().local();
-      console.log(time)
       setDate(time);
     } catch (e) {
       console.log(e);
@@ -74,6 +75,19 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
     }
   }
 
+  const reserve = async() =>{
+    
+    if (attending.length < capacity){
+      setStatus("Reserved");
+      const eventRef = doc(firestore, 'events', eventID);
+      await updateDoc(eventRef,{pending: arrayUnion(email)});
+    }
+    else{
+      setStatus("Reservation declined capacity is full");
+    }
+    
+    setVisible(true);
+  }
 
 
   useEffect(() => {
@@ -98,7 +112,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
               <Text style={styles.whiteTextReg}>{date.format('hh:mm A')} </Text>
 
               <Text> </Text>
-              <Text style={styles.whiteTextReg}> 0/{capacity} </Text>
+              <Text style={styles.whiteTextReg}> {attending.length}/{capacity} </Text>
               <Text>            </Text>
               <Text style={styles.whiteTextReg}> $0 </Text>
             </View>
@@ -116,12 +130,14 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
 
         <View style={{ padding: 20, top: -200 }}>
           <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 20, flex: 1, flexDirection: "row", backgroundColor: "white" }}>
-            <MyButton type="primary" size="medium" text="Reserve" />
-            <MyButton type="icon" text="♥" />
-            <MyButton type="icon" text="✉" />
+            <MyButton type="primary" size="medium" text="Reserve" onPressFn={() =>{reserve()}}/>
+
           </View>
 
           <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 20, flex: 1, flexDirection: "column", backgroundColor: "white" }}>
+
+      
+
 
             <Text style={styles.blackTextBold}>Menu</Text>
             <Text style={styles.gray_whiteTextBold}>_________________________________</Text>
@@ -152,7 +168,13 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
 
           </View>
         </View>
+        <Overlay isVisible={visible}>
+          <Text>{status}</Text>
+          <MyButton text="Ok" type="primary" size="large" onPressFn={ () => { setVisible(false)}} />
+      </Overlay>
       </ScrollView>
+
+      
     </View>
   );
 }
