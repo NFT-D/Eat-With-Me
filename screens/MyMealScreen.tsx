@@ -177,7 +177,7 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
         <View>
             <ScrollView>
                 <Text>My Meals</Text>
-
+                <MyButton type="primary" text="⟳" size="medium" onPressFn={async () => {handleRefresh()}}></MyButton>
 
                 <Text>hosted Meals</Text>
                 <FlatList
