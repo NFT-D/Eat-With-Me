@@ -135,7 +135,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
             xhr.send(null);
         });
 
-        const fileRef = ref(getStorage(), uuid.v4());
+        const fileRef = ref(getStorage(), 'events/' + uuid.v4());
         const result = await uploadBytes(fileRef, blob);
 
         // We're done with the blob, close and release it
