@@ -14,7 +14,9 @@ type ScreenProps = {
   route: any
 }
 
-
+let imgs = [
+  'https://firebasestorage.googleapis.com/v0/b/eat-with-me-53105.appspot.com/o/dishes%2Ffrenchtoast.jpeg?alt=media&token=60179fe2-dd58-44b4-8c93-404cb31e5a94'
+]
 
 
 export default function ViewMealScreen({ navigation,route }: ScreenProps) {
@@ -88,7 +90,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   return (
     <View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <ImageBackground source={food} style={[styles.columnContainer, { width: "100%", height: "50%", top: -200 }]}>
+        <ImageBackground source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/eat-with-me-53105.appspot.com/o/dishes%2Ffrench-toast.jpeg?alt=media&token=eca2042e-bde2-4c11-aafe-0dd338ed61b3'}} style={[styles.columnContainer, { width: "100%", height: "50%", top: -200 }]}>
           <View style={{ top: 150, alignItems: "center", padding: 15 }}>
             <Text style={styles.whiteTextBold}>{eventName}</Text>
             <Text style={styles.whiteTextBold}> Hosted by {host}</Text>
