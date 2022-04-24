@@ -6,6 +6,8 @@ import MyField from '../components/MyField';
 import { getFirstName, signUpWithEmail } from '../services/firebase';
 import colors from '../config/colors';
 import food from '../assets/food.png';
+import { pickImage } from '../helpers/upload-image';
+
 
 type ScreenProps = {
   navigation: any
@@ -15,6 +17,7 @@ export default function SignUpScreen({ navigation }: ScreenProps) {
   const [fName, setFName] = useState("");
   const [lName, setLName] = useState("");
   const [email, setEmail] = useState("");
+  const [avatarURL, setAvatarURL] = useState("");
   const [password, setPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -36,8 +39,12 @@ export default function SignUpScreen({ navigation }: ScreenProps) {
           <MyField title='Last Name' type='text' onChangeFn={setLName} />
           <MyField title='Email' type='text' onChangeFn={setEmail} />
           <MyField title='Password' type='text' secure={true} onChangeFn={setPassword} />
+          <MyButton text='Upload Picture' type='primary' onPressFn={ async() => {
+            let image = await pickImage('avatars');
+            setAvatarURL(image);
+          }} />
           <MyButton text="Sign Up" type="primary" size="large" onPressFn={async () => {
-            let result = await signUpWithEmail(fName, lName, email, password);
+            let result = await signUpWithEmail(fName, lName, email, password, avatarURL);
             if (result === 'success') {
               let firstName = await getFirstName();
               navigation.navigate("Home", { firstName: firstName });
