@@ -52,19 +52,16 @@ const styles = StyleSheet.create({
         fontFamily: 'CinzelDecorative_700Bold',
         fontWeight: '700',
         fontSize: 121,
-        top: 241,
-        width: 331,
         color: 'white',
         textShadowColor: colors.primary,
-        textShadowOffset:{width:1.5,height:1.5}
+        textShadowOffset:{width:1.5,height:1.5},
+        textAlign:'center'
     },
     text1: {
         fontFamily: 'Montserrat_700Bold',
         fontWeight: '700',
         fontSize: 40,
         textAlign: 'center',
-        top: 325,
-        width: 331,
         color: colors.primary,
         textShadowColor: 'white',
         textShadowOffset:{width:1.5,height:1.5}
