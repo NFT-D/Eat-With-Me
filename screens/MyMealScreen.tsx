@@ -175,6 +175,7 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
     }
 
     return(
+
         <SafeAreaView style={styles.primaryContainer}>
                 <View style={{backgroundColor:colors.secondary}}>
                 {/* top bar */}

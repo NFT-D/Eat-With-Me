@@ -37,6 +37,9 @@ type ScreenProps = {
 export default function HomeScreen({ navigation, route }: ScreenProps) {
     const { firstName, email} = route.params;
     const [searchText, enterSearch] = useState("");
+
+
+    //Data format = {id: element,id2:element2}
     const [DATA,setDATA] = useState([]);
     const [refeshing, setRefresh] = useState(false);
 
@@ -98,6 +101,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
         setRefresh(false);
     }
     return (
+        
         <SafeAreaView style={styles.homePage}>
             <View style={{flexDirection:'row', justifyContent:'space-evenly'}}>
                 <MyButton type="primary" text="Create Meal" size="medium" onPressFn={() => navigation.navigate("HostMeal", {firstName, firestore})}></MyButton>
@@ -125,7 +129,6 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
                     </View>
                 
             </View>
-
             <FlatList
                 keyExtractor={(item)=> item.id}
                 data={DATA}
