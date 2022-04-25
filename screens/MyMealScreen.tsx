@@ -14,7 +14,7 @@ type ScreenProps = {
   }
 
 export default function MyMealScreen({ navigation,route }: ScreenProps) {
-    const {email, firestore} = route.params;
+    const {firstName, email, firestore} = route.params;
     const [DATA,setDATA] = useState([]);
     const [AttenDATA,setAttenDATA] = useState([]);
     const [Attending,setAttending] = useState([]);
@@ -177,10 +177,13 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
     return(
 
         <SafeAreaView style={styles.primaryContainer}>
+                <TouchableOpacity onPress={async () => {handleRefresh()}}>
+                    <Text>⟳</Text>
+                </TouchableOpacity>
                 <View style={{backgroundColor:colors.secondary}}>
                 {/* top bar */}
                 <View style={{flexDirection:'row', backgroundColor:colors.primary, justifyContent:'space-evenly'}}>
-                    <TouchableOpacity onPress={async () => {  navigation.navigate("Home",)}}>
+                    <TouchableOpacity onPress={async () => {  navigation.navigate("Home",{firstName, email})}}>
                         <Text style={{fontSize:100, color:colors.secondary}}> ⌂ </Text>
                     </TouchableOpacity>
                     <Text style={styles.logoText}>EWM</Text>
