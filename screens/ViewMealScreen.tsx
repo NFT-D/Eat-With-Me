@@ -1,13 +1,16 @@
 import { SafeAreaView, View, TouchableOpacity, Text, TextInput, Image, StyleSheet, ScrollView, ImageBackground, FlatList } from 'react-native';
 import MyButton from '../components/MyButton';
 import React, { useEffect, useState } from 'react';
-import food from '../assets/pizza.png';
+import pizza from '../assets/pizza.png';
 import location from '../assets/location.png';
 import {  doc,  getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import moment from 'moment';
 import { Overlay } from 'react-native-elements';
 import pizza from '../assets/pizza.png'
 import { async } from '@firebase/util';
+import colors from '../config/colors';
+
+
 type ScreenProps = {
   navigation: any,
   route: any
@@ -134,56 +137,29 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   }, []);
 
   return (
-    <View>
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        <ImageBackground source={food} style={[styles.columnContainer, { width: "100%", height: "50%", top: -200 }]}>
-          <View style={{ top: 150, alignItems: "center", padding: 15 }}>
+    <SafeAreaView style={styles.contentContainer}>
+        <ImageBackground source={pizza} style={{ width: "100%", }}>
+          <View style={{ alignItems: "center", padding: 15 }}>
             <Text style={styles.whiteTextBold}>{eventName}</Text>
-            <Text style={styles.whiteTextBold}> Hosted by {host}</Text>
-            <View style={[styles.rowContainer, { top: -25 }]}>
-
-
+            <Text style={styles.hostedByText}> Hosted by {host}</Text>
+            <View style={{flexDirection:'row',justifyContent:'space-evenly' }}>
               <Text style={styles.whiteTextReg}>{date.format('hh:mm A')} </Text>
-
-              <Text> </Text>
+              {/* <Text> </Text> */}
               <Text style={styles.whiteTextReg}> {attending.length}/{capacity} </Text>
-              <Text>            </Text>
+              {/* <Text>            </Text> */}
               <Text style={styles.whiteTextReg}> $0 </Text>
             </View>
+            <View style={{ flexDirection:'row', justifyContent:'space-evenly' }}>
+              <Text style={styles.white_smallTextReg}> {date.format('M/DD/YYYY')} </Text>
+              <Text>          </Text>
+              <Text style={styles.white_smallTextReg}> Seats Taken </Text>
+              <Text>          </Text>
+              <Text style={styles.white_smallTextReg}> Fee </Text>
+            </View>
           </View>
-
-          <View style={[styles.rowContainer, { top: -40 }]}>
-            <Text style={styles.white_smallTextReg}> {date.format('M/DD/YYYY')} </Text>
-            <Text>          </Text>
-            <Text style={styles.white_smallTextReg}> Seats Taken </Text>
-            <Text>          </Text>
-            <Text style={styles.white_smallTextReg}> Fee </Text>
-          </View>
-
         </ImageBackground>
 
-        <View style={{ padding: 20, top: -200 }}>
-          <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 20, flex: 1, flexDirection: "row", backgroundColor: "white" }}>
-            <MyButton type="primary" size="medium" text="Reserve" onPressFn={() =>{reserve()}}/>
-
-          </View>
-
-          <View style={{ alignItems: "center", justifyContent: "space-evenly", padding: 20, flex: 1, flexDirection: "column", backgroundColor: "white" }}>
-
-          <Text>Duration: {duration}</Text>
-
-
-            <Text style={styles.blackTextBold}>Menu</Text>
-            <Text style={styles.gray_whiteTextBold}>_________________________________</Text>
-            {/* <Text style={styles.black_smallTextBold}>Appetizers:</Text>
-            <Text style={styles.gray_whiteTextBold}>{appetizers.toString()}</Text>
-            <Text style={styles.black_smallTextBold}>Entrees:</Text>
-            <Text style={styles.gray_whiteTextBold}>{entree.toString()}</Text>
-            <Text style={styles.black_smallTextBold}>Desserts:</Text>
-            <Text style={styles.gray_whiteTextBold}>{dessert.toString()}</Text>*/}
-            
-
-            
+        <MyButton type="primary" size="medium" text="Reserve" onPressFn={() =>{reserve()}}/>     
           </View>
           <Text style={styles.black_smallTextBold}>Appetizers:</Text>
             <FlatList
@@ -257,48 +233,34 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
           <Text style={styles.black_smallTextBold}>Allergens:</Text>
             <Text style={styles.gray_whiteTextBold}>{allergens.toString()}</Text> 
           <View style={{ flexDirection: "row", flexWrap: "wrap", width: "100%", padding: 15, backgroundColor: "white", }}>
+          <View style={styles.locationBox}>
             <View style={{ flex: 0.5 }}>
-              <Image source={location} style={{ height: "20%", width: "20%" }} />
+              <Image source={location} style={{ height: "100%", width: "100%",borderBottomLeftRadius:15,borderTopLeftRadius:15 }} />
             </View>
-
-            <View style={{ flexDirection: "column", padding: 10 }}>
+            <View style={{ flexDirection: "column", padding: 10,flex:.5 }}>
               {/*location info*/}
-              <Text style={styles.black_smallTextBold}>location: </Text>
+              <Text style={styles.black_smallTextBold}>Location: </Text>
               <Text>{address}</Text>
-
               <Text style={styles.black_smallTextBold}>Additional Notes:</Text>
               <Text> {notes} </Text>
-
             </View>
-
           </View>
-        </View>
-        <Overlay isVisible={visible}>
-          <Text>{status}</Text>
+        <Overlay isVisible={visible} style={{borderRadius:10, padding:10}}>
+          <Text style={{textAlign:'center'}}>{status}</Text>
           <MyButton text="Ok" type="primary" size="large" onPressFn={ () => { setVisible(false)}} />
-      </Overlay>
-      </ScrollView>
-
-      
-    </View>
+      </Overlay> 
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
-  rowContainer: {
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    padding: 10,
-    flex: 1,
-    flexDirection: 'row'
-
+  contentContainer: {
+    alignItems:'center',
+    backgroundColor:colors.secondary,
+    padding:25
   },
-  columnContainer: {
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    padding: 20,
-    flexDirection: 'column',
-
+  hostedByText:{
+    color: 'white',
+    fontSize: 25,
   },
   whiteTextBold: {
     color: 'white',
@@ -307,8 +269,8 @@ const styles = StyleSheet.create({
   },
   whiteTextReg: {
     color: 'white',
-    fontSize: 25,
-    fontWeight: 'bold'
+    fontSize: 20,
+    
   },
   gray_whiteTextBold: {
     color: 'grey',
@@ -331,22 +293,39 @@ const styles = StyleSheet.create({
   white_smallTextReg: {
     color: 'white',
     fontSize: 15,
-    fontWeight: 'bold'
+    
   },
-
-  eventTitle: {
-    color: 'white',
-    fontSize: 40,
-    fontWeight: 'bold'
-  },
-
   black_smallTextBold: {
     color: 'black',
     fontSize: 20,
     fontWeight: 'bold'
   },
-
-  contentContainer: {
-    paddingVertical: 200,
+  menu:{
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    flexDirection: "column", 
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: colors.primary,
+    width:"80%",
+    borderRadius:15
   },
+  menuTitle:{
+    color: 'black',
+    fontSize: 27,
+    fontWeight: 'bold',
+    textDecorationLine:'underline'
+  },
+  locationBox:{
+    flexDirection: "row", 
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: colors.primary,
+    width:"80%",
+    borderRadius:15
+  }
+
+  
 });

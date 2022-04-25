@@ -14,7 +14,7 @@ type ScreenProps = {
   }
 
 export default function MyMealScreen({ navigation,route }: ScreenProps) {
-    const { firstName,email, firestore} = route.params;
+    const {email, firestore} = route.params;
     const [DATA,setDATA] = useState([]);
     const [AttenDATA,setAttenDATA] = useState([]);
     const [Attending,setAttending] = useState([]);
@@ -26,6 +26,7 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
     const [evId, setId] = useState("");
     const [AttenVisible, setAttenVisible] = useState(false);
     const [AttenRefeshing, setAttenRefeshing] = useState(false);
+    
     let pendData, attendingData = [];
 
     async function start() {
@@ -174,94 +175,105 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
     }
 
     return(
-        <View>
-            <ScrollView>
-                <Text>My Meals</Text>
-                <MyButton type="primary" text="⟳" size="medium" onPressFn={async () => {handleRefresh()}}></MyButton>
 
-                <Text>hosted Meals</Text>
+        <SafeAreaView style={styles.primaryContainer}>
+                <View style={{backgroundColor:colors.secondary}}>
+                {/* top bar */}
+                <View style={{flexDirection:'row', backgroundColor:colors.primary, justifyContent:'space-evenly'}}>
+                    <TouchableOpacity onPress={async () => {  navigation.navigate("Home",)}}>
+                        <Text style={{fontSize:100, color:colors.secondary}}> ⌂ </Text>
+                    </TouchableOpacity>
+                    <Text style={styles.logoText}>EWM</Text>
+                    <Text style={{fontSize:100}}>   </Text>
+                </View>
+
+                <Text style={styles.headerText}>My Meals</Text>
                 <FlatList
                 keyExtractor={(item)=> item.id}
                 data={DATA}
                 refreshing = {refeshing}
                 onRefresh = {handleRefresh}
                 renderItem={({item}) =>(
-                    <ScrollView style={{ width: '85%', padding: 20 }}>
-                        <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }} onPress={() => navigation.navigate("ViewMeal", { eventID: item.id, firestore })}>
+                    <View style={{ width: '85%', padding: 10 }}>
+                        <TouchableOpacity style={styles.eventView} onPress={() => navigation.navigate("ViewMeal", { eventID: item.id, firestore })}>
                             <View style={{ flex: .5 }}>
-                                <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                                <Image source={pizza} style={styles.imageStyle} />
                             </View>
-                            <MyButton text="invitation requests" type="primary" size="large" onPressFn={ () => { setId(item.id); setVisible(true);pendData = item.pending ; handlePendRefresh();}} />
-                            <MyButton text="Attendees" type="primary" size="large" onPressFn={ () => {setAttenVisible(true);attendingData = item.atten;setAttenRefeshing(true); handleAttenRefresh(); }} />
-                            <MyButton text="cancel" type="primary" size="large" onPressFn={ async () => {await cancelHost(item.id)}} />
                             <View style={{ flexDirection: 'column', padding: 10 }}>
                                 {/*meal info */}
-                                <Text>{item.name}</Text>
-                                <Text>Max Guests: {item.capacity}</Text>
-                                <Text>{item.date}</Text>
+                                <Text style={styles.mealTitle}>{item.name}</Text>
+                                <Text style={styles.mealInfoText}>Max Guests: {item.capacity}</Text>
+                                <Text style={styles.mealInfoText}>{item.date}</Text>
                                 <Text style={{ color: colors.primary }}>View Event</Text>
                             </View>
+                            <View style={{flexDirection:'column'}}>
+                                <MyButton text="Invitation Requests" type="primary" size="large" onPressFn={ () => { setId(item.id); setVisible(true);pendData = item.pending ; handlePendRefresh();}} />
+                                <MyButton text="Attendees" type="primary" size="large" onPressFn={ () => {setAttenVisible(true);attendingData = item.atten;setAttenRefeshing(true); handleAttenRefresh(); }} />
+                                <MyButton text="Cancel Meal" type="primary" size="large" onPressFn={ async () => {await cancelHost(item.id)}} />
+                            </View>
                         </TouchableOpacity>
-                    </ScrollView>
-                )}
-            />
+                    </View>
+                )} />
 
                 
-                <Text>Attending Meals</Text>
+                <Text style={styles.headerText}>Upcoming Meals</Text>
                 <FlatList
                 keyExtractor={(item)=> item.id}
                 data={AttenDATA}
                 refreshing = {refeshing}
                 onRefresh = {handleRefresh}
                 renderItem={({item}) =>(
-                    <ScrollView style={{ width: '85%', padding: 20 }}>
-                        <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }} onPress={() => navigation.navigate("ViewMeal", { eventID: item.id, firestore })}>
+                    <View style={{ width: '85%', padding: 10 }}>
+                        <TouchableOpacity style={styles.eventView} onPress={() => navigation.navigate("ViewMeal", { eventID: item.id, firestore })}>
                             <View style={{ flex: .5 }}>
-                                <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                                <Image source={pizza} style={styles.imageStyle} />
                             </View>
-                            <MyButton text="cancel" type="primary" size="large" onPressFn={ async () => {await cancelAttending(item.id)}} />
                             <View style={{ flexDirection: 'column', padding: 10 }}>
                                 {/*meal info */}
-                                <Text>{item.name}</Text>
-                                <Text>Max Guests: {item.capacity}</Text>
-                                <Text>{item.date}</Text>
+                                <Text style={styles.mealTitle}>{item.name}</Text>
+                                <Text style={styles.mealInfoText}>Max Guests: {item.capacity}</Text>
+                                <Text style={styles.mealInfoText}>{item.date}</Text>
                                 <Text style={{ color: colors.primary }}>View Event</Text>
                             </View>
+                            <MyButton text="Unreserve" type="primary" size="large" onPressFn={ async () => {await cancelAttending(item.id)}} />
+                            
                         </TouchableOpacity>
-                    </ScrollView>
+                    </View>
                 )}
             />
 
 
 
-                <Text>Pending Meals</Text>
+                <Text style={styles.headerText}>Waiting for Host Approval</Text>
                 <FlatList
                 keyExtractor={(item)=> item.id}
                 data={pendList}
                 refreshing = {refeshing}
                 onRefresh = {handleRefresh}
                 renderItem={({item}) =>(
-                    <ScrollView style={{ width: '85%', padding: 20 }}>
-                        <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }} onPress={() => navigation.navigate("ViewMeal", { eventID: item.id, firestore })}>
-                            <View style={{ flex: .5 }}>
-                                <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                    <View style={{ padding:10}}>
+                        <TouchableOpacity style={styles.eventView} onPress={() => navigation.navigate("ViewMeal", { eventID: item.id, firestore })}>
+                            <View style={{flex:.5}}>
+                                <Image source={pizza} style={styles.imageStyle} />
                             </View>
-                            <MyButton text="cancel" type="primary" size="large" onPressFn={ async () => {await cancelPending(item.id)}} />
                             <View style={{ flexDirection: 'column', padding: 10 }}>
                                 {/*meal info */}
-                                <Text>{item.name}</Text>
-                                <Text>Max Guests: {item.capacity}</Text>
-                                <Text>{item.date}</Text>
+                                <Text style={styles.mealTitle}>{item.name}</Text>
+                                <Text style={styles.mealInfoText}>Max Guests: {item.capacity}</Text>
+                                <Text style={styles.mealInfoText}>{item.date}</Text>
                                 <Text style={{ color: colors.primary }}>View Event</Text>
                             </View>
+                            <View>
+                            <MyButton text="Cancel Request" type="primary" size="large" onPressFn={ async () => {await cancelPending(item.id)}} />
+                            </View>
                         </TouchableOpacity>
-                    </ScrollView>
-                )}
-            />
-            </ScrollView>
+                    </View>
+                )}/>
+           
+           
 
-        <Overlay isVisible={visible}>
-          <Text>Pending requests:</Text>
+        <Overlay isVisible={visible} style={styles.overlayBox}>
+          <Text style={styles.actionText}>Pending requests:</Text>
 
           <FlatList
                 keyExtractor={(item)=> item.id}
@@ -270,7 +282,7 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
                 onRefresh = {handlePendRefresh}
                 renderItem={({item}) =>(
                     <View>
-                        <Text>{item.name}</Text>
+                        <Text style={styles.actionText}>{item.name}</Text>
                         <MyButton text="accept" type="primary" size="large" onPressFn={ async () => {await accept(item.name)}} />
                         <MyButton text="decline" type="primary" size="large" onPressFn={  async () => {await decline(item.name)}} />
                     </View>
@@ -282,7 +294,7 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
           <MyButton text="Ok" type="primary" size="large" onPressFn={ () => { setVisible(false); handleRefresh();}} />
         </Overlay>
 
-        <Overlay isVisible={AttenVisible}>
+        <Overlay isVisible={AttenVisible} style={styles.overlayBox}>
             <FlatList
                 keyExtractor={(item)=> item.id}
                 data={Attending}
@@ -290,15 +302,71 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
                 onRefresh = {handleAttenRefresh}
                 renderItem={({item}) =>(
                     <View>
-                        <Text>{item.name}</Text>
+                        <Text style={styles.actionText}>{item.name}</Text>
                     </View>
                     
                 )}
             />
             <MyButton text="Ok" type="primary" size="large" onPressFn={ () => { setAttenVisible(false); handleRefresh();}} />
         </Overlay>
-
-        </View>
+        </View>  
+        </SafeAreaView>
 
     );
 }
+const styles = StyleSheet.create({
+    primaryContainer: {
+      backgroundColor: colors.secondary,
+  
+    },
+    eventView:{
+        flexDirection: 'row', 
+        width: "100%", 
+        borderColor: colors.primary, 
+        borderWidth: 1, 
+        borderRadius: 10
+    },
+    headerText: {
+        color: colors.primary,
+        fontSize: 40,
+        textAlign: 'center',
+        textDecorationLine:"underline",
+        textDecorationColor: colors.primary
+  
+    },
+    logoText:{
+        fontFamily: 'CinzelDecorative_700Bold',
+        fontWeight: '700',
+        fontSize: 100,
+        color: 'white',
+        textShadowColor: colors.primary,
+        textShadowOffset:{width:1.5,height:1.5},
+        textAlign:'center'
+
+  },
+  actionText:{
+    color: 'black',
+    fontSize: 40,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  imageStyle:{
+     height: '100%', 
+     width: '100%', 
+     borderTopLeftRadius: 10, 
+     borderBottomLeftRadius: 10 
+  },
+  mealTitle:{
+      fontWeight:"bold",
+      color: colors.primary,
+      fontSize: 14
+  },
+  mealInfoText:{
+    color: 'gray',
+    fontSize: 12
+  },
+  overlayBox:{
+    borderRadius:10, 
+    padding:10
+  }
+});

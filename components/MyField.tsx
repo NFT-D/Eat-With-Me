@@ -31,8 +31,8 @@ const MyField: React.FC<Props> = ({ title, type, secure, onChangeFn, showText}) 
 
 const styles = StyleSheet.create({
     focus: {
-        height: 50,
-        width: 300,
+        height: "40%",
+        width: "100%",
         fontSize: 16,
         borderColor: '#007AFF',
         borderWidth: 1,
@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
         padding: 10
     },
     input: {
-        height: 50,
-        width: 300,
+        height: "40%",
+        width: "100%",
         fontSize: 16,
         borderColor: 'gray',
         borderWidth: 1,
@@ -51,9 +51,10 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     container: {
-        width: 300,
-        height: 60,
-        marginBottom: 30
+        width: "100%",
+        height: "40%",
+        //marginBottom: 30,
+        padding: "7%"
     },
     text: {
         fontSize: 16
