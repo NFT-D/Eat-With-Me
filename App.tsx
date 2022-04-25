@@ -23,6 +23,10 @@ export default function App() {
       <Stack.Screen name="StartUp" component={StartUpScreen} options={{
           headerShown: false,
         }} />
+      <Stack.Screen name="MyMeal" component={MyMealScreen} options={{
+          headerShown: false,
+        }} />
+        
       <Stack.Screen name="Home" component={HomeScreen} options={({ navigation }) => ({
           headerStyle: { backgroundColor: 'white' },
           headerTintColor: '#133C55',
@@ -36,15 +40,13 @@ export default function App() {
             }}></Button>
           ),
           headerLeft: () => (
-            <Button title="≡" color={'#133C55'} onPress={() => navigation.navigate("myMeal")}></Button>
+            <Button title="≡" color={'#133C55'} onPress={() => navigation.navigate("MyMeal")}></Button>
           )
         })} />
 
         
 
-        <Stack.Screen name="MyMeal" component={MyMealScreen} options={{
-          headerShown: false,
-        }} />
+       
         
 
         <Stack.Screen name="ViewMeal" component={ViewMealScreen} options={{

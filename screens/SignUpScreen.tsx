@@ -45,7 +45,7 @@ export default function SignUpScreen({ navigation }: ScreenProps) {
               setModalVisible(true);
             }
           }} />
-          <View style={{ height: Dimensions.get('screen').width * 0.05 }}></View>
+          <View style={{ height: Dimensions.get('screen').width * 0.02 }}></View>
         </View>
       </ImageBackground>
     </>
@@ -57,8 +57,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
-    width: 338,
-    height: 500,
     alignSelf: 'center',
     position: 'absolute',
     borderRadius: 20,

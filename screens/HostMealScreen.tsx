@@ -65,22 +65,21 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
     };
 
     return (
-        <SafeAreaView style={{ alignContent: 'center', alignItems: 'center', backgroundColor: colors.secondary }}>
+        <SafeAreaView style={styles.mainContainer}>
 
-            <View>
-                <ScrollView>
                     <MyField title="Event Name" showText= "Test's Meal" type="text" secure={false} onChangeFn={setEvent}></MyField>
-                    <Text>Select Date and Time for your event</Text>
-                    <View style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center' }}>
-                        <TouchableOpacity style={{ backgroundColor: colors.primary, borderRadius: 20, height: 35, padding: 10, alignContent: 'center', alignItems: 'center' }} onPress={() => showMode('date')}>
+                    <Text>Select the DATE and TIME for your event</Text>
+                    <View style={{ flexDirection: 'row', alignContent:'center' }}>
+                        <TouchableOpacity style={{ backgroundColor: colors.primary, borderRadius: 10, padding: 10, alignContent: 'center', alignItems: 'center' }} onPress={() => showMode('date')}>
                             <Text style={{ color: 'white' }}>Select Date</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{ backgroundColor: colors.primary, borderRadius: 20, height: 35, padding: 10, alignContent: 'center', alignItems: 'center' }} onPress={() => showMode('time')}>
+                        <TouchableOpacity style={{ backgroundColor: colors.primary, borderRadius: 10, padding: 10, alignContent: 'center', alignItems: 'center' }} onPress={() => showMode('time')}>
                             <Text style={{ color: 'white' }}>Select Time</Text>
                         </TouchableOpacity>
 
                     </View>
-                    <Text>selected: {date.toLocaleString()}</Text>
+                    <Text>Date Selected:  {date.toLocaleString()}</Text>
+                    
                     {show && (
                         <DateTimePicker
                             testID="dateTimePicker"
@@ -90,11 +89,6 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
                             onChange={onChange}
                         />
                     )}
-                    <View>
-
-
-                    </View>
-
 
                     <MyField title="Duration in hours" type="text" showText= "2.5" secure={false} onChangeFn={setDuration} ></MyField>
 
@@ -114,73 +108,30 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
 
                     <MyField title="Other Notes....." type="text" secure={false} showText= "I have a cat" onChangeFn={enterNotes} ></MyField>
 
-                  
-                    <View style={{ flexDirection: 'row' }}><MyButton text="submit" type="primary" size="large" onPressFn={async () => { hostEv() }} /></View>
+                    <MyButton text="Create Meal" type="primary" size="large" onPressFn={async () => { hostEv() }} />
+                    
                     <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
 
                         <Text>Meal Created!</Text>
-                        <MyButton text="view Meal" type="primary" size="large" onPressFn={ () => {viewMealE()  }} />
+                        <MyButton text="View Meal" type="primary" size="large" onPressFn={ () => {viewMealE()  }} />
                         <MyButton text="Ok" type="primary" size="large" onPressFn={async () => {  navigation.navigate("Home", { firstName })}} />
                     </Overlay>
                     
 
 
-                </ScrollView>
-            </View>
+            
         </SafeAreaView>
     );
 }
 const styles = StyleSheet.create({
 
-    screenContainer: {
+    mainContainer: {
         flex: 1,
-        padding: 16,
-        width: '300px'
-    },
-    topPanelView: {
         backgroundColor: colors.secondary,
-        flexDirection: 'row',
-        alignItems: 'center',
-        alignContent: 'center',
-        width: '100%',
-        flex: 1,
-    },
-
-    container: {
-        flex: 1,
-
-        justifyContent: 'center',
-    },
-    slideContainer: {
-        flex: 1,
-        marginLeft: 10,
-        marginRight: 10,
-        alignItems: 'stretch',
-        justifyContent: 'center',
-    },
-    primaryContainer: {
-        flexDirection: 'column',
-        flexWrap: 'wrap',
-        width:'70%',
-        borderColor: colors.primary,
-        borderWidth:.5,
-        borderRadius: 20,
-        alignContent:'center',
-        alignItems:'center',
-    },
-    imageStyle:{
-        height:'100%',
-        width:'100%',
-        borderTopLeftRadius:20,
-        borderBottomLeftRadius:20,
-
+        alignContent: "center",
+        alignItems:"center"
     },
     
-    infoText: {
-        color: 'black',
-        fontWeight: 'bold',
-        textAlign: 'left',
-        fontSize: 12,
-    },
+    
 }
 );
