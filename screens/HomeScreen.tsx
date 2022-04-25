@@ -136,7 +136,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
                 onRefresh = {handleRefresh}
                 renderItem={({item}) =>(
                     <View>
-                        <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: colors.primary, borderWidth: 1, borderRadius: 8 }} onPress={() => navigation.navigate("ViewMeal", { firstName, eventID: item.id, firestore,email })}>
+                        <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", height:'90%', borderColor: colors.primary, borderWidth: 1, borderRadius: 8 }} onPress={() => navigation.navigate("ViewMeal", { firstName, eventID: item.id, firestore,email })}>
                             <View style={{ flex: .5 }}>
                                 <Image source={pizza} style={styles.imageStyle} />
                             </View>
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     },
     homePage:{
         backgroundColor: colors.secondary,
-        
+        height:'100%'
         
 
     },

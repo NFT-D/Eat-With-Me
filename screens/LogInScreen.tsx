@@ -28,8 +28,8 @@ export default function LogInScreen({ navigation }: ScreenProps) {
       <StatusBar style="light" />
       <ImageBackground source={food} style={{ width: '100%', height: '110%', justifyContent: 'center', alignItems: 'center' }}>
       
-        <View style={styles.container}>
-          <MyField title='Email' showText= "test@gmail.com" type='text' onChangeFn={setEmail} />
+        <View style={[styles.container, {justifyContent: 'space-around'}]}>
+          <MyField title='Email' showText= "abc123@gmail.com" type='text' onChangeFn={setEmail} />
           <MyField title='Password' type='text' showText= "Password" secure={true} onChangeFn={setPassword} />
           <MyButton text="Log In" type="primary" size="large" onPressFn={async () => {
             let result = await logInWithEmail(email, password);
@@ -43,7 +43,6 @@ export default function LogInScreen({ navigation }: ScreenProps) {
           }} />
           <View style={{ height: Dimensions.get('screen').width * 0.02 }}></View>
         </View>
-        
       </ImageBackground>
     </>
   );
@@ -57,6 +56,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     position: 'absolute',
     borderRadius: 20,
+    width: 338,
+    height: 340,
   },
   
 });

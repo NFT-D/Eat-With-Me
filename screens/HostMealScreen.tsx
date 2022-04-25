@@ -1,4 +1,4 @@
-import {SafeAreaView, View, TouchableOpacity, Text, TextInput, StyleSheet} from 'react-native';
+import {SafeAreaView, View, TouchableOpacity, Text, TextInput, StyleSheet, ScrollView} from 'react-native';
 import colors from '../config/colors';
 import MyField from '../components/MyField';
 import React, { useRef, useState } from 'react';
@@ -306,7 +306,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
 
     return (
         <SafeAreaView style={styles.mainContainer}>
-
+            <ScrollView>
                     <MyField title="Event Name" showText= "Test's Meal" type="text" secure={false} onChangeFn={setEvent}></MyField>
                     <Text>Select the DATE and TIME for your event</Text>
                     <View style={{ flexDirection: 'row', alignContent:'center' }}>
@@ -400,7 +400,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
                     
 
 
-            
+                </ScrollView>
         </SafeAreaView>
     );
 }
@@ -409,9 +409,10 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: colors.secondary,
-        alignContent: "center",
+        alignContent: 'center',
         alignItems:"center",
-        padding:10
+        padding:10,
+        width: '100%',
     },
     
     
