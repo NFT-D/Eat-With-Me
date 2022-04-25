@@ -1,4 +1,4 @@
-import {Image, SafeAreaView, View, TouchableOpacity, Text, TextInput, StyleSheet, ScrollView, Button, Alert, Modal, Pressable } from 'react-native';
+import {SafeAreaView, View, TouchableOpacity, Text, TextInput, StyleSheet} from 'react-native';
 import colors from '../config/colors';
 import MyField from '../components/MyField';
 import React, { useRef, useState } from 'react';
@@ -410,7 +410,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: colors.secondary,
         alignContent: "center",
-        alignItems:"center"
+        alignItems:"center",
+        padding:10
     },
     
     

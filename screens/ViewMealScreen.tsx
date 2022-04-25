@@ -1,4 +1,4 @@
-import { SafeAreaView, View, TouchableOpacity, Text, TextInput, Image, StyleSheet, ScrollView, ImageBackground, FlatList } from 'react-native';
+import { SafeAreaView, View, Text, Image, StyleSheet, ImageBackground, FlatList } from 'react-native';
 import MyButton from '../components/MyButton';
 import React, { useEffect, useState } from 'react';
 import pizza from '../assets/pizza.png';
@@ -6,8 +6,6 @@ import location from '../assets/location.png';
 import {  doc,  getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import moment from 'moment';
 import { Overlay } from 'react-native-elements';
-import pizza from '../assets/pizza.png'
-import { async } from '@firebase/util';
 import colors from '../config/colors';
 
 
@@ -160,7 +158,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
         </ImageBackground>
 
         <MyButton type="primary" size="medium" text="Reserve" onPressFn={() =>{reserve()}}/>     
-          </View>
+          
           <Text style={styles.black_smallTextBold}>Appetizers:</Text>
             <FlatList
                 keyExtractor={(item)=> item.id}
@@ -168,7 +166,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
                 refreshing = {refeshing}
                 onRefresh = {handleRefresh}
                 renderItem={({item}) =>(
-                    <ScrollView style={{ width: '85%', padding: 20 }}>
+                    <View style={{ width: '85%', padding: 20 }}>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }}>
                             <View style={{ flex: .5 }}>
                                 <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
@@ -180,7 +178,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
                                 <Text>Ingredients: {item.ingredient}</Text>
                             </View>
                         </View>
-                    </ScrollView>
+                    </View>
                 )}
             />
 
@@ -191,7 +189,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
                 refreshing = {refeshing}
                 onRefresh = {handleRefresh}
                 renderItem={({item}) =>(
-                    <ScrollView style={{ width: '85%', padding: 20 }}>
+                    <View style={{ width: '85%', padding: 20 }}>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }}>
                             <View style={{ flex: .5 }}>
                                 <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
@@ -203,7 +201,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
                                 <Text>Ingredients: {item.ingredient}</Text>
                             </View>
                         </View>
-                    </ScrollView>
+                    </View>
                 )}
             />
 
@@ -214,7 +212,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
                 refreshing = {refeshing}
                 onRefresh = {handleRefresh}
                 renderItem={({item}) =>(
-                    <ScrollView style={{ width: '85%', padding: 20 }}>
+                    <View style={{ width: '85%', padding: 20 }}>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }}>
                             <View style={{ flex: .5 }}>
                                 <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
@@ -226,13 +224,13 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
                                 <Text>Ingredients: {item.ingredient}</Text>
                             </View>
                         </View>
-                    </ScrollView>
+                    </View>
                 )}
             />
 
           <Text style={styles.black_smallTextBold}>Allergens:</Text>
-            <Text style={styles.gray_whiteTextBold}>{allergens.toString()}</Text> 
-          <View style={{ flexDirection: "row", flexWrap: "wrap", width: "100%", padding: 15, backgroundColor: "white", }}>
+          <Text style={styles.gray_whiteTextBold}>{allergens.toString()}</Text> 
+          
           <View style={styles.locationBox}>
             <View style={{ flex: 0.5 }}>
               <Image source={location} style={{ height: "100%", width: "100%",borderBottomLeftRadius:15,borderTopLeftRadius:15 }} />

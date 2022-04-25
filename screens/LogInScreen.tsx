@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Dimensions, ImageBackground, Alert, Modal, Pressable, Text } from 'react-native';
+import { StyleSheet, View, Dimensions, ImageBackground, Alert, Modal, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import MyButton from '../components/MyButton';
 import MyField from '../components/MyField';
