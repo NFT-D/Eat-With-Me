@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 export default {
   "expo": {
+    "owner": "nft-d",
     "name": "Eat-With-Me",
     "slug": "Eat-With-Me",
     "version": "1.0.0",
