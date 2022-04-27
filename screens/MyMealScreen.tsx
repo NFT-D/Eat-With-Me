@@ -178,7 +178,7 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
     return(
 
         <SafeAreaView style={styles.primaryContainer}>
-
+            <ScrollView style={styles.primaryContainer}>
                 {/* top bar 
                 <TouchableOpacity onPress={async () => {handleRefresh()}}>
                     <Text style={{fontSize: 50}}>⟳</Text>
@@ -191,23 +191,23 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
                 <View style={{flexDirection:'row', justifyContent:'space-evenly'}}>
                    
                     <TouchableOpacity onPress={async () => {  navigation.navigate("Home",{firstName, email})}}>
-                        <Text style={{fontSize:40, color:colors.primary}}> ⌂ </Text>
+                        <Text style={{fontSize:35, color:colors.primary}}> ⌂ </Text>
                     </TouchableOpacity>
                     <Text>      </Text>
-                    <Text style={styles.logoText}>EWM</Text>
+                    <Text style={[styles.logoText, {top:10}]}>EWM</Text>
                     <Text>      </Text>
                     <TouchableOpacity onPress={async () => {handleRefresh()}}>
-                        <Text style={{fontSize: 40, color:colors.primary}}>⟳ </Text>
+                        <Text style={{fontSize: 35, color:colors.primary}}>⟳ </Text>
                     </TouchableOpacity>
                 </View>
 
                 <Text></Text>
                 <Text></Text>
 
-                <Text style={styles.headerText}>   My Meals</Text>
+                <Text style={styles.headerText}>   Events Hosting: </Text>
 
                 <Text></Text>
-                <Text></Text>
+                {/* <Text></Text> */}
 
                 <FlatList
                 keyExtractor={(item)=> item.id}
@@ -244,12 +244,15 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
                         </ScrollView>  
                 )} />
 
-
+                <Text></Text>
+                <Text style={{color: colors.primary}}>____________________________________________________</Text>
+                <Text></Text>
                 
-                <Text style={styles.headerText}>   Upcoming Meals</Text>
+                <Text style={styles.headerText}>   Upcoming Events: </Text>
 
                 <Text></Text>
-                <Text></Text>
+                
+                {/* <Text></Text> */}
 
                 <FlatList
                 keyExtractor={(item)=> item.id}
@@ -281,9 +284,12 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
                 )}
             />
 
+                <Text></Text>
+                <Text style={{color: colors.primary}}>____________________________________________________</Text>
+                <Text></Text>
 
 
-                <Text style={styles.headerText}>   Waiting for Host Approval</Text>
+                <Text style={styles.headerText}>   Pending Requests: </Text>
 
                 <FlatList
 
@@ -316,8 +322,13 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
                     </ScrollView>
                 )}/>
            
-
+                <Text></Text>
+                <Text></Text>
+                <Text></Text>
+                <Text></Text>
+                <Text></Text>
            
+           </ScrollView>
 
         <Overlay isVisible={visible} overlayStyle={styles.overlayBox}>
           <Text></Text>
@@ -396,15 +407,15 @@ const styles = StyleSheet.create({
         color: colors.primary,
         fontSize: 25,
         textAlign: 'left',
-        //textDecorationLine:"",
-        
+        //textDecorationLine:'underline',
+        fontFamily: 'CinzelDecorative_700Bold',
         textDecorationColor: colors.primary
   
     },
     logoText:{
         fontFamily: 'CinzelDecorative_700Bold',
         fontWeight: '700',
-        fontSize: 50,
+        fontSize: 25,
         color: colors.primary,
         textShadowColor: colors.primary,
         textShadowOffset:{width:1.5,height:1.5},

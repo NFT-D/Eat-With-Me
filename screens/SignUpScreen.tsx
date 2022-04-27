@@ -42,10 +42,10 @@ export default function SignUpScreen({ navigation }: ScreenProps) {
           <Text style={{color: colors.primary}}>____________________________</Text>
           <MyField title='Email' type='text' showText= "abc123@gmail.com" onChangeFn={setEmail} />
           <MyField title='Password' type='text' showText= "Password" secure={true} onChangeFn={setPassword} />
-          <MyButton text='Upload Picture' type='primary' onPressFn={ async() => {
+          {/* <MyButton text='Upload Picture' type='primary' onPressFn={ async() => {
             let image = await pickImage('avatars');
             setAvatarURL(image);
-          }} />
+          }} /> */}
           <MyButton text="Sign Up" type="primary" size="large" onPressFn={async () => {
               let result = await signUpWithEmail(fName, lName, email, password, avatarURL);
               if (result === 'success') {

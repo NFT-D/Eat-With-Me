@@ -32,7 +32,14 @@ export default function App() {
           headerTintColor: '#133C55',
           headerShadowVisible: false,
           headerShown: true,
-          title: '',
+          title: 'EMW',
+          headerBackTitle: '',
+          headerTitleStyle: 
+              {fontFamily: 'CinzelDecorative_700Bold',
+              fontWeight: '700',
+              color: colors.primary,
+              fontSize: 25,
+              },
           headerRight: () => (
             <Button title="Log Out" color={'#133C55'} onPress={async () => {
               await logOut();
@@ -40,22 +47,26 @@ export default function App() {
             }}></Button>
           ),
           headerLeft: () => (
-            <Button title="≡" color={'#133C55'} onPress={() => navigation.navigate("MyMeal")}></Button>
+            <Button title="" color={'#133C55'} onPress={() => navigation.navigate("MyMeal")}></Button>
+            // <Button title="≡" color={'#133C55'} onPress={() => navigation.navigate("MyMeal")}></Button>
           )
         })} />
 
-        
 
-       
-        
 
         <Stack.Screen name="ViewMeal" component={ViewMealScreen} options={{
-          headerStyle: { backgroundColor: 'transparent' },
+          headerStyle: { backgroundColor: colors.primary },
           headerTransparent: true,
           headerTintColor: 'white',
           headerShadowVisible: false,
           headerBackVisible: true,
-          title: '',
+          headerBackTitle: '',
+          title: 'EMW',
+          headerTitleStyle: 
+              {fontFamily: 'CinzelDecorative_700Bold',
+              fontWeight: '700',
+              fontSize: 25,
+              }
 
         }} />
 
@@ -64,6 +75,7 @@ export default function App() {
           headerTintColor: '#133C55',
           headerShadowVisible: false,
           headerBackVisible: true,
+          headerBackTitle: '',
           title: 'Host Meal'
         }} />
 

@@ -31,7 +31,7 @@ export default function StartUpScreen({ navigation }: ScreenProps) {
                     <Text style={styles.fixToText}>EWM</Text>
                     <Text style={styles.text1}>EAT WITH ME</Text>
                 </View>
-                <MyButton type="primary" text="   Login  " size="large" onPressFn={() => navigation.navigate("LogIn")} />
+                <MyButton type="primary" text=" Login    " size="large" onPressFn={() => navigation.navigate("LogIn")} />
                 <View style={{ height: 20 }} />
                 <MyButton type="secondary" text="Sign Up" size="large" onPressFn={() => navigation.navigate("SignUp")} />
             </ImageBackground>

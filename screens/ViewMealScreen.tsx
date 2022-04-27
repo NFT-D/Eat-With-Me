@@ -126,12 +126,12 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
 
   const handleRefresh = async () =>{
     start();
-    setRefresh(false);
+    // setRefresh(false);
   }
   const start = async () =>{
     await getEventInfo(eventID)
     await getMealInfo(ml)
-    setRefresh(true);
+    // setRefresh(true);
   }
   useEffect(() => {
     start();
@@ -139,17 +139,20 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   }, []);
 
   return (
-    <View>
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        <ImageBackground source={{ uri: imageURL}} style={[styles.contentContainer, { width: "100%", height: "50%", top: -200 }]}>
+    <SafeAreaView style={styles.mainContainer}>
+      
+        <ImageBackground source={{ uri: imageURL}} style={[styles.contentContainer, { width: "100%", height: "50%", top:-35}]}>
+          
           <View style={{ top: 150, alignItems: "center", padding: 15 }}>
-            <Text style={styles.whiteTextBold}>{eventName}</Text>
-            <Text style={styles.hostedByText}> Hosted by {host}</Text>
+            
+            <Text style={[styles.whiteTextBold, {top:-50}]}>{eventName}</Text>
+            <Text style={[styles.hostedByText, {top:-50}]}> Hosted by {host}</Text>
+            
             <View style={{flexDirection:'row',justifyContent:'space-evenly' }}>
               <Text style={styles.whiteTextReg}>{date.format('hh:mm A')} </Text>
-              {/* <Text> </Text> */}
+              <Text>               </Text>
               <Text style={styles.whiteTextReg}> {attending.length}/{capacity} </Text>
-              {/* <Text>            </Text> */}
+              <Text>                 </Text>
               <Text style={styles.whiteTextReg}> $0 </Text>
             </View>
             <View style={{ flexDirection:'row', justifyContent:'space-evenly' }}>
@@ -157,13 +160,16 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
               <Text>          </Text>
               <Text style={styles.white_smallTextReg}> Seats Taken </Text>
               <Text>          </Text>
-              <Text style={styles.white_smallTextReg}> Fee </Text>
+              <Text style={styles.white_smallTextReg}>  Fee </Text>
             </View>
+            <Text>          </Text>
+            
+            <MyButton type="primary" size="large" text="Reserve" onPressFn={() =>{reserve()}}/> 
           </View>
-        </ImageBackground>
-
-        <MyButton type="primary" size="medium" text="Reserve" onPressFn={() =>{reserve()}}/>     
           
+        </ImageBackground>
+ 
+        <ScrollView style={{width:'100%', padding:10}}>
           <Text style={styles.black_smallTextBold}>Appetizers:</Text>
             <FlatList
                 keyExtractor={(item)=> item.id}
@@ -172,18 +178,28 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
                 onRefresh = {handleRefresh}
                 renderItem={({item}) =>(
                     <View style={{ width: '85%', padding: 20 }}>
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }}>
-                            <View style={{ flex: .5 }}>
+                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "110%", borderColor: colors.primary, borderWidth: 2, borderRadius: 20 }}>
+                            {/* <View style={{ flex: .5 }}>
                                 <Image source={item.imageURL} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
-                            </View>
+                            </View> */}
                             <View style={{ flexDirection: 'column', padding: 10 }}>
                                 {/*dish info */}
-                                <Text>Dish: {item.name}</Text>
-                                <Text>{item.image}</Text>
-                                <Text>Ingredients: {item.ingredient}</Text>
+                                <View style={{flexDirection:'row'}}>
+                                    <Text>Dish:</Text>
+                                    <Text style={{fontStyle:'italic'}}> {item.name}</Text>
+                                </View>
+                                <View>
+                                    {/* <Text style={{fontStyle:'italic'}}>Dish: {item.name}</Text> */}
+                                    <Text>{item.image}</Text>
+                                    <View style={{flexDirection:'row'}}>
+                                        <Text>Ingredients: </Text>
+                                        <Text style={{fontStyle:'italic'}}>{item.ingredient}</Text>
+                                      </View>
+                                  </View>
+
                             </View>
-                        </View>
-                    </View>
+                          </View>
+                      </View>
                 )}
             />
 
@@ -194,19 +210,29 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
                 refreshing = {refeshing}
                 onRefresh = {handleRefresh}
                 renderItem={({item}) =>(
-                    <View style={{ width: '85%', padding: 20 }}>
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }}>
-                            <View style={{ flex: .5 }}>
-                                <Image source={item.imageURL} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                  <View style={{ width: '85%', padding: 20 }}>
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "110%", borderColor: colors.primary, borderWidth: 2, borderRadius: 20 }}>
+                      {/* <View style={{ flex: .5 }}>
+                          <Image source={item.imageURL} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                      </View> */}
+                      <View style={{ flexDirection: 'column', padding: 10 }}>
+                          {/*dish info */}
+                          <View style={{flexDirection:'row'}}>
+                              <Text>Dish:</Text>
+                              <Text style={{fontStyle:'italic'}}> {item.name}</Text>
+                          </View>
+                          <View>
+                              {/* <Text style={{fontStyle:'italic'}}>Dish: {item.name}</Text> */}
+                              <Text>{item.image}</Text>
+                              <View style={{flexDirection:'row'}}>
+                                  <Text>Ingredients: </Text>
+                                  <Text style={{fontStyle:'italic'}}>{item.ingredient}</Text>
+                                </View>
                             </View>
-                            <View style={{ flexDirection: 'column', padding: 10 }}>
-                                {/*dish info */}
-                                <Text>Dish: {item.name}</Text>
-                                <Text>{item.image}</Text>
-                                <Text>Ingredients: {item.ingredient}</Text>
-                            </View>
-                        </View>
+
+                      </View>
                     </View>
+                </View>
                 )}
             />
 
@@ -217,43 +243,68 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
                 refreshing = {refeshing}
                 onRefresh = {handleRefresh}
                 renderItem={({item}) =>(
-                    <View style={{ width: '85%', padding: 20 }}>
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }}>
-                            <View style={{ flex: .5 }}>
-                                <Image source={item.imageURL} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                  <View style={{ width: '85%', padding: 20 }}>
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "110%", borderColor: colors.primary, borderWidth: 2, borderRadius: 20 }}>
+                      {/* <View style={{ flex: .5 }}>
+                          <Image source={item.imageURL} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                      </View> */}
+                      <View style={{ flexDirection: 'column', padding: 10 }}>
+                          {/*dish info */}
+                          <View style={{flexDirection:'row'}}>
+                              <Text>Dish:</Text>
+                              <Text style={{fontStyle:'italic'}}> {item.name}</Text>
+                          </View>
+                          <View>
+                              {/* <Text style={{fontStyle:'italic'}}>Dish: {item.name}</Text> */}
+                              <Text>{item.image}</Text>
+                              <View style={{flexDirection:'row'}}>
+                                  <Text>Ingredients: </Text>
+                                  <Text style={{fontStyle:'italic'}}>{item.ingredient}</Text>
+                                </View>
                             </View>
-                            <View style={{ flexDirection: 'column', padding: 10 }}>
-                                {/*dish info */}
-                                <Text>Dish: {item.name}</Text>
-                                <Text>{item.image}</Text>
-                                <Text>Ingredients: {item.ingredient}</Text>
-                            </View>
-                        </View>
+
+                      </View>
                     </View>
+                </View>
                 )}
             />
 
-          <Text style={styles.black_smallTextBold}>Allergens:</Text>
-          <Text style={styles.gray_whiteTextBold}>{allergens.toString()}</Text> 
-          
-          <View style={styles.locationBox}>
-            <View style={{ flex: 0.5 }}>
-              <Image source={location} style={{ height: "100%", width: "100%",borderBottomLeftRadius:15,borderTopLeftRadius:15 }} />
-            </View>
-            <View style={{ flexDirection: "column", padding: 10,flex:.5 }}>
-              {/*location info*/}
+          <View style={{flexDirection:'column'}}>
+            <Text style={styles.black_smallTextBold}>Allergens:</Text>
+            <Text style={styles.gray_whiteTextBold}>{allergens.toString()}</Text> 
+          </View>
+
+
+          <Text style={styles.black_smallTextBold}>Additional Notes:</Text>
+          <Text style={styles.gray_whiteTextBold}> {notes} </Text>
+          <Text></Text>
+
+          <View style={{flexDirection:'row'}}>
+              <Text style={{fontSize:30}}> 🏠 </Text>
+              <Text style={[styles.black_smallTextBold, {fontSize:20, top:5}]}>{address}</Text>
+              
+
+          </View>
+          <Text></Text>
+          <Text></Text>
+          {/* <View style={styles.locationBox}>
+            // {/* <View style={{ flex: 0.5}}>
+            //   <Image source={location} style={{ width: "100%",borderBottomLeftRadius:15,borderTopLeftRadius:15 }} />
+            // </View> 
+            <View style={{ flexDirection: "column", padding: 10, flex:0.5}}>
+              location info
               <Text style={styles.black_smallTextBold}>Location: </Text>
               <Text>{address}</Text>
-              <Text style={styles.black_smallTextBold}>Additional Notes:</Text>
-              <Text> {notes} </Text>
             </View>
-          </View>
+          </View> */}
+
+
         <Overlay isVisible={visible} style={{borderRadius:10, padding:10}}>
           <Text style={{textAlign:'center'}}>{status}</Text>
           <MyButton text="Ok" type="primary" size="large" onPressFn={ () => { setVisible(false)}} />
         </Overlay> 
-        </ScrollView>
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
@@ -262,19 +313,35 @@ const styles = StyleSheet.create({
     backgroundColor:colors.secondary,
     padding:25
   },
+  mainContainer: {
+    flex: 1,
+    backgroundColor: colors.secondary,
+    alignContent: 'center',
+    alignItems:"center",
+    padding:10,
+    width: '100%',
+},
   hostedByText:{
     color: 'white',
     fontSize: 25,
+    textShadowOffset:{width:6, height:6},
+    textShadowColor: 'black',
+    textShadowRadius: 5
   },
   whiteTextBold: {
     color: 'white',
     fontSize: 40,
-    fontWeight: 'bold'
+    fontFamily: 'CinzelDecorative_700Bold',
+    textShadowOffset:{width:6, height:6},
+    textShadowColor: 'black',
+    textShadowRadius: 5
   },
   whiteTextReg: {
     color: 'white',
     fontSize: 20,
-    
+    textShadowOffset:{width:6, height:6},
+    textShadowColor: 'black',
+    textShadowRadius: 5
   },
   gray_whiteTextBold: {
     color: 'grey',
@@ -292,17 +359,21 @@ const styles = StyleSheet.create({
   blackTextBold: {
     color: 'black',
     fontSize: 27,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontFamily: 'CinzelDecorative_700Bold',
   },
   white_smallTextReg: {
     color: 'white',
     fontSize: 15,
-    
+    textShadowOffset:{width:6, height:6},
+    textShadowColor: 'black',
+    textShadowRadius: 5
   },
   black_smallTextBold: {
     color: 'black',
     fontSize: 20,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontFamily: 'CinzelDecorative_700Bold',
   },
   menu:{
     alignItems: "center",
@@ -327,7 +398,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderWidth: 2,
     borderColor: colors.primary,
-    width:"80%",
+    width:"100%",
+    
     borderRadius:15
   }
 

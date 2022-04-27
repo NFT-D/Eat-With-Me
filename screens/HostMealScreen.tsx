@@ -245,11 +245,11 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
                     value ={refInputs.current[i][0]}
                     placeholder="Dish Name"
                 />
-                <TextInput
+                {/* <TextInput
                     onChangeText={value => setAppValue2(i,value)}
                     value ={refInputs.current[i][1]}
                     placeholder="Image"
-                />
+                /> */}
                 <TextInput
                     onChangeText={value => setAppValue3(i,value)}
                     value ={refInputs.current[i][2]}
@@ -271,11 +271,11 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
                     value ={refInputs2.current[j][0]}
                     placeholder="Dish Name"
                 />
-                <TextInput
+                {/* <TextInput
                     onChangeText={value => setEntValue2(j,value)}
                     value ={refInputs2.current[j][1]}
                     placeholder="Image"
-                />
+                /> */}
                 <TextInput
                     onChangeText={value => setEntValue3(j,value)}
                     value ={refInputs2.current[j][2]}
@@ -297,11 +297,11 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
                     value ={refInputs3.current[x][0]}
                     placeholder="Dish Name"
                 />
-                <TextInput
+                {/* <TextInput
                     onChangeText={value => setDesValue2(x,value)}
                     value ={refInputs3.current[x][1]}
                     placeholder="Image"
-                />
+                /> */}
                 <TextInput
                     onChangeText={value => setDesValue3(x,value)}
                     value ={refInputs3.current[x][2]}
@@ -458,9 +458,10 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
                     <Text>    </Text>
                     <Text>    </Text>
 
-                    <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+                    <Overlay isVisible={visible} overlayStyle={{borderRadius:10}}onBackdropPress={toggleOverlay}>
 
-                        <Text>Meal Created!</Text>
+                        <Text style={styles.actionText}>Meal</Text>
+                        <Text style={styles.actionText}>Created!</Text>
                         {/* <MyButton text="View Meal" type="primary" size="large" onPressFn={ () => {viewMealE()  }} /> */}
                         <MyButton text="Ok" type="primary" size="large" onPressFn={async () => {  navigation.navigate("Home", { firstName, email })}} />
                     </Overlay>
@@ -481,7 +482,12 @@ const styles = StyleSheet.create({
         padding:10,
         width: '100%',
     },
-    
-    
+    actionText:{
+        color: 'black',
+        fontSize: 40,
+        fontWeight: '700',
+        textAlign: 'center',
+        fontFamily: 'CinzelDecorative_700Bold',
+    },
 }
 );

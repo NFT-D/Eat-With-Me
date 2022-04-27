@@ -111,7 +111,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
             
             <View style={{padding:10}}>
                 
-                <Text>Search for a Meal...</Text>
+                <Text> Search for a Meal...</Text>
                 
                     <View style={{flexDirection:'row'}}>
                         <TextInput 
@@ -121,7 +121,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
                         placeholder="Search"
                         style={styles.searchBar}/>   
                         <TouchableOpacity style={styles.searchBarButton} onPress={async () => {handleSearch()}}>
-                            <Text style={[styles.searchBarButtonText,{alignSelf:'flex-end'}]}>→</Text>
+                            <Text style={[styles.searchBarButtonText,{alignSelf:'flex-end', fontSize:19}]}>🔍</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.searchBarButton} onPress={async () => {handleRefresh()}}>
                             <Text style={styles.searchBarButtonText}>⟳</Text>
@@ -140,7 +140,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
                     
                         <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", height:'100%', borderColor: colors.primary, borderWidth: 1, borderRadius: 8 }} onPress={() => navigation.navigate("ViewMeal", { firstName, eventID: item.id, firestore,email })}>
                             <View style={{ flex: .5 }}>
-                                <Image source={{ uri: item.imageURL }} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                                <Image source={{ uri: item.imageURL }} style={{ height: '100%', width: '100%', borderTopLeftRadius: 8, borderBottomLeftRadius: 8 }} />
                             </View>
                             <View style={{ flexDirection: 'column', padding: 10 }}>
                                 {/*meal info */}
