@@ -1,7 +1,7 @@
 import { SafeAreaView, View, Text, Image, StyleSheet, ImageBackground, FlatList, ScrollView } from 'react-native';
 import MyButton from '../components/MyButton';
 import React, { useEffect, useState } from 'react';
-import pizza from '../assets/pizza.png';
+// import pizza from '../assets/pizza.png';
 import location from '../assets/location.png';
 import {  doc,  getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import moment from 'moment';
@@ -174,7 +174,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
                     <View style={{ width: '85%', padding: 20 }}>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }}>
                             <View style={{ flex: .5 }}>
-                                <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                                <Image source={item.imageURL} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
                             </View>
                             <View style={{ flexDirection: 'column', padding: 10 }}>
                                 {/*dish info */}
@@ -197,7 +197,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
                     <View style={{ width: '85%', padding: 20 }}>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }}>
                             <View style={{ flex: .5 }}>
-                                <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                                <Image source={item.imageURL} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
                             </View>
                             <View style={{ flexDirection: 'column', padding: 10 }}>
                                 {/*dish info */}
@@ -220,7 +220,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
                     <View style={{ width: '85%', padding: 20 }}>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }}>
                             <View style={{ flex: .5 }}>
-                                <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                                <Image source={item.imageURL} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
                             </View>
                             <View style={{ flexDirection: 'column', padding: 10 }}>
                                 {/*dish info */}

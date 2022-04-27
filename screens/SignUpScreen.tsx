@@ -50,7 +50,7 @@ export default function SignUpScreen({ navigation }: ScreenProps) {
               let result = await signUpWithEmail(fName, lName, email, password, avatarURL);
               if (result === 'success') {
                 let firstName = await getFirstName();
-                navigation.navigate("Home", { firstName: firstName });
+                navigation.navigate("Home", { firstName: firstName, email: email });
               }
               else {
                 setModalVisible(true);

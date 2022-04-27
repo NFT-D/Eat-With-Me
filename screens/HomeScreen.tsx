@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList,View, Text, StyleSheet, Image, SafeAreaView, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import colors from "../config/colors";
 import MyButton from '../components/MyButton';
-import pizza from '../assets/pizza.png'
+// import pizza from '../assets/pizza.png'
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut } from "firebase/auth";
