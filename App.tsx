@@ -12,6 +12,7 @@ import React from 'react';
 import { logOut } from './services/firebase';
 
 import colors from './config/colors';
+import MyMealScreen from './screens/MyMealScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,10 @@ export default function App() {
       <Stack.Screen name="StartUp" component={StartUpScreen} options={{
           headerShown: false,
         }} />
+      <Stack.Screen name="MyMeal" component={MyMealScreen} options={{
+          headerShown: false,
+        }} />
+        
       <Stack.Screen name="Home" component={HomeScreen} options={({ navigation }) => ({
           headerStyle: { backgroundColor: 'white' },
           headerTintColor: '#133C55',
@@ -35,13 +40,13 @@ export default function App() {
             }}></Button>
           ),
           headerLeft: () => (
-            <Button title="≡" color={'#133C55'} onPress={() => navigation.navigate("ViewMeal")}></Button>
+            <Button title="≡" color={'#133C55'} onPress={() => navigation.navigate("MyMeal")}></Button>
           )
         })} />
 
         
 
-
+       
         
 
         <Stack.Screen name="ViewMeal" component={ViewMealScreen} options={{
