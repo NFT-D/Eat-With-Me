@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         paddingHorizontal: 32,
         paddingVertical: 12,
-        width: 150,
+        //width: 150,
         borderRadius: 11,
     },
     secondaryText: {
@@ -88,19 +88,19 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     smallContainer: {
-        paddingHorizontal: 16,
-        paddingVertical: 4,
-        width: 75,
+        paddingHorizontal: 20,
+        paddingVertical: 8,
+        //width: 75,
         borderRadius: 16,
         
     },
     smallText: {
-        fontSize: 8
+        fontSize: 12
     },
     mediumContainer: {
         paddingHorizontal: 32,
         paddingVertical: 8,
-        width: 150,
+        //width: 150,
         borderRadius: 11,
        
     },
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     largeContainer: {
         paddingHorizontal: 48,
         paddingVertical: 12,
-        width: 300,
+        //width: 300,
         borderRadius: 11,
     },
     largeText: {

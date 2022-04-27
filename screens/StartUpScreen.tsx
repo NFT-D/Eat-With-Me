@@ -27,11 +27,11 @@ export default function StartUpScreen({ navigation }: ScreenProps) {
     return (
         <SafeAreaView style={styles.container}>
             <ImageBackground source={food} style={{ width: '100%', height: '110%', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <View style={{justifyContent:'space-between', padding:40}}>
+                <View style={{justifyContent:'space-between', padding:40, top:-150}}>
                     <Text style={styles.fixToText}>EWM</Text>
                     <Text style={styles.text1}>EAT WITH ME</Text>
                 </View>
-                <MyButton type="primary" text="Login" size="large" onPressFn={() => navigation.navigate("LogIn")} />
+                <MyButton type="primary" text="   Login  " size="large" onPressFn={() => navigation.navigate("LogIn")} />
                 <View style={{ height: 20 }} />
                 <MyButton type="secondary" text="Sign Up" size="large" onPressFn={() => navigation.navigate("SignUp")} />
             </ImageBackground>
@@ -52,21 +52,20 @@ const styles = StyleSheet.create({
         fontFamily: 'CinzelDecorative_700Bold',
         fontWeight: '700',
         fontSize: 121,
-        top: 241,
-        width: 331,
         color: 'white',
         textShadowColor: colors.primary,
-        textShadowOffset:{width:1.5,height:1.5}
+        textShadowOffset:{width:3,height:3},
+        textShadowRadius: 4,
+        textAlign:'center',
     },
     text1: {
         fontFamily: 'Montserrat_700Bold',
         fontWeight: '700',
         fontSize: 40,
         textAlign: 'center',
-        top: 325,
-        width: 331,
         color: colors.primary,
         textShadowColor: 'white',
+        textShadowRadius: 3,
         textShadowOffset:{width:1.5,height:1.5}
         
     },
