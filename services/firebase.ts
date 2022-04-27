@@ -24,14 +24,14 @@ const firestore = getFirestore(app);
 // AUTHENTICATION // ---------------------------------------------------------
 let user = auth.currentUser;
 
-export const signUpWithEmail = async (fName: string, lName: string, email: string, password: string) => {
+export const signUpWithEmail = async (fName: string, lName: string, email: string, password: string, avatarURL: string) => {
     try {
         let result = await createUserWithEmailAndPassword(auth, email, password);
         user = result.user;
         await updateProfile(user, {
             displayName: fName + " " + lName,
         });
-        await addNewUser(fName, lName, email);
+        await addNewUser(fName, lName, email, avatarURL);
         return 'success';
     } catch (e) {
         console.log(e);
@@ -62,12 +62,13 @@ export const logOut = async () => {
 }
 
 // FIRESTORE // --------------------------------------------------------------
-const addNewUser = async (fName: string, lName: string, email: string) => {
+const addNewUser = async (fName: string, lName: string, email: string, avatarURL: string) => {
     try {
         const userData = {
             first_name: fName,
             last_name: lName,
-            email: email
+            email: email,
+            avatar: avatarURL
         }
         const docRef = await addDoc(collection(firestore, "users",), userData);
         console.log(docRef.id);

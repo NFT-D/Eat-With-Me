@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList,View, Text, StyleSheet, Image, SafeAreaView, TouchableOpacity, ScrollView} from "react-native";
 import colors from "../config/colors";
 import MyButton from '../components/MyButton';
-import pizza from '../assets/pizza.png'
+// import pizza from '../assets/pizza.png'
 // Import the functions you need from the SDKs you need
 import { doc, collection, query, where, getDocs, arrayRemove, arrayUnion, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import moment from 'moment';
@@ -26,6 +26,8 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
     const [evId, setId] = useState("");
     const [AttenVisible, setAttenVisible] = useState(false);
     const [AttenRefeshing, setAttenRefeshing] = useState(false);
+    // const [imageURL, setImageURL] = useState("");
+
     
     let pendData, attendingData = [];
 
@@ -39,10 +41,11 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
                 var time = docData["date"];
                 time = moment.unix(time.seconds).utc().local();
                 let temp = docData["pending"];
+                let image = docData["image"];
                 if (!Array.isArray(temp)){
                     temp = [];
                 };
-                arys.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A'), pending: temp, atten: docData["attendees"]});
+                arys.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A'), pending: temp, atten: docData["attendees"], imageURL: image});
             });
             arys=arys.sort((a, b) => {return moment(a.date).diff(b.date)});
             
@@ -62,7 +65,7 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
                 let docData = doc.data();
                 var time = docData["date"];
                 time = moment.unix(time.seconds).utc().local();
-                arys.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A')});
+                arys.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A'), imageURL: docData["image"]});
             });
             arys=arys.sort((a, b) => {return moment(a.date).diff(b.date)});
             
@@ -83,7 +86,7 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
                 let docData = doc.data();
                 var time = docData["date"];
                 time = moment.unix(time.seconds).utc().local();
-                arys.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A')});
+                arys.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A'), imageURL: docData["image"]});
             });
             arys=arys.sort((a, b) => {return moment(a.date).diff(b.date)});
             
@@ -217,7 +220,7 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
                             <TouchableOpacity style={styles.eventView} onPress={() => navigation.navigate("ViewMeal", { eventID: item.id, firestore })}>
                             
                                     <View style={{flex: 2}}>
-                                        <Image source={pizza} style={styles.imageStyle} />
+                                        <Image source={{uri: item.imageURL}} style={styles.imageStyle} />
                                     </View>
                                     
                                     <View style={{ flexDirection: 'column', padding: 10, alignItems:'center'}}>
@@ -259,7 +262,7 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
 
                         <TouchableOpacity style={styles.eventView} onPress={() => navigation.navigate("ViewMeal", { eventID: item.id, firestore })}>
                             <View style={{ flex: 2 }}>
-                                <Image source={pizza} style={styles.imageStyle} />
+                                <Image source={{ uri: item.imageURL }} style={styles.imageStyle} />
                             </View>
 
                             <View style={{ flexDirection: 'column', padding: 10, alignItems:'center'}}>
@@ -295,7 +298,7 @@ export default function MyMealScreen({ navigation,route }: ScreenProps) {
                         <TouchableOpacity style={styles.eventView} onPress={() => navigation.navigate("ViewMeal", { eventID: item.id, firestore })}>
 
                             <View style={{flex:2}}>
-                                <Image source={pizza} style={styles.imageStyle} />
+                                <Image source={{uri: item.imageURL}} style={styles.imageStyle} />
                             </View>
 
                             <View style={{ flexDirection: 'column', padding: 10, alignItems:'center'}}>

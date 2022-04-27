@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList,View, Text, StyleSheet, Image, SafeAreaView, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import colors from "../config/colors";
 import MyButton from '../components/MyButton';
-import pizza from '../assets/pizza.png'
+// import pizza from '../assets/pizza.png'
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signOut } from "firebase/auth";
@@ -55,7 +55,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
                 let docData = doc.data();
                 var time = docData["date"];
                 time = moment.unix(time.seconds).utc().local();
-                arys.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A')});
+                arys.push({ id: doc.id, name: docData["event"], capacity: docData["capacity"], date: time.format('M/DD/YYYY hh:mm A'), imageURL: docData["image"]});
             });
             arys=arys.sort((a, b) => {return moment(a.date).diff(b.date)});
             setDATA(arys);
@@ -80,7 +80,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
                 let docData = doc.data();
                 var time = docData["date"];
                 time = moment.unix(time.seconds).utc().local();
-                ary.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A')});
+                ary.push({id: doc.id, name: docData["event"],capacity: docData["capacity"],date: time.format('M/DD/YYYY hh:mm A'), imageURL: docData["image"]});
             });
             ary=ary.sort((a, b) => {return moment(a.date).diff(b.date)});
             setDATA(ary);
@@ -140,7 +140,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
                     
                         <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", height:'100%', borderColor: colors.primary, borderWidth: 1, borderRadius: 8 }} onPress={() => navigation.navigate("ViewMeal", { firstName, eventID: item.id, firestore,email })}>
                             <View style={{ flex: .5 }}>
-                                <Image source={pizza} style={styles.imageStyle} />
+                                <Image source={{ uri: item.imageURL }} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
                             </View>
                             <View style={{ flexDirection: 'column', padding: 10 }}>
                                 {/*meal info */}

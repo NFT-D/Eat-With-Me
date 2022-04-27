@@ -5,6 +5,12 @@ import React, { useRef, useState } from 'react';
 import {Overlay } from 'react-native-elements';
 import MyButton from '../components/MyButton';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Constants from 'expo-constants';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { async } from '@firebase/util';
+import { pickImage } from '../helpers/upload-image';
 import { addDoc, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
@@ -25,6 +31,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
     const [guest, enterGuest] = useState(0);
     const [allergens, enterAllergens] = useState("");
     const [notes, enterNotes] = useState("");
+    const [image, setImage] = useState("");
 
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState(null);
@@ -46,13 +53,13 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
     const refInputs2 = useRef<Array<any>>([]);
     const refInputs3 = useRef<Array<any>>([]);
 
-    const hostEvent = async (email: string,eventName: string, address: string, guest: number, allergen: string, notes:string, duration: number, sDate: Date, fName: string,fees: number, app: Array<any>,ent: Array<any>,des: Array<any>) => {
+    const hostEvent = async (email: string,eventName: string, address: string, guest: number, allergen: string, notes:string, duration: number, sDate: Date, fName: string,fees: number, app: Array<any>,ent: Array<any>,des: Array<any>, imageURL: string) => {
 
         try {
             
             const mealRef = await addMeal(app, ent, des, allergen);
     
-            const data = { HostEmail: email,event: eventName, capacity: guest, attendees: [], pending: [],fee: fees, location: address, meal: mealRef, date: sDate, note: notes, host: fName, duration: duration }
+            const data = { HostEmail: email,event: eventName, capacity: guest, attendees: [], pending: [],fee: fees, location: address, meal: mealRef, date: sDate, note: notes, host: fName, duration: duration, image: imageURL }
     
             const docRef = await addDoc(collection(firestore, "events"), data);
             console.log(docRef.id);
@@ -128,7 +135,8 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
       };
     
     const hostEv = async () => {
-        setEventID(await hostEvent(email,event, location, guest, allergens, notes, duration, date, firstName, fee, refInputs.current, refInputs2.current, refInputs3.current))
+        let imageURL = await pickImage('events');
+        setEventID(await hostEvent(email,event, location, guest, allergens, notes, duration, date, firstName, fee, refInputs.current, refInputs2.current, refInputs3.current, imageURL))
         toggleOverlay();
     };
 

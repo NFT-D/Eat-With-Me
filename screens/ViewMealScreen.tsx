@@ -1,7 +1,7 @@
-import { SafeAreaView, View, Text, Image, StyleSheet, ImageBackground, FlatList } from 'react-native';
+import { SafeAreaView, View, Text, Image, StyleSheet, ImageBackground, FlatList, ScrollView } from 'react-native';
 import MyButton from '../components/MyButton';
 import React, { useEffect, useState } from 'react';
-import pizza from '../assets/pizza.png';
+// import pizza from '../assets/pizza.png';
 import location from '../assets/location.png';
 import {  doc,  getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import moment from 'moment';
@@ -14,7 +14,9 @@ type ScreenProps = {
   route: any
 }
 
-
+let imgs = [
+  'https://firebasestorage.googleapis.com/v0/b/eat-with-me-53105.appspot.com/o/dishes%2Ffrenchtoast.jpeg?alt=media&token=60179fe2-dd58-44b4-8c93-404cb31e5a94'
+]
 
 
 export default function ViewMealScreen({ navigation,route }: ScreenProps) {
@@ -31,6 +33,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   const [attending, setAttending] = useState([]);
 
   const [eventName, setEventName] = useState("");
+  const [imageURL, setImageURL] = useState("");
   const [visible, setVisible] = useState(false);
   const [status, setStatus] = useState("");
 
@@ -54,6 +57,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
       setEventName(event["event"]);
       setCapacity(event["capacity"]);
       setNotes(event["note"]);
+      setImageURL(event["image"]);
       ml = event["meal"];
       setDuration(event["duration"]);
       time = querySnapshot.data()["date"];
@@ -135,9 +139,10 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   }, []);
 
   return (
-    <SafeAreaView style={styles.contentContainer}>
-        <ImageBackground source={pizza} style={{ width: "100%", }}>
-          <View style={{ alignItems: "center", padding: 15 }}>
+    <View>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        <ImageBackground source={{ uri: imageURL}} style={[styles.contentContainer, { width: "100%", height: "50%", top: -200 }]}>
+          <View style={{ top: 150, alignItems: "center", padding: 15 }}>
             <Text style={styles.whiteTextBold}>{eventName}</Text>
             <Text style={styles.hostedByText}> Hosted by {host}</Text>
             <View style={{flexDirection:'row',justifyContent:'space-evenly' }}>
@@ -169,7 +174,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
                     <View style={{ width: '85%', padding: 20 }}>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }}>
                             <View style={{ flex: .5 }}>
-                                <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                                <Image source={item.imageURL} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
                             </View>
                             <View style={{ flexDirection: 'column', padding: 10 }}>
                                 {/*dish info */}
@@ -192,7 +197,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
                     <View style={{ width: '85%', padding: 20 }}>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }}>
                             <View style={{ flex: .5 }}>
-                                <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                                <Image source={item.imageURL} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
                             </View>
                             <View style={{ flexDirection: 'column', padding: 10 }}>
                                 {/*dish info */}
@@ -215,7 +220,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
                     <View style={{ width: '85%', padding: 20 }}>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", borderColor: 'black', borderWidth: 1, borderRadius: 20 }}>
                             <View style={{ flex: .5 }}>
-                                <Image source={pizza} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                                <Image source={item.imageURL} style={{ height: '100%', width: '100%', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
                             </View>
                             <View style={{ flexDirection: 'column', padding: 10 }}>
                                 {/*dish info */}
@@ -246,8 +251,9 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
         <Overlay isVisible={visible} style={{borderRadius:10, padding:10}}>
           <Text style={{textAlign:'center'}}>{status}</Text>
           <MyButton text="Ok" type="primary" size="large" onPressFn={ () => { setVisible(false)}} />
-      </Overlay> 
-    </SafeAreaView>
+        </Overlay> 
+        </ScrollView>
+    </View>
   );
 }
 const styles = StyleSheet.create({
