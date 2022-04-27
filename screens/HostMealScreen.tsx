@@ -46,15 +46,16 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
     const refInputs2 = useRef<Array<any>>([]);
     const refInputs3 = useRef<Array<any>>([]);
 
-    const hostEvent = async (email: string,eventName: string, address: string, guest: number, allergen: string, notes: string, duration: number, sDate: Date, fName: string,fee: number, app: Array<any>,ent: Array<any>,des: Array<any>) => {
+    const hostEvent = async (email: string,eventName: string, address: string, guest: number, allergen: string, notes:string, duration: number, sDate: Date, fName: string,fees: number, app: Array<any>,ent: Array<any>,des: Array<any>) => {
 
         try {
             
             const mealRef = await addMeal(app, ent, des, allergen);
     
-            const data = { HostEmail: email,event: eventName, capacity: guest, attendees: [], fee: fee, location: address, meal: mealRef, date: sDate, note: notes, host: fName, duration: duration }
+            const data = { HostEmail: email,event: eventName, capacity: guest, attendees: [], pending: [],fee: fees, location: address, meal: mealRef, date: sDate, note: notes, host: fName, duration: duration }
     
             const docRef = await addDoc(collection(firestore, "events"), data);
+            console.log(docRef.id);
             return docRef.id;
         } catch (e) {
             console.log(e);
@@ -133,7 +134,7 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
 
     const viewMealE = () => {
         setVisible(false);
-        navigation.navigate("ViewMeal", {eventID, firestore })
+        navigation.navigate("ViewMeal", { firstName, eventID, firestore,email })
     };
 
 
@@ -306,42 +307,89 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
 
     return (
         <SafeAreaView style={styles.mainContainer}>
-            <ScrollView>
-                    <MyField title="Event Name" showText= "Test's Meal" type="text" secure={false} onChangeFn={setEvent}></MyField>
-                    <Text>Select the DATE and TIME for your event</Text>
-                    <View style={{ flexDirection: 'row', alignContent:'center' }}>
+            <ScrollView style={[{width:"90%"}]}>
+                    <MyField title="Event Name" showText= "Event" type="text" secure={false} onChangeFn={setEvent}></MyField>
+
+                    <Text>    </Text>
+
+                    <View style={{alignItems:'center'}}>
+                        <Text style={{color: colors.primary}}>______________________________________________</Text>
+
+                        <Text>    </Text>
+                        <Text>    </Text>
+
+                        <Text>Select the DATE and TIME for your event</Text>
+
+                        <Text>    </Text>
+
+                    </View>
+                    {show && (
+                            <DateTimePicker
+                            style={{justifyContent:'center', width:'69%'}}
+
+                                testID="dateTimePicker"
+                                value={date}
+                                mode={mode}
+                                display="default"
+                                onChange={onChange}
+                            />
+                        )}
+
+                    <Text>    </Text>
+                    <View style={{ flexDirection: 'row', justifyContent:'center' }}>
+
                         <TouchableOpacity style={{ backgroundColor: colors.primary, borderRadius: 10, padding: 10, alignContent: 'center', alignItems: 'center' }} onPress={() => showMode('date')}>
                             <Text style={{ color: 'white' }}>Select Date</Text>
                         </TouchableOpacity>
+
+                        <Text>    </Text>
+
                         <TouchableOpacity style={{ backgroundColor: colors.primary, borderRadius: 10, padding: 10, alignContent: 'center', alignItems: 'center' }} onPress={() => showMode('time')}>
                             <Text style={{ color: 'white' }}>Select Time</Text>
                         </TouchableOpacity>
 
+                        
                     </View>
-                    <Text>Date Selected:  {date.toLocaleString()}</Text>
+
+                    <View style={{alignItems:'center' }}>
+                   
+                        <Text>    </Text>
+                        <Text style={{color: colors.primary}}> Date Selected:  {date.toLocaleString()}</Text>
+                        <Text>    </Text>
+
+                    </View>
+                        
+
+
+                        {//<MyButton text="console" type="primary" onPressFn={ ()=>{console.log(refInputs);console.log(refInputs2);console.log(refInputs3);}} />
+                        }
+
                     
-                    {show && (
-                        <DateTimePicker
-                            testID="dateTimePicker"
-                            value={date}
-                            mode={mode}
-                            display="default"
-                            onChange={onChange}
-                        />
-                    )}
-                    
-                    <MyButton text="console" type="primary" onPressFn={ ()=>{console.log(refInputs);console.log(refInputs2);console.log(refInputs3);}} />
+                    <Text>    </Text>
 
                     <MyField title="Duration in hours" type="text" showText= "2.5" secure={false} onChangeFn={setDuration} ></MyField>
+
 
                     <MyField title="Address" type="text" secure={false} showText= "123 abc St. Hoboken" onChangeFn={enterLoc} ></MyField>
 
                     <MyField title="How many people are you serving?" type="number" showText= "2" secure={false} onChangeFn={enterGuest} ></MyField>
 
                     <MyField title="Fee in $" type="text" secure={false} showText= "3.50"  onChangeFn={setFee} ></MyField>
+                    
+                    <Text>    </Text>
 
+                    <View style={{alignItems:'center'}}>
+                        <Text style={{color: colors.primary}}>______________________________________________</Text>
+
+                        <Text>    </Text>
+                        <Text>    </Text>
+
+                    </View>
+
+                    <Text>    </Text>
                     <Text>Appetizers</Text>
                     {/* <MyField title="Appetizers (separated by ',')" type="text" showText= "app1,app2, app3" secure={false} onChangeFn={enterAppetizersDish} ></MyField> */}
+                    <Text>    </Text>
 
                     <View>
                         {appInput}
@@ -354,10 +402,11 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
                         </View> */}
                     </View>
 
-
+                    <Text>    </Text>
+                    <Text>    </Text>
                     <Text>Entrees</Text>
                     {/* <MyField title="Entrees (separated by ',')" type="text" showText= "ent1,ent2, ent3" secure={false} onChangeFn={enterEntreesDish} ></MyField> */}
-
+                    <Text>    </Text>
 
                     <View>
                         {entInput}
@@ -370,9 +419,11 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
                         </View> */}
                     </View>
 
+                    <Text>    </Text>
+                    <Text>    </Text>
                     <Text>Desserts</Text>
                     {/* <MyField title="Desserts (separated by ',')" type="text" showText= "des1, des2" secure={false} onChangeFn={enterDessertsDish} ></MyField> */}
-
+                    <Text>    </Text>
 
                     <View>
                         {desInput}
@@ -384,18 +435,26 @@ export default function HostMealScreen({ navigation, route }: ScreenProps) {
                             })}
                         </View> */}
                     </View>
+                    <Text>    </Text>
+                    <Text>    </Text>
 
-                    <MyField title="Allergens?" type="text" secure={false} showText= "Dairy" onChangeFn={enterAllergens} ></MyField>
+                    <MyField title="Allergens?" type="text" secure={false} showText= "ex: Dairy" onChangeFn={enterAllergens} ></MyField>
 
                     <MyField title="Other Notes....." type="text" secure={false} showText= "I have a cat" onChangeFn={enterNotes} ></MyField>
 
+                    <Text>    </Text>
+                    <Text>    </Text>
+
                     <MyButton text="Create Meal" type="primary" size="large" onPressFn={async () => { hostEv() }} />
                     
+                    <Text>    </Text>
+                    <Text>    </Text>
+
                     <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
 
                         <Text>Meal Created!</Text>
-                        <MyButton text="View Meal" type="primary" size="large" onPressFn={ () => {viewMealE()  }} />
-                        <MyButton text="Ok" type="primary" size="large" onPressFn={async () => {  navigation.navigate("Home", { firstName })}} />
+                        {/* <MyButton text="View Meal" type="primary" size="large" onPressFn={ () => {viewMealE()  }} /> */}
+                        <MyButton text="Ok" type="primary" size="large" onPressFn={async () => {  navigation.navigate("Home", { firstName, email })}} />
                     </Overlay>
                     
 

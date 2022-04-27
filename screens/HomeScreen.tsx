@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList,View, Text, StyleSheet, Image, SafeAreaView, TextInput, TouchableOpacity } from "react-native";
+import { FlatList,View, Text, StyleSheet, Image, SafeAreaView, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import colors from "../config/colors";
 import MyButton from '../components/MyButton';
 import pizza from '../assets/pizza.png'
@@ -59,7 +59,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
             });
             arys=arys.sort((a, b) => {return moment(a.date).diff(b.date)});
             setDATA(arys);
-            setRefresh(true);
+            
         } catch (e) {
             console.log(e);
         }
@@ -67,7 +67,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
     }
     useEffect(() => {
         start();
-    
+        
       }, []);
     
     const search = async () => {
@@ -84,7 +84,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
             });
             ary=ary.sort((a, b) => {return moment(a.date).diff(b.date)});
             setDATA(ary);
-            setRefresh(true);
+            
         } catch (e) {
             console.log(e);
         }
@@ -104,7 +104,7 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
         
         <SafeAreaView style={styles.homePage}>
             <View style={{flexDirection:'row', justifyContent:'space-evenly'}}>
-                <MyButton type="primary" text="Create Meal" size="medium" onPressFn={() => navigation.navigate("HostMeal", {firstName, firestore})}></MyButton>
+                <MyButton type="primary" text="Create Meal" size="medium" onPressFn={() => navigation.navigate("HostMeal", {email, firstName, firestore})}></MyButton>
                 <MyButton type="primary" text="My Meals" size="medium" onPressFn={() => navigation.navigate("MyMeal", {firstName, email,firestore})}></MyButton>
             </View>
             
@@ -129,14 +129,16 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
                     </View>
                 
             </View>
+
             <FlatList
                 keyExtractor={(item)=> item.id}
                 data={DATA}
                 refreshing = {refeshing}
                 onRefresh = {handleRefresh}
                 renderItem={({item}) =>(
-                    <View>
-                        <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", height:'90%', borderColor: colors.primary, borderWidth: 1, borderRadius: 8 }} onPress={() => navigation.navigate("ViewMeal", { firstName, eventID: item.id, firestore,email })}>
+                    <ScrollView style={{ width: '100%', padding: 10}}>
+                    
+                        <TouchableOpacity style={{ flexDirection: 'row', flexWrap: 'wrap', width: "100%", height:'100%', borderColor: colors.primary, borderWidth: 1, borderRadius: 8 }} onPress={() => navigation.navigate("ViewMeal", { firstName, eventID: item.id, firestore,email })}>
                             <View style={{ flex: .5 }}>
                                 <Image source={pizza} style={styles.imageStyle} />
                             </View>
@@ -148,7 +150,8 @@ export default function HomeScreen({ navigation, route }: ScreenProps) {
                                 <Text style={styles.linkText}>View Event</Text>
                             </View>
                         </TouchableOpacity>
-                    </View>
+                    
+                </ScrollView>
                 )}
             />
 

@@ -88,14 +88,14 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     smallContainer: {
-        paddingHorizontal: 16,
-        paddingVertical: 4,
+        paddingHorizontal: 20,
+        paddingVertical: 8,
         //width: 75,
         borderRadius: 16,
         
     },
     smallText: {
-        fontSize: 8
+        fontSize: 12
     },
     mediumContainer: {
         paddingHorizontal: 32,
