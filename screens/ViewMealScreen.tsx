@@ -141,7 +141,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
   return (
     <SafeAreaView style={styles.mainContainer}>
       
-        <ImageBackground source={{ uri: imageURL}} style={[styles.contentContainer, { width: "100%", height: "50%", top:-35}]}>
+        <ImageBackground source={{ uri: imageURL}} style={[styles.contentContainer, { width: "100%", height: "65%", top:-35}]}>
           
           <View style={{ top: 150, alignItems: "center", padding: 15 }}>
             
@@ -279,7 +279,7 @@ export default function ViewMealScreen({ navigation,route }: ScreenProps) {
           <Text style={styles.gray_whiteTextBold}> {notes} </Text>
           <Text></Text>
 
-          <View style={{flexDirection:'row'}}>
+          <View style={{flexDirection:'row', width:'80%'}}>
               <Text style={{fontSize:30}}> 🏠 </Text>
               <Text style={[styles.black_smallTextBold, {fontSize:20, top:5}]}>{address}</Text>
               
